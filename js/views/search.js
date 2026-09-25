@@ -3,7 +3,7 @@
 
 import { h, clear, icon, ICONS } from '../ui/dom.js';
 import { show } from '../ui/shell.js';
-import { topicRow } from '../ui/badges.js';
+import { hiddenNotice, topicRow } from '../ui/badges.js';
 import { getStore } from '../data.js';
 import { buildIndex, search } from '../search.js';
 import { isVisible } from '../status.js';
@@ -137,6 +137,7 @@ function homeSections() {
   return h(
     'div',
     {},
+    hiddenNotice(store.topics),
     h('h2', { class: 'section-title' }, 'カテゴリから探す'),
     categoryList(),
     h('h2', { class: 'section-title' }, 'ほかの探し方'),

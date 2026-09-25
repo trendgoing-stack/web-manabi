@@ -28,4 +28,10 @@
 python -m http.server 8766
 ```
 
-http://localhost:8766/ を開く。検証ページは http://localhost:8766/tools/validate.html
+http://localhost:8766/ を開く（localhost では Service Worker を登録しない。試すときは `?sw` を付ける）。検証ページは http://localhost:8766/tools/validate.html
+
+## 公開するとき
+
+- 何かを変えたら `sw.js` の `VERSION` と `js/config.js` の `APP_VERSION` を同じ値に上げる（上げないと利用者に届かない）
+- ファイルを増減したら `sw.js` の `SHELL` を直す。`node tools/validate-cli.mjs` が漏れを知らせる
+- 手順の詳細は README の「更新するとき」

@@ -31,6 +31,7 @@
       "apps": [],
       "related": [
         "phase-split",
+        "writing-instructions",
         "claude-md"
       ],
       "links": [
@@ -83,7 +84,9 @@
       "related": [
         "plan-first",
         "slash-commands",
-        "phase-split"
+        "phase-split",
+        "writing-instructions",
+        "context-management"
       ],
       "links": [
         {
@@ -194,6 +197,105 @@
         {
           "label": "スキル（Claude Code 公式ドキュメント）",
           "url": "https://code.claude.com/docs/ja/skills",
+          "kind": "official"
+        },
+        {
+          "label": "インタラクティブモード（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/interactive-mode",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "AI開発",
+        "効率化"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "writing-instructions",
+      "category": "claude-code",
+      "level": "basic",
+      "title": "指示書の書き方（前提・制約・しないこと）",
+      "aka": [
+        "指示書",
+        "プロンプトの書き方",
+        "要件の伝え方"
+      ],
+      "keywords": [
+        "Claude Code",
+        "前提",
+        "制約",
+        "しないこと",
+        "成果物",
+        "チェックリスト"
+      ],
+      "summary": "Claude Code に大きな作業を頼むときに、目的・前提・制約・しないこと・成果物を分けて書いておく方法。",
+      "what": "大きなアプリを作ってもらうときの[[プロンプト]]（指示書）を、「目的」「前提・制約」「画面や機能の仕様」「しないこと」「成果物」「進め方」のように見出しで分けて書くやり方です。",
+      "why": "口頭で少しずつ伝えると、大事な条件が抜けたり、途中で方針が揺れたりします。最初に条件をまとめて書いておけば、Claude Code は判断に迷ったときに指示書に立ち返れます。「しないこと」を書いておくと、頼んでいない機能が勝手に増えるのも防げます。",
+      "how": "「外部ライブラリを使わない」「データは端末の外に送らない」のような制約は、理由と一緒に書くと、似た場面でも正しく判断してもらいやすくなります。\n\n成果物には、ファイル名や、確認用のチェックリストの項目まで書いておくと、完了の基準がはっきりします。長く使う決まりごとは CLAUDE.md にも残しておきます。",
+      "pitfalls": [
+        "「いい感じに」のような曖昧な書き方は、人によって受け取り方が変わる。できるだけ具体的に書く。",
+        "条件同士が矛盾していないか、送る前に読み返す。"
+      ],
+      "apps": [],
+      "related": [
+        "plan-first",
+        "phase-split",
+        "claude-md"
+      ],
+      "links": [
+        {
+          "label": "Claude Code のベストプラクティス（公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/best-practices",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "進め方",
+        "AI開発"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "context-management",
+      "category": "claude-code",
+      "level": "intermediate",
+      "title": "会話のコンテキストの管理",
+      "aka": [
+        "コンテキスト管理",
+        "/clear",
+        "/compact",
+        "会話のリセット"
+      ],
+      "keywords": [
+        "Claude Code",
+        "長い会話",
+        "要約",
+        "新しい会話",
+        "トークン"
+      ],
+      "summary": "長い作業のあいだに Claude Code が参照する会話の量を整理し、関係のない話が混ざらないようにする工夫。",
+      "what": "Claude Code は、それまでの会話や読んだファイルの内容（[[コンテキスト]]）をもとに作業します。会話が長くなると、古い話題や試行錯誤の跡が積み重なります。区切りのよいところで会話をリセット（`/clear`）したり、要約して短くしたり（`/compact`）して整理するのがコンテキストの管理です。",
+      "why": "関係のない話が多く残っていると、今の作業に必要な情報が埋もれ、的外れな回答が増えることがあります。作業の区切りで整理すれば、今の作業に集中してもらえます。",
+      "how": "別の作業に移るときは、新しい会話を始めるか `/clear` を使います。続きの作業で経緯を残したいときは `/compact` で要約します。\n\n会話をまたいで守ってほしい決まりは CLAUDE.md に、作業の進み具合は README やチェックリストなどのファイルに書いておくと、会話を整理しても失われません。",
+      "pitfalls": [
+        "`/clear` すると、それまでの会話の内容は参照されなくなる。必要な決まりごとはファイルに残してから行う。",
+        "コマンドの名前や働きは版によって変わることがある。公式ドキュメントで確かめる。"
+      ],
+      "apps": [],
+      "related": [
+        "claude-md",
+        "slash-commands",
+        "phase-split"
+      ],
+      "links": [
+        {
+          "label": "コストを効果的に管理する（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/costs",
           "kind": "official"
         },
         {

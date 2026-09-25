@@ -2,7 +2,7 @@
 
 import { h, extLink, icon, ICONS } from '../ui/dom.js';
 import { show } from '../ui/shell.js';
-import { appIcon, topicRow } from '../ui/badges.js';
+import { appIcon, hiddenNotice, topicRow } from '../ui/badges.js';
 import { getStore } from '../data.js';
 import { isVisible } from '../status.js';
 import { GITHUB_OWNER } from '../config.js';
@@ -73,6 +73,7 @@ export function renderApp(id) {
       ),
       h('a', { href: `#/learn/quiz?scope=${encodeURIComponent(`app:${app.id}`)}&mode=normal`, class: 'btn btn-primary btn-block' }, 'このアプリの技術でクイズ'),
       h('h2', { class: 'section-title' }, `使った技術（${topics.length} 件）`),
+      hiddenNotice(store.topicsByApp.get(app.id) ?? []),
       topics.length === 0 ? h('p', { class: 'empty' }, '表示できる項目はまだありません。') : null,
       groups.map((g) => [h('h3', { class: 'group-title' }, g.cat.label), h('ul', { class: 'list' }, g.list.map(topicRow))]),
     ),

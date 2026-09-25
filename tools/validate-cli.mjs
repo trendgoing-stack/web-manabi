@@ -2,7 +2,7 @@
 //   node tools/validate-cli.mjs
 // エラーがあれば終了コード 1 を返す。
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validate } from './validate-core.js';
@@ -35,10 +35,24 @@ const raw = {
   failed,
 };
 const swPath = join(ROOT, 'sw.js');
+const demoDir = join(ROOT, 'js', 'demos');
+const demoIds = new Set(existsSync(demoDir) ? readdirSync(demoDir).filter((f) => f.endsWith('.js')).map((f) => f.slice(0, -3)) : []);
+
+/** sw.js の SHELL に、配信するファイル（tools/ 以外）が漏れなく入っているか */
+function swMissing() {
+  if (!existsSync(swPath)) return [];
+  const sw = readFileSync(swPath, 'utf8');
+  /** @param {string} dir @returns {string[]} */
+  const walk = (dir) => readdirSync(join(ROOT, dir)).flatMap((n) => (statSync(join(ROOT, dir, n)).isDirectory() ? walk(`${dir}/${n}`) : [`${dir}/${n}`]));
+  const files = ['index.html', 'manifest.json', 'count.js', ...walk('css'), ...walk('js'), ...walk('icons')].filter((f) => existsSync(join(ROOT, f)));
+  return files.filter((f) => !sw.includes(`'./${f}'`));
+}
 const { findings, stats } = validate(raw, {
   today: today(),
   appVersion: APP_VERSION,
   swText: existsSync(swPath) ? readFileSync(swPath, 'utf8') : null,
+  demoIds,
+  swMissing: swMissing(),
 });
 
 const mark = { error: '✖', warn: '▲', info: '・' };

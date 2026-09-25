@@ -17,9 +17,12 @@ import { renderQuiz } from './views/quiz.js';
 import { renderCards } from './views/cards.js';
 import { renderSettings, renderHelp } from './views/settings.js';
 import { renderNotFound } from './views/not-found.js';
+import { registerServiceWorker } from './pwa.js';
+import { startAnalytics } from './analytics.js';
 
 async function boot() {
   initStorage();
+  registerServiceWorker();
   setWriteErrorHandler((msg) => toast(msg, 5000));
   applyFontSize();
   initShell();
@@ -55,6 +58,7 @@ async function boot() {
     ],
     () => renderNotFound(),
   );
+  startAnalytics();
 }
 
 boot().catch(() => {

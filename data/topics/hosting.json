@@ -55,7 +55,8 @@
         "subpath-relative-paths",
         "same-origin-storage",
         "https-secure-context",
-        "goatcounter"
+        "goatcounter",
+        "nojekyll"
       ],
       "links": [
         {
@@ -79,9 +80,9 @@
         "無料",
         "HTTPS"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "subpath-relative-paths",
@@ -156,9 +157,9 @@
         "パス",
         "トラブル"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "github-actions-pages",
@@ -228,6 +229,67 @@
       "tags": [
         "公開",
         "自動化"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "nojekyll",
+      "category": "hosting",
+      "level": "basic",
+      "title": ".nojekyll（Jekyll の処理を止める）",
+      "aka": [
+        "nojekyll",
+        "Jekyll",
+        "ジキル"
+      ],
+      "keywords": [
+        "GitHub Pages",
+        "_ で始まるファイル",
+        "404",
+        "表示されない",
+        "空のファイル"
+      ],
+      "summary": "GitHub Pages が標準で行う Jekyll の変換を止めるための、中身が空のファイル。",
+      "what": "GitHub Pages は、ブランチの中身を公開するとき、標準では Jekyll というツールでサイトを組み立て直します。リポジトリのいちばん上に `.nojekyll` という空のファイルを置くと、この処理が止まり、ファイルがそのまま公開されます。",
+      "why": "Jekyll は、`_` で始まるファイルやフォルダを公開の対象から外します。ビルドツールが作ったファイルの中にそうした名前があると、公開したときに読み込めず、画面が真っ白になることがあります。`.nojekyll` を置いておけば、この心配がなくなります。",
+      "how": "中身は空で構いません。ファイルがあるかどうかだけで判断されます。GitHub Actions でビルドした結果を公開する場合は、公開するフォルダ（例：`dist`）の中に入れます。",
+      "pitfalls": [
+        "`.` で始まるファイルは、パソコンの設定によっては一覧に表示されず、入れ忘れに気づきにくい。"
+      ],
+      "apps": [
+        {
+          "appId": "image-tool",
+          "usage": "リポジトリのいちばん上に `.nojekyll` を置き、ブランチの中身をそのまま公開しています。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "`public/.nojekyll` に置き、Vite のビルドで `dist` の中にコピーされるようにしています。Service Worker のキャッシュ対象からは外しています（`vite.config.ts`）。",
+          "snippet": {
+            "file": "vite.config.ts",
+            "startLine": 36,
+            "endLine": 40,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "ts",
+            "code": "      const files = listFiles(outDir)\n        .map((path) => relative(outDir, path).replaceAll('\\\\', '/'))\n        // sw.js 自身と、.nojekyll のような隠しファイルはキャッシュしない\n        .filter((path) => path !== 'sw.js' && !path.split('/').some((p) => p.startsWith('.')))\n        .sort()"
+          }
+        }
+      ],
+      "related": [
+        "github-pages",
+        "github-actions-pages"
+      ],
+      "links": [
+        {
+          "label": "GitHub Pages と Jekyll について",
+          "url": "https://docs.github.com/ja/pages/setting-up-a-github-pages-site-with-jekyll/about-github-pages-and-jekyll",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "公開",
+        "トラブル"
       ],
       "verified": false,
       "verifiedNote": "",

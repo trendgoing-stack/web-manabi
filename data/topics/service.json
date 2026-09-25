@@ -30,7 +30,7 @@
       "apps": [
         {
           "appId": "git-manabi",
-          "usage": "`count.js` をリポジトリに同梱し、`js/analytics.js` から読み込んでいます。送るパスは `/git-manabi/` に固定し、設定で「送信しない」を選ぶと `count.js` 自体を読み込みません。",
+          "usage": "公式の `count.js` の代わりに、固定のパス（`/git-manabi/`）とタイトルだけを送る最小限の `count.js` を自作して同梱しています。`js/analytics.js` から読み込み、設定で「送信しない」を選ぶと読み込みません。リファラーは送らず、localhost では送信しません。",
           "snippet": {
             "file": "js/analytics.js",
             "startLine": 6,
@@ -54,6 +54,7 @@
         }
       ],
       "related": [
+        "self-hosted-scripts",
         "github-pages"
       ],
       "links": [
