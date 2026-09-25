@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>データ検証 | Webまなび帳</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #f6f7f9; --fg: #1c1f24; --sub: #5b6270; --line: #dde1e7; --err: #c62828; --warn: #9a6700; --ok: #1f7a4d; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #15171c; --fg: #e8eaee; --sub: #a4abb8; --line: #353a44; --err: #ff8a80; --warn: #f5d37a; --ok: #7ee2a8; } }
+    body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 15px/1.6 -apple-system, "Hiragino Sans", "Segoe UI", "Yu Gothic UI", sans-serif; }
+    h1 { font-size: 1.3rem; margin: 0 0 4px; }
+    p { color: var(--sub); margin: 0 0 12px; }
+    button { font: inherit; font-size: 16px; min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: inherit; cursor: pointer; }
+    .summary { font-weight: 700; margin: 16px 0 8px; }
+    .summary.ok { color: var(--ok); }
+    .summary.ng { color: var(--err); }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+    td:first-child { white-space: nowrap; font-weight: 700; }
+    .error { color: var(--err); }
+    .warn { color: var(--warn); }
+    .info { color: var(--sub); }
+    dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 16px; margin: 8px 0 16px; }
+    dd { margin: 0; }
+  </style>
+  <script type="module" src="./validate.js"></script>
+</head>
+<body>
+  <h1>データ検証</h1>
+  <p>data/ の JSON をチェックします。開発用のページです（アプリからはリンクしていません）。同じチェックは <code>node tools/validate-cli.mjs</code> でも実行できます。</p>
+  <button type="button" id="run">もう一度チェック</button>
+  <div id="summary" class="summary"></div>
+  <dl id="stats"></dl>
+  <table>
+    <thead><tr><th>種類</th><th>場所</th><th>内容</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</body>
+</html>

@@ -1,0 +1,106 @@
+{
+  "category": "pwa",
+  "topics": [
+    {
+      "id": "service-worker",
+      "category": "pwa",
+      "level": "intermediate",
+      "title": "Service Worker",
+      "aka": ["サービスワーカー", "SW"],
+      "keywords": ["オフライン", "キャッシュ", "fetch", "更新", "sw.js", "register"],
+      "summary": "ページとネットワークの間に入って通信を中継する、ブラウザの中で動くスクリプト。キャッシュを使って、アプリをオフラインでも動かせる。",
+      "what": "Service Worker は、Webページとは別に[[ブラウザ]]の中で動く JavaScript のファイルです。ページがファイルを読み込もうとすると、その要求（リクエスト）はいったん Service Worker を通ります。Service Worker は、要求をそのまま[[ネットワーク]]に流すことも、手元の[[キャッシュ]]から答えを返すこともできます。\n\nページとは別に動くため、画面の[[DOM]]には直接さわれません。",
+      "why": "普通のWebページは、電波がないと開けません。Service Worker で必要なファイルを先にキャッシュしておけば、[[オフライン]]でも起動できる、アプリのような使い心地を作れます。[[PWA]] の中心になる仕組みです。\n\nネットワークより先にキャッシュから返せるので、2回目以降の起動も速くなります。",
+      "how": "ページ側で `navigator.serviceWorker.register('./sw.js')` を呼ぶと登録されます。Service Worker には段階があり、`install` でファイルをキャッシュに保存し、`activate` で古いキャッシュを片付け、その後は `fetch` イベントで通信を受け持ちます。\n\n`sw.js` の中身が少しでも変わると、ブラウザは新しい版として扱います。新しい版はすぐには切り替わらず**待機**するため、画面で更新を知らせてから切り替えるのが一般的です。",
+      "pitfalls": [
+        "[[HTTPS]] か [[localhost]] でないと登録できない。HTML ファイルを直接開いた場合も動かない。",
+        "登録した場所によって担当範囲（[[スコープ]]）が決まる。`sw.js` はアプリのいちばん上の階層に置くのが基本。",
+        "`sw.js` を変えないと、アプリのファイルを更新しても利用者の画面は古いまま。"
+      ],
+      "iosNote": "Safari で開いた場合とホーム画面から起動した場合では、キャッシュが別々に管理されます。しばらく使わないとキャッシュが消されることがあるとされています（条件は要確認）。",
+      "apps": [
+        { "appId": "git-manabi", "usage": "`js/pwa.js` で Service Worker を登録し、新しい版が待機したら画面上部に「更新があります」を表示します。タップすると待機中の版に切り替えて再読み込みします。画面に戻ってきたときにも更新を確認しています。" },
+        { "appId": "image-tool", "usage": "`js/sw-register.js` で `sw.js` を登録し、アプリ本体をキャッシュしています。画像は端末の中だけで処理するので、電波がなくても最初から最後まで使えます。" },
+        { "appId": "lottery-tools", "usage": "アプリ本体の HTML・CSS・JS とアイコンをキャッシュし、電波のない場所でも抽選ツールを起動できるようにしています。" },
+        { "appId": "reversi", "usage": "`js/app.js` の中で Service Worker を登録しています。AI の思考を担当する `js/worker.js` もキャッシュ対象に入れ、オフラインでも対局できるようにしています。" },
+        { "appId": "workout-calendar", "usage": "`sw/sw.js` をひな形にして、ビルドのときに Vite のプラグインがキャッシュ対象の一覧を埋め込んだ `sw.js` を出力します。更新の通知は `src/pwa.ts` が受け持ちます。" }
+      ],
+      "related": ["cache-versioning", "web-app-manifest", "subpath-relative-paths"],
+      "links": [
+        { "label": "Service Worker API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API", "kind": "mdn" },
+        { "label": "Service Worker の使用（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API/Using_Service_Workers", "kind": "mdn" },
+        { "label": "Service Workers 仕様（W3C）", "url": "https://www.w3.org/TR/service-workers/", "kind": "official" },
+        { "label": "Can I use: Service Workers", "url": "https://caniuse.com/serviceworkers", "kind": "caniuse" }
+      ],
+      "tags": ["オフライン", "PWA", "キャッシュ"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "web-app-manifest",
+      "category": "pwa",
+      "level": "basic",
+      "title": "Web App Manifest",
+      "aka": ["ウェブアプリマニフェスト", "マニフェスト", "manifest.json", "manifest.webmanifest"],
+      "keywords": ["ホーム画面", "アイコン", "start_url", "scope", "display", "standalone", "apple-touch-icon"],
+      "summary": "アプリの名前、アイコン、起動時の表示方法などをまとめた JSON ファイル。ホーム画面に追加したときの見た目を決める。",
+      "what": "Web App Manifest は、Webアプリの「名刺」にあたる [[JSON]] ファイルです。アプリ名（`name`／`short_name`）、アイコン、起動するページ（`start_url`）、担当範囲（`scope`）、起動時の表示方法（`display`）などを書きます。HTML の `<link rel=\"manifest\">` でページと結び付けます。",
+      "why": "[[ホーム画面に追加]]したとき、どの名前とアイコンで並べるか、アドレスバーを出すかどうかを、ブラウザはこのファイルから判断します。`display` を `standalone` にすると、アドレスバーのない、アプリのような画面で起動できます。",
+      "how": "ブラウザはページを開いたときに manifest を読み込みます。ホーム画面に追加すると、その時点の名前やアイコンが使われます。\n\niPhone では manifest に加えて、`apple-touch-icon` や `apple-mobile-web-app-title` などの `<link>`／`<meta>` タグも参照されます。両方を用意しておくと確実です。",
+      "pitfalls": [
+        "`start_url` や `scope` を `/` で始めると、サブパスで公開したときに別の場所を指してしまう。`./` から始まる[[相対パス]]で書く。",
+        "ホーム画面に追加した後で manifest を変えても、名前やアイコンはすぐには変わらないことがある。追加し直すと確実。",
+        "アイコンの大きさが足りないと、ぼやけたり、自動で作られたアイコンになったりする。"
+      ],
+      "iosNote": "iPhone のホーム画面のアイコンには `apple-touch-icon`（180×180 が目安）が使われます。manifest のどの項目が使われるかは iOS のバージョンによって違うため、要確認です。",
+      "apps": [
+        { "appId": "git-manabi", "usage": "`manifest.json` に名前とアイコンを書き、`index.html` から読み込んでいます。ホーム画面での表示名は `apple-mobile-web-app-title` と `short_name` で「まなび帳」と短くしています。" },
+        { "appId": "image-tool", "usage": "`manifest.json` で `start_url` と `scope` を `./` にし、`display` を `standalone` にしています。通常のアイコンに加えて、形を切り抜かれても欠けにくい maskable 用のアイコン（`icon-maskable-512.png`）も用意しています。" },
+        { "appId": "lottery-tools", "usage": "`manifest.json` の `id`・`start_url`・`scope` をすべて `./` にし、テーマ色をアプリの紫（`#5847e0`）に合わせています。" },
+        { "appId": "reversi", "usage": "拡張子を `.webmanifest` にした `manifest.webmanifest` を使っています。`start_url` と `scope` は `.`（今いる階層）にしています。" },
+        { "appId": "workout-calendar", "usage": "`public/manifest.webmanifest` に置いています。Vite は `public/` の中身をビルド結果にそのままコピーするため、ファイル名が変わらずに公開されます。" }
+      ],
+      "related": ["service-worker", "subpath-relative-paths"],
+      "links": [
+        { "label": "ウェブアプリマニフェスト（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps/Manifest", "kind": "mdn" },
+        { "label": "Web Application Manifest 仕様（W3C）", "url": "https://www.w3.org/TR/appmanifest/", "kind": "official" }
+      ],
+      "tags": ["PWA", "ホーム画面", "アイコン"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "cache-versioning",
+      "category": "pwa",
+      "level": "intermediate",
+      "title": "キャッシュ戦略とバージョン管理",
+      "aka": ["キャッシュファースト", "cache first", "キャッシュ名", "バージョン番号"],
+      "keywords": ["更新", "Cache API", "caches", "SKIP_WAITING", "古いキャッシュ", "更新があります", "VERSION"],
+      "summary": "Service Worker がキャッシュとネットワークのどちらを先に使うかという考え方と、キャッシュに版番号を付けて更新を確実に届ける仕組み。",
+      "what": "キャッシュ戦略とは、Service Worker がリクエストを受けたときに「[[キャッシュ]]と[[ネットワーク]]のどちらを先に使うか」を決めるルールです。キャッシュにあればそれを返す**キャッシュファースト**と、まずネットワークに聞く**ネットワークファースト**が代表的です。\n\nバージョン管理は、キャッシュの名前に `app-v1.0.2` のような版番号を入れて、新旧を区別するやり方です。",
+      "why": "キャッシュファーストは速くて[[オフライン]]にも強い反面、そのままでは古いファイルを返し続けます。版番号を変えれば、新しい名前でキャッシュを作り直して古いものを消せるので、「オフラインで動く」と「更新が届く」を両立できます。",
+      "how": "ファイルを変えたら `sw.js` の版番号を上げます。`sw.js` 自体が変わるので、ブラウザが新しい Service Worker を見つけます。新しい版は `install` で新しい名前のキャッシュにファイルを取り込み、待機します。\n\n画面で「更新があります」を表示し、タップされたら待機中の版に切り替えます（`SKIP_WAITING` のメッセージを送る）。切り替わった版は `activate` で、自分以外の名前のキャッシュを削除します。",
+      "pitfalls": [
+        "版番号を上げ忘れると、利用者には更新が届かない。",
+        "キャッシュに取り込むときにブラウザの通常のキャッシュを通ると、古いファイルが混ざることがある。取り込むときは `cache: 'reload'` を指定すると確実。",
+        "ファイルを追加したのにキャッシュ対象の一覧に入れ忘れると、オフラインのときにそのファイルだけ読めない。"
+      ],
+      "apps": [
+        { "appId": "reversi", "usage": "`sw.js` の `VERSION` をキャッシュ名に入れています。`scripts/bump-version.mjs` を実行すると、`sw.js` と `js/version.js` の版番号を同時に書き換え、キャッシュ対象の一覧に漏れがないかも確認します。" },
+        { "appId": "workout-calendar", "usage": "版番号に加えて、ビルド結果の中身から計算したハッシュ（`BUILD_ID`）をキャッシュ名に入れています。中身が変われば `sw.js` も必ず変わるので、版番号を上げ忘れても更新が届きます。" },
+        { "appId": "git-manabi", "usage": "アプリ本体の版（`sw.js` の `VERSION`）と、辞書データの版（`data/meta.json` の `dataVersion`）を分けて管理しています。どちらを変えたときも `VERSION` は必ず上げる決まりです。" }
+      ],
+      "related": ["service-worker", "subpath-relative-paths"],
+      "links": [
+        { "label": "Cache（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Cache", "kind": "mdn" },
+        { "label": "Service Worker の使用（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API/Using_Service_Workers", "kind": "mdn" }
+      ],
+      "tags": ["オフライン", "PWA", "キャッシュ", "更新"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "category": "web-api",
+  "topics": [
+    {
+      "id": "localstorage",
+      "category": "web-api",
+      "level": "basic",
+      "title": "localStorage",
+      "aka": ["ローカルストレージ", "Web Storage"],
+      "keywords": ["保存", "端末内", "setItem", "getItem", "JSON.stringify", "容量", "QuotaExceededError"],
+      "summary": "ブラウザの中に、文字列をキーと値の組で保存できる仕組み。ページを閉じてもデータが残る。",
+      "what": "localStorage は、[[ブラウザ]]がサイトごとに用意する小さな保存場所です。`localStorage.setItem('キー', '値')` で保存し、`getItem('キー')` で取り出します。保存できるのは文字列だけなので、配列やオブジェクトは [[JSON]] の文字列に変換して保存します。",
+      "why": "お気に入りや設定、ゲームの記録などを、サーバーを使わずに端末の中だけで覚えておけます。アカウントも通信も要らないので、個人のアプリで手軽に使えます。",
+      "how": "データは[[オリジン]]ごとに分かれていて、別のサイトからは読めません。読み書きはその場で終わり、結果を待つ必要はありません。\n\n保存できる量には上限があり（目安は数MB。ブラウザによって違う）、超えると `setItem` がエラーを投げます。",
+      "pitfalls": [
+        "容量の超過などで書き込みに失敗することがある。`try`／`catch` で囲み、失敗を利用者に知らせる。",
+        "保存するデータの形を後から変えると、古い形のデータを読んで壊れることがある。形の版番号を一緒に保存しておくと安心。",
+        "同じオリジンのスクリプトからは読めるため、パスワードなどの秘密の情報は保存しない。"
+      ],
+      "iosNote": "Safari で開いた場合とホーム画面から起動した場合では、保存場所が別々になります。しばらく使わないサイトのデータは消されることがあるとされています（条件は要確認）。",
+      "apps": [
+        { "appId": "git-manabi", "usage": "`js/storage.js` にすべての読み書きをまとめ、キーの先頭に共通の文字列を付けています。インポートの途中で失敗したときは、書き込む前の値に戻す処理も入っています。" },
+        { "appId": "lottery-tools", "usage": "`js/core/store.js` でキーの先頭に共通の文字列を付けて保存しています。全削除のときは、その文字列で始まるキーだけを消します。" },
+        { "appId": "reversi", "usage": "設定と勝敗記録を別々のキーで保存しています。記録には `version: 1` を付けて、後から形が変わっても見分けられるようにしています。" },
+        { "appId": "image-tool", "usage": "よく使う設定（プリセット）を、`js/settings/presets.js` で保存しています。" },
+        { "appId": "workout-calendar", "usage": "すべての記録を1つのキーにまとめて保存しています。読み書きは `src/lib/storage.ts` だけで行います。" }
+      ],
+      "related": ["service-worker"],
+      "links": [
+        { "label": "Window.localStorage（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/localStorage", "kind": "mdn" },
+        { "label": "Can I use: Web Storage", "url": "https://caniuse.com/namevalue-storage", "kind": "caniuse" }
+      ],
+      "tags": ["保存", "端末内", "オフライン"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "canvas-api",
+      "category": "web-api",
+      "level": "basic",
+      "title": "Canvas API",
+      "aka": ["キャンバス", "canvas", "2D コンテキスト"],
+      "keywords": ["画像処理", "描画", "drawImage", "toBlob", "getContext", "縮小", "リサイズ"],
+      "summary": "`<canvas>` 要素に、JavaScript で図形や画像を描くための仕組み。描いた結果を画像ファイルとして取り出すこともできる。",
+      "what": "Canvas API は、HTML の `<canvas>` 要素を「お絵かき帳」として使うための仕組みです。`getContext('2d')` で描画用の道具（コンテキスト）を取り出し、線や図形、文字、画像を描きます。描いた内容は[[ピクセル]]の集まりとして扱われます。",
+      "why": "画像の縮小や切り取り、モザイクのような加工を、サーバーに送らずブラウザの中だけで行えます。ルーレットのように、図形を自由に描いて動かしたい場面にも使えます。",
+      "how": "`drawImage` で画像を好きな大きさに描き込むと、縮小や切り取りができます。描いた結果は `canvas.toBlob()` で JPEG や PNG の [[Blob]]（ファイルのデータ）として取り出せます。\n\n画面に表示される大きさ（CSS）と、canvas が持つピクセル数（`width`／`height` 属性）は別物です。",
+      "pitfalls": [
+        "canvas の大きさには上限があり、大きな写真をそのまま描くと失敗することがある。",
+        "使い終わった大きな canvas は、幅と高さを 0 にするなどしてメモリを手放す。",
+        "高解像度の画面でぼやけるときは、`devicePixelRatio` に合わせてピクセル数を増やす。"
+      ],
+      "iosNote": "iOS Safari は canvas に使えるメモリの上限が比較的小さいとされ、大きな画像を扱うと描画に失敗することがあります（具体的な上限は要確認）。",
+      "apps": [
+        { "appId": "image-tool", "usage": "`js/core/resize.js` で、大きく縮小するときは半分ずつ段階的に縮めて画質を保っています。書き出しは `js/core/encode.js` の `canvas.toBlob()` で行い、`js/core/limits.js` で canvas の上限を超えないように大きさを調整しています。" },
+        { "appId": "lottery-tools", "usage": "ルーレットの円盤を、`js/features/roulette.js` で canvas に描いています。" }
+      ],
+      "related": ["pointer-events", "web-share-api"],
+      "links": [
+        { "label": "Canvas API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Canvas_API", "kind": "mdn" },
+        { "label": "HTMLCanvasElement.toBlob()（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/HTMLCanvasElement/toBlob", "kind": "mdn" },
+        { "label": "Can I use: Canvas", "url": "https://caniuse.com/canvas", "kind": "caniuse" }
+      ],
+      "tags": ["画像", "描画", "端末内"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "web-share-api",
+      "category": "web-api",
+      "level": "basic",
+      "title": "Web Share API",
+      "aka": ["ウェブシェア", "共有", "navigator.share"],
+      "keywords": ["シェア", "LINE", "写真に保存", "canShare", "ファイル共有", "共有シート"],
+      "summary": "OS の共有シートを開いて、テキストや画像をほかのアプリに渡す仕組み。iPhone では写真アプリへの保存もここから行える。",
+      "what": "Web Share API は、`navigator.share()` を呼ぶと端末の[[共有シート]]を開いてくれる仕組みです。テキストや URL のほか、画像などのファイルも渡せます。渡す先（LINE、メール、写真アプリなど）は利用者が選びます。",
+      "why": "Webアプリからほかのアプリに結果を送ったり、作った画像を保存したりするのは、本来は手間がかかります。共有シートを使えば、ネイティブアプリと同じ操作で渡せます。渡す先ごとの対応は OS が受け持つので、Webアプリ側で書き分ける必要がありません。",
+      "how": "`navigator.share({ title, text })` や `navigator.share({ files })` を呼ぶと、共有シートが開きます。結果は[[非同期処理]]で返り、利用者がキャンセルすると `AbortError` というエラーになります。\n\nファイルを渡せるかどうかは、先に `navigator.canShare({ files })` で確かめられます。",
+      "pitfalls": [
+        "[[ユーザー操作]]（タップ）の処理の中で呼ばないと失敗する。`await` で何かを待った後に呼ぶと、タップとの結び付きが切れることがある。",
+        "使えない環境があるため、コピーやダウンロードなどの代わりの手段を用意する。",
+        "[[HTTPS]] でないと使えない。"
+      ],
+      "iosNote": "iPhone では、画像ファイルを共有シートに渡すと「画像を保存」から写真アプリに保存できます。",
+      "apps": [
+        { "appId": "image-tool", "usage": "`js/output/share.js` で、編集した画像をファイルとして共有シートに渡しています。`canShare` で渡せないと分かったときは、ダウンロードに切り替えます。" },
+        { "appId": "lottery-tools", "usage": "`js/core/share.js` で、抽選の結果をテキストで共有しています。共有が使えないときは、クリップボードへのコピーに切り替えます。" }
+      ],
+      "related": ["canvas-api"],
+      "links": [
+        { "label": "Web Share API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Share_API", "kind": "mdn" },
+        { "label": "Can I use: Web Share API", "url": "https://caniuse.com/web-share", "kind": "caniuse" }
+      ],
+      "tags": ["共有", "iPhone"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "pointer-events",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "Pointer Events",
+      "aka": ["ポインターイベント", "pointerdown", "pointermove"],
+      "keywords": ["タッチ", "マウス", "ペン", "スワイプ", "ドラッグ", "setPointerCapture", "touch-action"],
+      "summary": "マウス・指・ペンの操作を、同じ書き方で受け取れるイベント。ドラッグやスワイプを作るときに使う。",
+      "what": "Pointer Events は、画面を「押した」「動かした」「離した」を、入力の種類に関係なく同じ[[イベント]]で受け取る仕組みです。`pointerdown`、`pointermove`、`pointerup` などがあり、マウスでも指でもペンでも同じように動きます。",
+      "why": "以前は、マウス用（`mousedown` など）と指用（`touchstart` など）で別々に処理を書く必要がありました。Pointer Events なら1つの書き方で済み、PC でも iPhone でも同じ操作を実現できます。",
+      "how": "`pointerdown` で操作の始まりを知り、`setPointerCapture(e.pointerId)` を呼ぶと、指が要素の外に出てもその要素にイベントが届き続けます。`pointermove` で位置（`clientX`／`clientY`）の変化を追い、`pointerup` や `pointercancel` で終わりを知ります。\n\nCSS の `touch-action` で、ブラウザ標準のスクロールやズームとの分担を決めます。",
+      "pitfalls": [
+        "`touch-action` を指定しないと、指で動かしたときにブラウザのスクロールが優先され、`pointercancel` で中断されることがある。",
+        "横スワイプを作るときに `touch-action: none` にすると、縦のスクロールもできなくなる。横だけを自分で扱うなら `pan-y` を指定する。",
+        "`pointercancel` の後片付けを忘れると、ドラッグ中の状態が残ってしまう。"
+      ],
+      "apps": [
+        { "appId": "image-tool", "usage": "`js/ui/compare.js` で、処理前後の画像を見比べる境目を指でなぞって動かせるようにしています。`setPointerCapture` で、指が外にずれても操作が続きます。編集画面（`js/editor/editor.js`）で範囲を指定する操作にも使っています。" },
+        { "appId": "lottery-tools", "usage": "画面への最初のタッチ（`pointerdown`）を合図に、効果音を鳴らせるよう準備しています（`js/app.js`）。" }
+      ],
+      "related": ["canvas-api", "web-audio-api"],
+      "links": [
+        { "label": "ポインターイベント（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Pointer_events", "kind": "mdn" },
+        { "label": "touch-action（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Properties/touch-action", "kind": "mdn" },
+        { "label": "Can I use: Pointer events", "url": "https://caniuse.com/pointer", "kind": "caniuse" }
+      ],
+      "tags": ["タッチ操作", "イベント"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "web-audio-api",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "Web Audio API",
+      "aka": ["ウェブオーディオ", "AudioContext", "効果音"],
+      "keywords": ["音", "サウンド", "オシレーター", "自動再生", "unlock", "GainNode"],
+      "summary": "ブラウザの中で音を作ったり加工したりする仕組み。音声ファイルがなくても、効果音をその場で作れる。",
+      "what": "Web Audio API は、音の部品（ノード）をつないで音を作る仕組みです。音の出どころ（音の波を作るオシレーターや、音声ファイル）から、音量を調整する部品を通って、スピーカーへつなぎます。全体の土台になるのが `AudioContext` です。",
+      "why": "効果音のために音声ファイルを用意すると、読み込みや管理の手間が増えます。Web Audio API なら、「ピッ」「ポン」のような短い音を数行のコードで作れて、音の高さや長さも自由に変えられます。",
+      "how": "`new AudioContext()` で土台を作り、`createOscillator()` で音の波を、`createGain()` で音量の部品を作って、`connect()` でつなぎます。`start()` と `stop()` に時刻を渡すと、決めたタイミングで鳴らせます。\n\n音量を急に変えると「プツッ」という雑音が出るため、少しずつ上げ下げします。",
+      "pitfalls": [
+        "多くのブラウザは、[[ユーザー操作]]なしに音を鳴らすことを制限している。最初のタップで `AudioContext` を作るか、`resume()` する。",
+        "`AudioContext` をたくさん作ると資源を使い切ることがある。1つを使い回す。"
+      ],
+      "iosNote": "iPhone では、タップなどの操作の中で音を鳴らすまで `AudioContext` が停止中（`suspended`）のままです。本体の消音モードの影響も受けることがあります（挙動は要確認）。",
+      "apps": [
+        { "appId": "lottery-tools", "usage": "`js/core/sound.js` で、音声ファイルを使わずに効果音を作っています。iOS 対策として、最初のタップで無音の短い音を鳴らしてから（`unlock()`）使っています。" }
+      ],
+      "related": ["pointer-events"],
+      "links": [
+        { "label": "Web Audio API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API", "kind": "mdn" },
+        { "label": "Can I use: Web Audio API", "url": "https://caniuse.com/audio-api", "kind": "caniuse" }
+      ],
+      "tags": ["音", "iPhone"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "screen-wake-lock",
+      "category": "web-api",
+      "level": "basic",
+      "title": "Screen Wake Lock API",
+      "aka": ["スクリーンウェイクロック", "ウェイクロック", "画面のスリープ防止"],
+      "keywords": ["スリープ", "画面が暗くなる", "wakeLock", "navigator.wakeLock", "visibilitychange"],
+      "summary": "画面が自動で暗くなったりロックされたりするのを、一時的に止める仕組み。",
+      "what": "Screen Wake Lock API は、`navigator.wakeLock.request('screen')` を呼ぶと、画面の自動スリープを止めてくれる仕組みです。戻ってきたオブジェクト（センチネル）の `release()` を呼ぶと、元に戻ります。",
+      "why": "抽選の演出を見せている途中や、レシピを見ながら料理しているときに画面が暗くなると困ります。この API を使えば、必要な間だけスリープを止め、終わったら元に戻せます。",
+      "how": "`request('screen')` は[[非同期処理]]で、うまくいくとセンチネルが返ります。ページが見えなくなる（別のアプリに切り替えるなど）と、ロックは自動的に外れます。\n\nそのため、`visibilitychange` イベントで画面に戻ってきたことを知り、必要ならもう一度取り直します。",
+      "pitfalls": [
+        "使えない環境があるため、`'wakeLock' in navigator` で確かめてから使う。取得に失敗してもアプリが動くようにする。",
+        "ロックしたまま放っておくと電池を消費する。使い終わったら必ず外す。"
+      ],
+      "iosNote": "iOS Safari でも使えますが、対応したバージョンや、ホーム画面から起動したときの挙動は要確認です。",
+      "apps": [
+        { "appId": "lottery-tools", "usage": "`js/core/wakelock.js` で、演出中だけ画面のスリープを止めています。演出が重なっても正しく外せるよう、使っている数を数えています。画面に戻ってきたときに演出が続いていれば、取り直します。" }
+      ],
+      "related": ["web-audio-api"],
+      "links": [
+        { "label": "Screen Wake Lock API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Screen_Wake_Lock_API", "kind": "mdn" },
+        { "label": "Can I use: Screen Wake Lock API", "url": "https://caniuse.com/wake-lock", "kind": "caniuse" }
+      ],
+      "tags": ["画面", "iPhone"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "crypto-getrandomvalues",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "crypto.getRandomValues",
+      "aka": ["暗号論的乱数", "getRandomValues", "クリプト"],
+      "keywords": ["乱数", "ランダム", "Math.random", "抽選", "シャッフル", "偏り", "公平", "Fisher–Yates"],
+      "summary": "予測されにくい、質の高い乱数を作る関数。抽選のように公平さが大事な場面で、`Math.random` の代わりに使える。",
+      "what": "`crypto.getRandomValues()` は、渡した数値の配列（`Uint32Array` など）を[[乱数]]で埋めてくれる関数です。暗号に使えるほど予測されにくい乱数を作れるのが特長です。",
+      "why": "よく使われる `Math.random()` は手軽ですが、乱数の作り方はブラウザに任されていて、予測されにくさは保証されていません。抽選やくじ引きのように「公平であること」を説明したい場面では、質が保証された `getRandomValues` を使う方が安心です。",
+      "how": "`const buf = new Uint32Array(1); crypto.getRandomValues(buf);` とすると、`buf[0]` に 0 から約43億までの整数が入ります。\n\nこれを「1〜6の出目」に変えるとき、単純に `% 6`（6で割った余り）を使うと、ごくわずかに小さい数が出やすくなります。割り切れない端の範囲に入った値を捨てて引き直す（**棄却サンプリング**）と、偏りなく選べます。",
+      "pitfalls": [
+        "大きな数を `%` で小さい範囲に変えると、わずかに偏る。",
+        "1回で作れる量には上限（65,536 バイト）がある。",
+        "乱数の質が高くても、並べ替えのやり方が正しくないと偏る。シャッフルには Fisher–Yates という方法を使う。"
+      ],
+      "apps": [
+        { "appId": "lottery-tools", "usage": "`js/core/random.js` にすべての乱数をまとめ、`Math.random` は使わない方針にしています。棄却サンプリングで偏りをなくし、シャッフルは Fisher–Yates で行っています。" }
+      ],
+      "related": [],
+      "links": [
+        { "label": "Crypto.getRandomValues()（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Crypto/getRandomValues", "kind": "mdn" },
+        { "label": "Can I use: getRandomValues", "url": "https://caniuse.com/getrandomvalues", "kind": "caniuse" }
+      ],
+      "tags": ["乱数", "抽選", "公平"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    }
+  ]
+}

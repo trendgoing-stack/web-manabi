@@ -1,0 +1,42 @@
+[
+  {
+    "id": "workout-calendar",
+    "name": "筋トレ記録カレンダー",
+    "summary": "筋トレの記録をカレンダーで管理するアプリ。鍛えた部位が色分けで表示され、統計のグラフやルーティンの保存もできる。",
+    "repo": "workout-calendar",
+    "pagesUrl": "https://trendgoing-stack.github.io/workout-calendar/",
+    "techStack": "React + Vite + TypeScript"
+  },
+  {
+    "id": "image-tool",
+    "name": "画像かんたん編集",
+    "summary": "写真のリサイズ・圧縮・形式変換と、切り取り・ぼかし・文字入れを端末の中だけで行うアプリ。",
+    "repo": "image-tool",
+    "pagesUrl": "https://trendgoing-stack.github.io/image-tool/",
+    "techStack": "バニラJS（ES Modules）"
+  },
+  {
+    "id": "lottery-tools",
+    "name": "抽選ツール",
+    "summary": "サイコロ・ルーレット・あみだくじ・チーム分けなど、「決める」「選ぶ」ための道具をまとめたアプリ。",
+    "repo": "lottery-tools",
+    "pagesUrl": "https://trendgoing-stack.github.io/lottery-tools/",
+    "techStack": "バニラJS（ES Modules）"
+  },
+  {
+    "id": "reversi",
+    "name": "リバーシ",
+    "summary": "入門から十段まで11段階のAIと対戦できるリバーシ。最善手のアシストや盤面の解説つき。",
+    "repo": "reversi",
+    "pagesUrl": "https://trendgoing-stack.github.io/reversi/",
+    "techStack": "バニラJS + Web Worker"
+  },
+  {
+    "id": "git-manabi",
+    "name": "Gitまなび帳",
+    "summary": "Git・GitHub CLI・GitHub の操作を、「やりたいこと」とコマンド名の両方から引ける学習向けの辞典。",
+    "repo": "git-manabi",
+    "pagesUrl": "https://trendgoing-stack.github.io/git-manabi/",
+    "techStack": "バニラJS（ES Modules）"
+  }
+]
