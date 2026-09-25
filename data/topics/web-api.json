@@ -82,9 +82,9 @@
         "端末内",
         "オフライン"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "canvas-api",
@@ -233,9 +233,9 @@
         "共有",
         "iPhone"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "pointer-events",
@@ -308,9 +308,9 @@
         "タッチ操作",
         "イベント"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "web-audio-api",
@@ -503,9 +503,9 @@
         "抽選",
         "公平"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "web-worker",
@@ -642,9 +642,9 @@
         "コピー",
         "iPhone"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "page-visibility",

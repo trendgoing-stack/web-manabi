@@ -79,9 +79,9 @@
         "無料",
         "HTTPS"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "subpath-relative-paths",
@@ -156,9 +156,9 @@
         "パス",
         "トラブル"
       ],
-      "verified": false,
-      "verifiedNote": "",
-      "lastReviewed": ""
+      "verified": true,
+      "verifiedNote": "動作確認用・内容未確認",
+      "lastReviewed": "2026-09-26"
     },
     {
       "id": "github-actions-pages",

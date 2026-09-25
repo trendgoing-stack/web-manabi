@@ -14,22 +14,24 @@ const rd = (p)=>JSON.parse(readFileSync(join(ROOT,'data',p),'utf8'));
 const meta=rd('meta.json');
 const raw={meta,apps:rd('apps.json'),glossary:rd('glossary.json'),quiz:rd('quiz.json'),topicFiles:meta.categories.map(c=>({path:`topics/${c.id}.json`,data:rd(`topics/${c.id}.json`)})),failed:[]};
 const plain=(s)=>s.replace(/\[\[([^\]]+)\]\]|`([^`]+)`|\*\*([^*]+)\*\*/g,(_,a,b,c)=>a??b??c);
+// data/ の確認状態に左右されないよう、テストごとに全件を未確認に戻してから始める
+const fresh=()=>{ const st=buildStore(structuredClone(raw)); st.topics.forEach(t=>{ t.verified=false; }); return st; };
 let ok=0, ng=0; const assert=(c,m)=>{ if(c) ok++; else { ng++; console.log('NG', m); } };
 
 // 未確認だけ → 開始できない
-let store=buildStore(structuredClone(raw));
+let store=fresh();
 let r=Q.checkStart(store,{kind:'all'},'normal',{}, '2026-09-26');
 assert(!r.ok && r.message.includes('0 件'), 'all unverified: '+r.message);
 assert(Q.buildQuiz(store,{kind:'all'},'normal',{},'2026-09-26',plain).length===0,'no questions when unverified');
 
 // 3件だけ確認済み → 開始できない（クイズ）、カードは可
-store=buildStore(structuredClone(raw));
+store=fresh();
 store.topics.slice(0,3).forEach(t=>t.verified=true);
 assert(!Q.checkStart(store,{kind:'all'},'normal',{},'2026-09-26').ok,'3 verified quiz ng');
 assert(Q.checkStart(store,{kind:'all'},'normal',{},'2026-09-26','cards').ok,'3 verified cards ok');
 
 // 半分を確認済みに
-store=buildStore(structuredClone(raw));
+store=fresh();
 const vset=new Set(); store.topics.forEach((t,i)=>{ if(i%2===0){t.verified=true; vset.add(t.id);} });
 for (let k=0;k<200;k++){
   const qs=Q.buildQuiz(store,{kind:'all'},'normal',{},'2026-09-26',plain);
