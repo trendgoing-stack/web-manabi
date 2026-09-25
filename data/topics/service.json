@@ -1,0 +1,37 @@
+{
+  "category": "service",
+  "topics": [
+    {
+      "id": "goatcounter",
+      "category": "service",
+      "level": "basic",
+      "title": "GoatCounter",
+      "aka": ["ゴートカウンター", "アクセス解析"],
+      "keywords": ["アクセス数", "解析", "count.js", "プライバシー", "クッキーなし", "計測"],
+      "summary": "クッキーを使わず、個人を追いかけない方針のアクセス解析サービス。小さなスクリプトを読み込むだけで、ページが開かれた回数を数えられる。",
+      "what": "GoatCounter は、Webサイトが何回開かれたかを数えるアクセス解析サービスです。[[クッキー]]を使わず、訪問者一人ひとりを追いかけないことを方針にしています。ページに `count.js` という小さなスクリプトを読み込むと、表示のたびに記録が送られます。",
+      "why": "アプリを公開したら、どのくらい使われているかを知りたくなります。一方で、利用者のプライバシーは守りたいものです。GoatCounter は集める情報が少ない作りなので、個人のアプリでも導入しやすいサービスです。",
+      "how": "`<script data-goatcounter=\"送信先のURL\" src=\"count.js\">` のように読み込むと、スクリプトがページの[[パス]]やタイトルを送信先に送ります。送るパスやタイトルは、属性で決まった値に置き換えることもできます。\n\n手元の [[localhost]] で開いたときは記録しない作りになっているため、開発中の操作は数えられません。",
+      "pitfalls": [
+        "何も指定しないと、ページの URL のパスがそのまま送られる。URL に検索語などを入れている場合は、送る値を固定する。",
+        "広告ブロッカーなどで送信が止められることがあるため、数字は目安として扱う。",
+        "外部の [[CDN]] から読み込むと、オフラインのときは読み込みに失敗する。失敗してもアプリが止まらないようにする。"
+      ],
+      "apps": [
+        { "appId": "git-manabi", "usage": "`count.js` をリポジトリに同梱し、`js/analytics.js` から読み込んでいます。送るパスは `/git-manabi/` に固定し、設定で「送信しない」を選ぶと `count.js` 自体を読み込みません。" },
+        { "appId": "reversi", "usage": "`index.html` の `<script>` タグで、GoatCounter の配信元（`gc.zgo.at`）から `count.js` を読み込んでいます。オフラインのときは読み込みに失敗するだけで、対局には影響しません。" },
+        { "appId": "lottery-tools", "usage": "`index.html` の最後で `count.js` を `async` で読み込んでいます。送信先は、ほかのアプリと共通のアカウント（`km-apps`）です。" },
+        { "appId": "workout-calendar", "usage": "`index.html` の `<script>` タグで `count.js` を読み込んでいます。React のアプリですが、計測はビルドとは関係なく HTML に直接書いています。" }
+      ],
+      "related": ["github-pages"],
+      "links": [
+        { "label": "GoatCounter 公式サイト", "url": "https://www.goatcounter.com/", "kind": "official" },
+        { "label": "GoatCounter の使い方", "url": "https://www.goatcounter.com/help/start", "kind": "official" }
+      ],
+      "tags": ["アクセス解析", "プライバシー", "無料"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    }
+  ]
+}

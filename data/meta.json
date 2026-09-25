@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026.09.26-1",
+  "counts": {
+    "topics": 20,
+    "glossary": 38,
+    "quiz": 0
+  },
+  "categories": [
+    { "id": "web-api", "label": "Web API", "order": 1, "reviewDays": 180 },
+    { "id": "pwa", "label": "PWA・オフライン", "order": 2, "reviewDays": 180 },
+    { "id": "frontend", "label": "フロントエンド構成", "order": 3, "reviewDays": 180 },
+    { "id": "hosting", "label": "公開・ホスティング", "order": 4, "reviewDays": 180 },
+    { "id": "service", "label": "外部サービス", "order": 5, "reviewDays": 180 },
+    { "id": "claude-code", "label": "Claude Code・AI開発", "order": 6, "reviewDays": 90 },
+    { "id": "security", "label": "セキュリティ・プライバシー", "order": 7, "reviewDays": 180 }
+  ]
+}

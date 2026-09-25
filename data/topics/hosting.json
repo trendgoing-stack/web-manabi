@@ -1,0 +1,70 @@
+{
+  "category": "hosting",
+  "topics": [
+    {
+      "id": "github-pages",
+      "category": "hosting",
+      "level": "basic",
+      "title": "GitHub Pages",
+      "aka": ["ギットハブページズ", "Pages", "github.io"],
+      "keywords": ["公開", "ホスティング", "静的サイト", "デプロイ", "HTTPS", "GitHub Actions"],
+      "summary": "GitHub のリポジトリに置いたファイルを、そのまま Web サイトとして無料で公開できるサービス。HTTPS で配信される。",
+      "what": "GitHub Pages は、GitHub の[[リポジトリ]]にある HTML・CSS・JavaScript を、`https://ユーザー名.github.io/リポジトリ名/` の URL で公開してくれるサービスです。サーバー側でプログラムを動かす機能はなく、ファイルを配るだけの[[静的サイト]]向けです。",
+      "why": "自分でサーバーを用意しなくても、無料で [[HTTPS]] のサイトを公開できます。Service Worker やクリップボードのように HTTPS でないと動かない機能を、iPhone の実機で試す場所としても便利です。",
+      "how": "公開の方法は大きく2つあります。1つは、指定したブランチ（例：`main` の `/ (root)`）の中身をそのまま公開する方法です。もう1つは、GitHub Actions でビルドなどの処理をしてから、その結果を公開する方法です。\n\nどちらの方法でも、リポジトリに push すると数分で公開中のサイトに反映されます（[[デプロイ]]）。push などの Git の操作は「Gitまなび帳」で確認できます。",
+      "pitfalls": [
+        "リポジトリごとのサイトはサブパス（`/リポジトリ名/`）で公開されるため、`/` で始まるパスは動かない。",
+        "公開したファイルは誰でも見られる。秘密の情報はリポジトリに入れない。",
+        "反映までに数分かかる。変わらないときは、Service Worker のキャッシュも疑う。"
+      ],
+      "apps": [
+        { "appId": "git-manabi", "usage": "`main` ブランチの `/ (root)` をそのまま公開しています。ビルドの工程はなく、push した内容がそのまま配信されます。" },
+        { "appId": "image-tool", "usage": "ブランチの中身をそのまま公開しています。`.nojekyll` という空のファイルを置いて、GitHub Pages が標準で行う Jekyll の処理を止めています。" },
+        { "appId": "reversi", "usage": "GitHub Actions のワークフロー（`.github/workflows/deploy.yml`）で、`main` に push するたびにリポジトリの中身をそのまま公開しています。" },
+        { "appId": "lottery-tools", "usage": "リバーシと同じく、GitHub Actions のワークフローでリポジトリの中身をそのまま公開しています。" },
+        { "appId": "workout-calendar", "usage": "GitHub Actions で `npm ci` と `npm run build` を実行し、ビルドで出力された `dist` フォルダを公開しています。" }
+      ],
+      "related": ["subpath-relative-paths", "goatcounter", "service-worker"],
+      "links": [
+        { "label": "GitHub Pages のドキュメント", "url": "https://docs.github.com/ja/pages", "kind": "official" },
+        { "label": "GitHub Pages とは", "url": "https://docs.github.com/ja/pages/getting-started-with-github-pages/what-is-github-pages", "kind": "official" },
+        { "label": "Gitまなび帳（push などの Git 操作）", "url": "https://trendgoing-stack.github.io/git-manabi/", "kind": "other" }
+      ],
+      "tags": ["公開", "無料", "HTTPS"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "subpath-relative-paths",
+      "category": "hosting",
+      "level": "basic",
+      "title": "サブパス配信と相対パス",
+      "aka": ["サブパス", "相対パス", "base"],
+      "keywords": ["GitHub Pages", "パス", "404", "表示が崩れる", "scope", "start_url", "./"],
+      "summary": "`https://ユーザー名.github.io/リポジトリ名/` のように、ドメインの直下ではない場所で公開するときの注意点。ファイルは `./` から始まる相対パスで指定する。",
+      "what": "サブパス配信とは、ドメインのいちばん上（`/`）ではなく、`/web-manabi/` のような下の階層でサイトを公開することです。GitHub Pages のリポジトリごとのサイトは、この形になります。\n\n[[相対パス]]は「今いる場所から見た位置」でファイルを指す書き方で、`./css/app.css` のように書きます。",
+      "why": "`/css/app.css` のように `/` から始まる書き方は、ドメインの直下を指します。サブパス配信ではそこに何もないため、ファイルが見つからず画面が崩れます。相対パスで書いておけば、どの階層に置いても同じように動きます。",
+      "how": "ブラウザは相対パスを、それを書いたファイルの場所を基準に解決します。HTML の中なら HTML の場所、`sw.js` の中なら `sw.js` の場所、manifest の `start_url: \"./\"` なら manifest の場所が基準です。\n\nビルドツールを使う場合は、出力するパスの基準を設定で `./` にしておきます。",
+      "pitfalls": [
+        "手元の [[localhost]] では動くのに、公開すると表示が崩れるときは、まず `/` で始まるパスを疑う。",
+        "`#/topic/...` のようなハッシュを使った画面遷移なら、サーバーの設定なしでサブパスでも動く。",
+        "Service Worker の[[スコープ]]も `sw.js` を置いた場所で決まるため、相対パスでそろえる。"
+      ],
+      "apps": [
+        { "appId": "workout-calendar", "usage": "`vite.config.ts` で `base: './'` を指定し、ビルド結果のパスをすべて相対パスにしています。GitHub Pages のサブパスでも、ドメインの直下でも同じビルドが動きます。" },
+        { "appId": "reversi", "usage": "`sw.js` のキャッシュ対象を `./index.html` のような相対パスで書き、`/reversi/` の下で公開しても動くようにしています。" },
+        { "appId": "git-manabi", "usage": "Service Worker を `./sw.js` で登録し、キャッシュ対象も `./` から始まる相対パスで書いています。" }
+      ],
+      "related": ["github-pages", "service-worker", "web-app-manifest", "vite"],
+      "links": [
+        { "label": "GitHub Pages とは", "url": "https://docs.github.com/ja/pages/getting-started-with-github-pages/what-is-github-pages", "kind": "official" },
+        { "label": "Vite の base オプション", "url": "https://ja.vite.dev/config/shared-options", "kind": "official" }
+      ],
+      "tags": ["公開", "パス", "トラブル"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    }
+  ]
+}

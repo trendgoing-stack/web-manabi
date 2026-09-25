@@ -1,0 +1,150 @@
+{
+  "category": "frontend",
+  "topics": [
+    {
+      "id": "es-modules",
+      "category": "frontend",
+      "level": "basic",
+      "title": "ES Modules",
+      "aka": ["ESモジュール", "ESM", "import", "export"],
+      "keywords": ["type=module", "動的import", "import()", "ファイル分割", "モジュール"],
+      "summary": "JavaScript のファイルを部品に分けて、`import` と `export` で受け渡しする標準の仕組み。ビルドなしでもブラウザがそのまま扱える。",
+      "what": "ES Modules は、JavaScript を複数のファイルに分け、必要なものだけを受け渡すための仕組みです。あるファイルで `export` した関数を、別のファイルで `import` して使います。HTML からは `<script type=\"module\">` で読み込みます。",
+      "why": "1つのファイルにすべてを書くと、長くなって読みにくく、名前もぶつかりやすくなります。[[モジュール]]に分けると役割ごとにファイルを整理でき、どのファイルが何を使っているかも `import` を見れば分かります。今のブラウザは標準で対応しているので、[[ビルド]]なしでも使えます。",
+      "how": "ブラウザは `type=\"module\"` のスクリプトを読むと、`import` をたどって必要なファイルを取得します。モジュールの中の変数は、`export` しない限り外から見えません。\n\n`import('./demo.js')` のように関数の形で書くと、必要になったときに後から読み込めます（動的 import）。",
+      "pitfalls": [
+        "HTML ファイルを直接開く（`file://`）と動かない。手元でもサーバー経由で開く。",
+        "ビルドなしで使うときは、`import` のパスに拡張子の `.js` まで書く。",
+        "モジュールのスクリプトは、HTML の読み込みが終わってから実行される。"
+      ],
+      "apps": [
+        { "appId": "git-manabi", "usage": "`index.html` から `js/app.js` を `type=\"module\"` で読み込み、検索・クイズ・保存などを多数のファイルに分けています。ビルドの工程はありません。" },
+        { "appId": "image-tool", "usage": "`js/core/`（読み込み・縮小・書き出し）、`js/editor/`（編集）、`js/ui/`（画面）のように、役割ごとのフォルダに分けています。" },
+        { "appId": "lottery-tools", "usage": "`js/core/` に共通の部品（乱数、効果音、共有など）、`js/features/` に機能ごとの画面を置いています。" },
+        { "appId": "reversi", "usage": "ES Modules は使わず、昔ながらの `<script>` を3本並べています。`engine.js` は即時関数で `ReversiEngine` という名前だけを外に出し、Web Worker からは `importScripts` で読み込んでいます。" }
+      ],
+      "related": ["vite", "typescript"],
+      "links": [
+        { "label": "JavaScript モジュール（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules", "kind": "mdn" },
+        { "label": "Can I use: JavaScript modules", "url": "https://caniuse.com/es6-module", "kind": "caniuse" }
+      ],
+      "tags": ["JavaScript", "ビルド不要", "ファイル分割"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "react",
+      "category": "frontend",
+      "level": "intermediate",
+      "title": "React",
+      "aka": ["リアクト", "React.js"],
+      "keywords": ["コンポーネント", "JSX", "TSX", "フック", "useState", "UI ライブラリ"],
+      "summary": "画面を「コンポーネント」という部品の組み合わせで作る、JavaScript の UI ライブラリ。データが変わると画面を自動で描き直す。",
+      "what": "React は、画面（UI）を作るための[[ライブラリ]]です。ボタンやカードのような部品を[[コンポーネント]]として関数で書き、それを組み合わせて画面全体を作ります。見た目は、HTML に似た JSX という書き方で表します。",
+      "why": "画面の一部を書き換えるたびに [[DOM]] を手で操作すると、表示とデータがずれるなどの不具合が起きやすくなります。React では「データ（[[状態]]）がこうなら、画面はこう」と書くだけで、データが変わったときの書き換えは React が受け持ちます。",
+      "how": "コンポーネントは、受け取った値と自分の状態から「どんな画面にしたいか」を返す関数です。状態は `useState` などのフックで持ちます。状態が変わると React はコンポーネントを呼び直し、前回との違いを調べて、変わった部分だけを実際の DOM に反映します。\n\nJSX はそのままではブラウザで動かないため、[[ビルド]]で普通の JavaScript に変換します。",
+      "pitfalls": [
+        "状態の配列やオブジェクトを直接書き換えると、変化に気づかれず画面が更新されない。新しい値を作って渡す。",
+        "ビルドが必要になるため、バニラJSより準備が増える。",
+        "小さなアプリでは、React を使わない方がシンプルなこともある。"
+      ],
+      "apps": [
+        { "appId": "workout-calendar", "usage": "カレンダー、記録の編集、統計、ルーティンの各画面を `src/pages/` と `src/components/` のコンポーネントで作っています。アプリ全体のデータは `src/store/` の Context で共有し、更新バナーは `useSyncExternalStore` で Service Worker の状態を受け取っています。" }
+      ],
+      "related": ["vite", "typescript", "tailwind-css"],
+      "links": [
+        { "label": "React 公式サイト", "url": "https://ja.react.dev/", "kind": "official" },
+        { "label": "React の学習ガイド", "url": "https://ja.react.dev/learn", "kind": "official" }
+      ],
+      "tags": ["UI", "ライブラリ", "ビルド必要"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "vite",
+      "category": "frontend",
+      "level": "intermediate",
+      "title": "Vite",
+      "aka": ["ヴィート", "ビート"],
+      "keywords": ["ビルドツール", "開発サーバー", "バンドル", "npm run dev", "npm run build", "dist", "vite.config"],
+      "summary": "開発中はすぐに画面へ反映し、公開用には必要なファイルをまとめて小さく出力してくれるビルドツール。",
+      "what": "Vite は、Webアプリの開発を助ける[[ビルド]]ツールです。開発中は手元でサーバーを動かし、ファイルを保存するとすぐにブラウザへ反映します。公開するときは、ソースコードを[[バンドル]]・圧縮して、配布用のファイル（`dist` フォルダ）を出力します。",
+      "why": "React の JSX や TypeScript は、ブラウザがそのままでは読めません。Vite がそれらを変換し、たくさんのファイルを配布しやすい形にまとめます。設定が少なくても始められ、動作が速いのも特長です。",
+      "how": "開発中（`npm run dev`）は、ブラウザが要求したファイルをその都度変換して返します。全体をまとめ直さないので、起動や反映が速くなります。\n\n公開用（`npm run build`）では、使われているファイルをたどってまとめ、ファイル名に中身から作ったハッシュを付けて出力します。設定は `vite.config.ts` に書き、プラグインで機能を足せます。",
+      "pitfalls": [
+        "GitHub Pages のサブパスで公開するときは、`base` を設定しないとファイルが読み込めない。",
+        "公開するのは `dist` の中身。ソースのフォルダをそのまま公開しても動かない。",
+        "入れたパッケージの版によって動きが変わるため、`package-lock.json` もリポジトリに入れる。"
+      ],
+      "apps": [
+        { "appId": "workout-calendar", "usage": "`vite.config.ts` で React と Tailwind CSS のプラグインを読み込み、`base: './'` を指定しています。さらに自作のプラグインで、キャッシュ対象の一覧とハッシュを埋め込んだ `sw.js` を出力しています。" }
+      ],
+      "related": ["react", "typescript", "tailwind-css", "subpath-relative-paths"],
+      "links": [
+        { "label": "Vite 公式サイト", "url": "https://ja.vite.dev/", "kind": "official" }
+      ],
+      "tags": ["ビルド必要", "開発ツール"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "typescript",
+      "category": "frontend",
+      "level": "intermediate",
+      "title": "TypeScript",
+      "aka": ["タイプスクリプト", "TS"],
+      "keywords": ["型", "型チェック", "tsc", ".ts", ".tsx", "interface", "JSDoc"],
+      "summary": "JavaScript に「型」を書けるようにした言語。書いた内容の食い違いを、実行する前に見つけられる。",
+      "what": "TypeScript は、JavaScript に[[型]]の情報を加えた言語です。「この変数には数値が入る」「この関数は文字列を返す」といった約束を書いておくと、それに反するコードをエディタやコマンドが指摘してくれます。",
+      "why": "JavaScript は、数値のつもりの値に文字列が入っていても、実行するまで気づけません。TypeScript なら、書いている途中や[[ビルド]]の前に間違いが分かります。エディタの補完も賢くなり、大きなアプリでも安心して書き換えられます。",
+      "how": "`.ts`／`.tsx` のファイルに型付きのコードを書き、`tsc` コマンドで型をチェックします。ブラウザは TypeScript を直接は実行できないため、型の部分を取り除いた JavaScript に変換してから配ります。この変換は Vite などのツールが行います。\n\nビルドなしで型の助けを借りたい場合は、JavaScript のコメントに型を書く **JSDoc** という方法もあります。",
+      "pitfalls": [
+        "型はビルドのときのチェックで、実行するときには消えている。外から読み込んだ JSON が型どおりとは限らないので、中身の確認は別に必要。",
+        "`any` 型を多用すると、チェックが効かなくなる。"
+      ],
+      "apps": [
+        { "appId": "workout-calendar", "usage": "`src/` 以下をすべて `.ts`／`.tsx` で書き、データの形を `src/types/index.ts` にまとめています。`npm run build` では、`tsc -b` で型をチェックしてから Vite でビルドします。" },
+        { "appId": "git-manabi", "usage": "TypeScript は使っていませんが、`js/types.js` に JSDoc で型を書き、エディタの補完やチェックに役立てています。" }
+      ],
+      "related": ["vite", "react", "es-modules"],
+      "links": [
+        { "label": "TypeScript 公式サイト", "url": "https://www.typescriptlang.org/ja/", "kind": "official" },
+        { "label": "TypeScript のドキュメント", "url": "https://www.typescriptlang.org/ja/docs/", "kind": "official" }
+      ],
+      "tags": ["型", "ビルド必要", "言語"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "tailwind-css",
+      "category": "frontend",
+      "level": "basic",
+      "title": "Tailwind CSS",
+      "aka": ["テイルウィンド", "Tailwind"],
+      "keywords": ["ユーティリティクラス", "CSS フレームワーク", "className", "レスポンシブ", "ダークモード", "dark:"],
+      "summary": "`flex` や `p-4` のような小さなクラス名を HTML に並べて見た目を作る CSS フレームワーク。使ったクラスの CSS だけが出力される。",
+      "what": "Tailwind CSS は、「余白を 1rem」「文字を太く」といった1つの役割だけを持つクラス（ユーティリティクラス）をたくさん用意した CSS の[[フレームワーク]]です。CSS ファイルに見た目を書く代わりに、HTML（React なら `className`）にクラス名を並べて見た目を決めます。",
+      "why": "自分で CSS を書くと、クラス名を考えたり、どの CSS がどこに効いているかを追ったりする手間がかかります。Tailwind なら見た目がその場で分かり、余白や色もあらかじめ決められた段階から選ぶので、画面全体の統一感を保ちやすくなります。",
+      "how": "[[ビルド]]のときに、ソースコードの中で使われているクラス名を探し、それに対応する CSS だけを作ります。使っていないクラスは出力されないため、CSS ファイルは小さく保たれます。\n\n`md:` や `dark:` のような接頭辞を付けると、画面幅やダークモードに応じたスタイルも書けます。",
+      "pitfalls": [
+        "クラス名を文字列の組み立てで作ると（例：`'text-' + color`）、ビルドのときに見つけられず CSS が出力されない。クラス名は省略せずに書く。",
+        "クラスが長く並んで読みにくくなりやすい。繰り返す部分はコンポーネントにまとめる。"
+      ],
+      "apps": [
+        { "appId": "workout-calendar", "usage": "`src/index.css` の先頭で `@import \"tailwindcss\"` し、Vite のプラグイン（`@tailwindcss/vite`）で組み込んでいます。画面の高さには `min-h-dvh` のようなクラスを使っています。" }
+      ],
+      "related": ["react", "vite"],
+      "links": [
+        { "label": "Tailwind CSS のドキュメント", "url": "https://tailwindcss.com/docs/installation/using-vite", "kind": "official" }
+      ],
+      "tags": ["CSS", "ビルド必要"],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    }
+  ]
+}
