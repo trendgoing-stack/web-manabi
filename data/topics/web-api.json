@@ -6,8 +6,19 @@
       "category": "web-api",
       "level": "basic",
       "title": "localStorage",
-      "aka": ["ローカルストレージ", "Web Storage"],
-      "keywords": ["保存", "端末内", "setItem", "getItem", "JSON.stringify", "容量", "QuotaExceededError"],
+      "aka": [
+        "ローカルストレージ",
+        "Web Storage"
+      ],
+      "keywords": [
+        "保存",
+        "端末内",
+        "setItem",
+        "getItem",
+        "JSON.stringify",
+        "容量",
+        "QuotaExceededError"
+      ],
       "summary": "ブラウザの中に、文字列をキーと値の組で保存できる仕組み。ページを閉じてもデータが残る。",
       "what": "localStorage は、[[ブラウザ]]がサイトごとに用意する小さな保存場所です。`localStorage.setItem('キー', '値')` で保存し、`getItem('キー')` で取り出します。保存できるのは文字列だけなので、配列やオブジェクトは [[JSON]] の文字列に変換して保存します。",
       "why": "お気に入りや設定、ゲームの記録などを、サーバーを使わずに端末の中だけで覚えておけます。アカウントも通信も要らないので、個人のアプリで手軽に使えます。",
@@ -15,22 +26,62 @@
       "pitfalls": [
         "容量の超過などで書き込みに失敗することがある。`try`／`catch` で囲み、失敗を利用者に知らせる。",
         "保存するデータの形を後から変えると、古い形のデータを読んで壊れることがある。形の版番号を一緒に保存しておくと安心。",
-        "同じオリジンのスクリプトからは読めるため、パスワードなどの秘密の情報は保存しない。"
+        "同じオリジンのスクリプトからは読めるため、パスワードなどの秘密の情報は保存しない。",
+        "`ユーザー名.github.io` の下のアプリはすべて同じオリジンなので、保存場所を共有する。キーの先頭にアプリごとの文字を付ける。"
       ],
       "iosNote": "Safari で開いた場合とホーム画面から起動した場合では、保存場所が別々になります。しばらく使わないサイトのデータは消されることがあるとされています（条件は要確認）。",
       "apps": [
-        { "appId": "git-manabi", "usage": "`js/storage.js` にすべての読み書きをまとめ、キーの先頭に共通の文字列を付けています。インポートの途中で失敗したときは、書き込む前の値に戻す処理も入っています。" },
-        { "appId": "lottery-tools", "usage": "`js/core/store.js` でキーの先頭に共通の文字列を付けて保存しています。全削除のときは、その文字列で始まるキーだけを消します。" },
-        { "appId": "reversi", "usage": "設定と勝敗記録を別々のキーで保存しています。記録には `version: 1` を付けて、後から形が変わっても見分けられるようにしています。" },
-        { "appId": "image-tool", "usage": "よく使う設定（プリセット）を、`js/settings/presets.js` で保存しています。" },
-        { "appId": "workout-calendar", "usage": "すべての記録を1つのキーにまとめて保存しています。読み書きは `src/lib/storage.ts` だけで行います。" }
+        {
+          "appId": "git-manabi",
+          "usage": "`js/storage.js` にすべての読み書きをまとめ、キーの先頭に共通の文字列を付けています。インポートの途中で失敗したときは、書き込む前の値に戻す処理も入っています。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/store.js` でキーの先頭に共通の文字列を付けて保存しています。全削除のときは、その文字列で始まるキーだけを消します。",
+          "snippet": {
+            "file": "js/core/store.js",
+            "startLine": 10,
+            "endLine": 21,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "const PREFIX = 'lt.'\n\nexport function load(key, fallback) {\n  try {\n    const raw = localStorage.getItem(PREFIX + key)\n    if (raw == null) return structuredClone(fallback)\n    const value = JSON.parse(raw)\n    return value ?? structuredClone(fallback)\n  } catch {\n    return structuredClone(fallback)\n  }\n}"
+          }
+        },
+        {
+          "appId": "reversi",
+          "usage": "設定と勝敗記録を別々のキーで保存しています。記録には `version: 1` を付けて、後から形が変わっても見分けられるようにしています。"
+        },
+        {
+          "appId": "image-tool",
+          "usage": "よく使う設定（プリセット）を、`js/settings/presets.js` で保存しています。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "すべての記録を1つのキーにまとめて保存しています。読み書きは `src/lib/storage.ts` だけで行います。"
+        }
       ],
-      "related": ["service-worker"],
+      "related": [
+        "same-origin-storage",
+        "storage-separation",
+        "service-worker"
+      ],
       "links": [
-        { "label": "Window.localStorage（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/localStorage", "kind": "mdn" },
-        { "label": "Can I use: Web Storage", "url": "https://caniuse.com/namevalue-storage", "kind": "caniuse" }
+        {
+          "label": "Window.localStorage（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/localStorage",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Web Storage",
+          "url": "https://caniuse.com/namevalue-storage",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["保存", "端末内", "オフライン"],
+      "tags": [
+        "保存",
+        "端末内",
+        "オフライン"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -40,8 +91,20 @@
       "category": "web-api",
       "level": "basic",
       "title": "Canvas API",
-      "aka": ["キャンバス", "canvas", "2D コンテキスト"],
-      "keywords": ["画像処理", "描画", "drawImage", "toBlob", "getContext", "縮小", "リサイズ"],
+      "aka": [
+        "キャンバス",
+        "canvas",
+        "2D コンテキスト"
+      ],
+      "keywords": [
+        "画像処理",
+        "描画",
+        "drawImage",
+        "toBlob",
+        "getContext",
+        "縮小",
+        "リサイズ"
+      ],
       "summary": "`<canvas>` 要素に、JavaScript で図形や画像を描くための仕組み。描いた結果を画像ファイルとして取り出すこともできる。",
       "what": "Canvas API は、HTML の `<canvas>` 要素を「お絵かき帳」として使うための仕組みです。`getContext('2d')` で描画用の道具（コンテキスト）を取り出し、線や図形、文字、画像を描きます。描いた内容は[[ピクセル]]の集まりとして扱われます。",
       "why": "画像の縮小や切り取り、モザイクのような加工を、サーバーに送らずブラウザの中だけで行えます。ルーレットのように、図形を自由に描いて動かしたい場面にも使えます。",
@@ -53,16 +116,51 @@
       ],
       "iosNote": "iOS Safari は canvas に使えるメモリの上限が比較的小さいとされ、大きな画像を扱うと描画に失敗することがあります（具体的な上限は要確認）。",
       "apps": [
-        { "appId": "image-tool", "usage": "`js/core/resize.js` で、大きく縮小するときは半分ずつ段階的に縮めて画質を保っています。書き出しは `js/core/encode.js` の `canvas.toBlob()` で行い、`js/core/limits.js` で canvas の上限を超えないように大きさを調整しています。" },
-        { "appId": "lottery-tools", "usage": "ルーレットの円盤を、`js/features/roulette.js` で canvas に描いています。" }
+        {
+          "appId": "image-tool",
+          "usage": "`js/core/resize.js` で、大きく縮小するときは半分ずつ段階的に縮めて画質を保っています。書き出しは `js/core/encode.js` の `canvas.toBlob()` で行います。`js/core/limits.js` では、iOS Safari で描画に失敗しないよう、canvas の画素数を 16,777,216（4096×4096 相当）以内に収め、使い終わった canvas は幅と高さを 0 にしてメモリを手放しています。",
+          "snippet": {
+            "file": "js/core/resize.js",
+            "startLine": 74,
+            "endLine": 79,
+            "commitSha": "92ec285288b3bc672dcb9b08f4ed6d806a650c25",
+            "lang": "js",
+            "code": "function draw(source, canvas) {\n  const ctx = canvas.getContext('2d')\n  ctx.imageSmoothingEnabled = true\n  ctx.imageSmoothingQuality = 'high'\n  ctx.drawImage(source, 0, 0, canvas.width, canvas.height)\n}"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "ルーレットの円盤を、`js/features/roulette.js` で canvas に描いています。"
+        }
       ],
-      "related": ["pointer-events", "web-share-api"],
+      "related": [
+        "image-decode",
+        "blob-object-url",
+        "exif-privacy",
+        "pointer-events"
+      ],
       "links": [
-        { "label": "Canvas API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Canvas_API", "kind": "mdn" },
-        { "label": "HTMLCanvasElement.toBlob()（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/HTMLCanvasElement/toBlob", "kind": "mdn" },
-        { "label": "Can I use: Canvas", "url": "https://caniuse.com/canvas", "kind": "caniuse" }
+        {
+          "label": "Canvas API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Canvas_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "HTMLCanvasElement.toBlob()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/HTMLCanvasElement/toBlob",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Canvas",
+          "url": "https://caniuse.com/canvas",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["画像", "描画", "端末内"],
+      "tags": [
+        "画像",
+        "描画",
+        "端末内"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -72,8 +170,19 @@
       "category": "web-api",
       "level": "basic",
       "title": "Web Share API",
-      "aka": ["ウェブシェア", "共有", "navigator.share"],
-      "keywords": ["シェア", "LINE", "写真に保存", "canShare", "ファイル共有", "共有シート"],
+      "aka": [
+        "ウェブシェア",
+        "共有",
+        "navigator.share"
+      ],
+      "keywords": [
+        "シェア",
+        "LINE",
+        "写真に保存",
+        "canShare",
+        "ファイル共有",
+        "共有シート"
+      ],
       "summary": "OS の共有シートを開いて、テキストや画像をほかのアプリに渡す仕組み。iPhone では写真アプリへの保存もここから行える。",
       "what": "Web Share API は、`navigator.share()` を呼ぶと端末の[[共有シート]]を開いてくれる仕組みです。テキストや URL のほか、画像などのファイルも渡せます。渡す先（LINE、メール、写真アプリなど）は利用者が選びます。",
       "why": "Webアプリからほかのアプリに結果を送ったり、作った画像を保存したりするのは、本来は手間がかかります。共有シートを使えば、ネイティブアプリと同じ操作で渡せます。渡す先ごとの対応は OS が受け持つので、Webアプリ側で書き分ける必要がありません。",
@@ -85,15 +194,45 @@
       ],
       "iosNote": "iPhone では、画像ファイルを共有シートに渡すと「画像を保存」から写真アプリに保存できます。",
       "apps": [
-        { "appId": "image-tool", "usage": "`js/output/share.js` で、編集した画像をファイルとして共有シートに渡しています。`canShare` で渡せないと分かったときは、ダウンロードに切り替えます。" },
-        { "appId": "lottery-tools", "usage": "`js/core/share.js` で、抽選の結果をテキストで共有しています。共有が使えないときは、クリップボードへのコピーに切り替えます。" }
+        {
+          "appId": "image-tool",
+          "usage": "`js/output/share.js` で、編集した画像をファイルとして共有シートに渡しています。`canShare` で渡せないと分かったときは、ダウンロードに切り替えます。",
+          "snippet": {
+            "file": "js/output/share.js",
+            "startLine": 19,
+            "endLine": 30,
+            "commitSha": "92ec285288b3bc672dcb9b08f4ed6d806a650c25",
+            "lang": "js",
+            "code": "/**\n * @returns {Promise<'shared' | 'cancelled'>}\n */\nexport async function shareFiles(files) {\n  try {\n    await navigator.share({ files })\n    return 'shared'\n  } catch (err) {\n    if (err && err.name === 'AbortError') return 'cancelled'\n    throw err\n  }\n}"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/share.js` で、抽選の結果をテキストで共有しています。共有が使えないときは、クリップボードへのコピーに切り替えます。"
+        }
       ],
-      "related": ["canvas-api"],
+      "related": [
+        "clipboard-api",
+        "blob-object-url",
+        "https-secure-context",
+        "canvas-api"
+      ],
       "links": [
-        { "label": "Web Share API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Share_API", "kind": "mdn" },
-        { "label": "Can I use: Web Share API", "url": "https://caniuse.com/web-share", "kind": "caniuse" }
+        {
+          "label": "Web Share API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Share_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Web Share API",
+          "url": "https://caniuse.com/web-share",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["共有", "iPhone"],
+      "tags": [
+        "共有",
+        "iPhone"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -103,8 +242,20 @@
       "category": "web-api",
       "level": "intermediate",
       "title": "Pointer Events",
-      "aka": ["ポインターイベント", "pointerdown", "pointermove"],
-      "keywords": ["タッチ", "マウス", "ペン", "スワイプ", "ドラッグ", "setPointerCapture", "touch-action"],
+      "aka": [
+        "ポインターイベント",
+        "pointerdown",
+        "pointermove"
+      ],
+      "keywords": [
+        "タッチ",
+        "マウス",
+        "ペン",
+        "スワイプ",
+        "ドラッグ",
+        "setPointerCapture",
+        "touch-action"
+      ],
       "summary": "マウス・指・ペンの操作を、同じ書き方で受け取れるイベント。ドラッグやスワイプを作るときに使う。",
       "what": "Pointer Events は、画面を「押した」「動かした」「離した」を、入力の種類に関係なく同じ[[イベント]]で受け取る仕組みです。`pointerdown`、`pointermove`、`pointerup` などがあり、マウスでも指でもペンでも同じように動きます。",
       "why": "以前は、マウス用（`mousedown` など）と指用（`touchstart` など）で別々に処理を書く必要がありました。Pointer Events なら1つの書き方で済み、PC でも iPhone でも同じ操作を実現できます。",
@@ -115,16 +266,48 @@
         "`pointercancel` の後片付けを忘れると、ドラッグ中の状態が残ってしまう。"
       ],
       "apps": [
-        { "appId": "image-tool", "usage": "`js/ui/compare.js` で、処理前後の画像を見比べる境目を指でなぞって動かせるようにしています。`setPointerCapture` で、指が外にずれても操作が続きます。編集画面（`js/editor/editor.js`）で範囲を指定する操作にも使っています。" },
-        { "appId": "lottery-tools", "usage": "画面への最初のタッチ（`pointerdown`）を合図に、効果音を鳴らせるよう準備しています（`js/app.js`）。" }
+        {
+          "appId": "image-tool",
+          "usage": "`js/ui/compare.js` で、処理前後の画像を見比べる境目を指でなぞって動かせるようにしています。`setPointerCapture` で、指が外にずれても操作が続きます。編集画面（`js/editor/editor.js`）で範囲を指定する操作にも使っています。",
+          "snippet": {
+            "file": "js/ui/compare.js",
+            "startLine": 46,
+            "endLine": 58,
+            "commitSha": "92ec285288b3bc672dcb9b08f4ed6d806a650c25",
+            "lang": "js",
+            "code": "  // 画像の上を指でなぞっても境目を動かせるようにする\n  const stage = $('compare-stage')\n  const move = (e) => {\n    const rect = stage.getBoundingClientRect()\n    setPosition(((e.clientX - rect.left) / rect.width) * 100)\n  }\n  stage.addEventListener('pointerdown', (e) => {\n    stage.setPointerCapture(e.pointerId)\n    move(e)\n  })\n  stage.addEventListener('pointermove', (e) => {\n    if (stage.hasPointerCapture(e.pointerId)) move(e)\n  })"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "画面への最初のタッチ（`pointerdown`）を合図に、効果音を鳴らせるよう準備しています（`js/app.js`）。"
+        }
       ],
-      "related": ["canvas-api", "web-audio-api"],
+      "related": [
+        "canvas-api",
+        "web-audio-api"
+      ],
       "links": [
-        { "label": "ポインターイベント（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Pointer_events", "kind": "mdn" },
-        { "label": "touch-action（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Properties/touch-action", "kind": "mdn" },
-        { "label": "Can I use: Pointer events", "url": "https://caniuse.com/pointer", "kind": "caniuse" }
+        {
+          "label": "ポインターイベント（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Pointer_events",
+          "kind": "mdn"
+        },
+        {
+          "label": "touch-action（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Properties/touch-action",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Pointer events",
+          "url": "https://caniuse.com/pointer",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["タッチ操作", "イベント"],
+      "tags": [
+        "タッチ操作",
+        "イベント"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -134,8 +317,19 @@
       "category": "web-api",
       "level": "intermediate",
       "title": "Web Audio API",
-      "aka": ["ウェブオーディオ", "AudioContext", "効果音"],
-      "keywords": ["音", "サウンド", "オシレーター", "自動再生", "unlock", "GainNode"],
+      "aka": [
+        "ウェブオーディオ",
+        "AudioContext",
+        "効果音"
+      ],
+      "keywords": [
+        "音",
+        "サウンド",
+        "オシレーター",
+        "自動再生",
+        "unlock",
+        "GainNode"
+      ],
       "summary": "ブラウザの中で音を作ったり加工したりする仕組み。音声ファイルがなくても、効果音をその場で作れる。",
       "what": "Web Audio API は、音の部品（ノード）をつないで音を作る仕組みです。音の出どころ（音の波を作るオシレーターや、音声ファイル）から、音量を調整する部品を通って、スピーカーへつなぎます。全体の土台になるのが `AudioContext` です。",
       "why": "効果音のために音声ファイルを用意すると、読み込みや管理の手間が増えます。Web Audio API なら、「ピッ」「ポン」のような短い音を数行のコードで作れて、音の高さや長さも自由に変えられます。",
@@ -146,14 +340,38 @@
       ],
       "iosNote": "iPhone では、タップなどの操作の中で音を鳴らすまで `AudioContext` が停止中（`suspended`）のままです。本体の消音モードの影響も受けることがあります（挙動は要確認）。",
       "apps": [
-        { "appId": "lottery-tools", "usage": "`js/core/sound.js` で、音声ファイルを使わずに効果音を作っています。iOS 対策として、最初のタップで無音の短い音を鳴らしてから（`unlock()`）使っています。" }
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/sound.js` で、音声ファイルを使わずに効果音を作っています。iOS 対策として、最初のタップで無音の短い音を鳴らしてから（`unlock()`）使っています。",
+          "snippet": {
+            "file": "js/core/sound.js",
+            "startLine": 37,
+            "endLine": 51,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "function tone(freq, { at = 0, dur = 0.12, type = 'sine', gain = 0.18, to = null } = {}) {\n  const ac = audio()\n  if (!ac) return\n  const t = ac.currentTime + at\n  const osc = ac.createOscillator()\n  const amp = ac.createGain()\n  osc.type = type\n  osc.frequency.setValueAtTime(freq, t)\n  if (to) osc.frequency.exponentialRampToValueAtTime(to, t + dur)\n  amp.gain.setValueAtTime(0.0001, t)\n  amp.gain.exponentialRampToValueAtTime(gain, t + 0.008)\n  amp.gain.exponentialRampToValueAtTime(0.0001, t + dur)\n  osc.connect(amp).connect(ac.destination)\n  osc.start(t)\n  osc.stop(t + dur + 0.02)"
+          }
+        }
       ],
-      "related": ["pointer-events"],
+      "related": [
+        "pointer-events"
+      ],
       "links": [
-        { "label": "Web Audio API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API", "kind": "mdn" },
-        { "label": "Can I use: Web Audio API", "url": "https://caniuse.com/audio-api", "kind": "caniuse" }
+        {
+          "label": "Web Audio API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Web Audio API",
+          "url": "https://caniuse.com/audio-api",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["音", "iPhone"],
+      "tags": [
+        "音",
+        "iPhone"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -163,8 +381,18 @@
       "category": "web-api",
       "level": "basic",
       "title": "Screen Wake Lock API",
-      "aka": ["スクリーンウェイクロック", "ウェイクロック", "画面のスリープ防止"],
-      "keywords": ["スリープ", "画面が暗くなる", "wakeLock", "navigator.wakeLock", "visibilitychange"],
+      "aka": [
+        "スクリーンウェイクロック",
+        "ウェイクロック",
+        "画面のスリープ防止"
+      ],
+      "keywords": [
+        "スリープ",
+        "画面が暗くなる",
+        "wakeLock",
+        "navigator.wakeLock",
+        "visibilitychange"
+      ],
       "summary": "画面が自動で暗くなったりロックされたりするのを、一時的に止める仕組み。",
       "what": "Screen Wake Lock API は、`navigator.wakeLock.request('screen')` を呼ぶと、画面の自動スリープを止めてくれる仕組みです。戻ってきたオブジェクト（センチネル）の `release()` を呼ぶと、元に戻ります。",
       "why": "抽選の演出を見せている途中や、レシピを見ながら料理しているときに画面が暗くなると困ります。この API を使えば、必要な間だけスリープを止め、終わったら元に戻せます。",
@@ -175,14 +403,39 @@
       ],
       "iosNote": "iOS Safari でも使えますが、対応したバージョンや、ホーム画面から起動したときの挙動は要確認です。",
       "apps": [
-        { "appId": "lottery-tools", "usage": "`js/core/wakelock.js` で、演出中だけ画面のスリープを止めています。演出が重なっても正しく外せるよう、使っている数を数えています。画面に戻ってきたときに演出が続いていれば、取り直します。" }
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/wakelock.js` で、演出中だけ画面のスリープを止めています。演出が重なっても正しく外せるよう、使っている数を数えています。画面に戻ってきたときに演出が続いていれば、取り直します。",
+          "snippet": {
+            "file": "js/core/wakelock.js",
+            "startLine": 9,
+            "endLine": 19,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "async function request() {\n  if (sentinel || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return\n  try {\n    sentinel = await navigator.wakeLock.request('screen')\n    sentinel.addEventListener('release', () => {\n      sentinel = null\n    })\n  } catch {\n    sentinel = null\n  }\n}"
+          }
+        }
       ],
-      "related": ["web-audio-api"],
+      "related": [
+        "page-visibility",
+        "web-audio-api"
+      ],
       "links": [
-        { "label": "Screen Wake Lock API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Screen_Wake_Lock_API", "kind": "mdn" },
-        { "label": "Can I use: Screen Wake Lock API", "url": "https://caniuse.com/wake-lock", "kind": "caniuse" }
+        {
+          "label": "Screen Wake Lock API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Screen_Wake_Lock_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Screen Wake Lock API",
+          "url": "https://caniuse.com/wake-lock",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["画面", "iPhone"],
+      "tags": [
+        "画面",
+        "iPhone"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -192,8 +445,21 @@
       "category": "web-api",
       "level": "intermediate",
       "title": "crypto.getRandomValues",
-      "aka": ["暗号論的乱数", "getRandomValues", "クリプト"],
-      "keywords": ["乱数", "ランダム", "Math.random", "抽選", "シャッフル", "偏り", "公平", "Fisher–Yates"],
+      "aka": [
+        "暗号論的乱数",
+        "getRandomValues",
+        "クリプト"
+      ],
+      "keywords": [
+        "乱数",
+        "ランダム",
+        "Math.random",
+        "抽選",
+        "シャッフル",
+        "偏り",
+        "公平",
+        "Fisher–Yates"
+      ],
       "summary": "予測されにくい、質の高い乱数を作る関数。抽選のように公平さが大事な場面で、`Math.random` の代わりに使える。",
       "what": "`crypto.getRandomValues()` は、渡した数値の配列（`Uint32Array` など）を[[乱数]]で埋めてくれる関数です。暗号に使えるほど予測されにくい乱数を作れるのが特長です。",
       "why": "よく使われる `Math.random()` は手軽ですが、乱数の作り方はブラウザに任されていて、予測されにくさは保証されていません。抽選やくじ引きのように「公平であること」を説明したい場面では、質が保証された `getRandomValues` を使う方が安心です。",
@@ -204,14 +470,556 @@
         "乱数の質が高くても、並べ替えのやり方が正しくないと偏る。シャッフルには Fisher–Yates という方法を使う。"
       ],
       "apps": [
-        { "appId": "lottery-tools", "usage": "`js/core/random.js` にすべての乱数をまとめ、`Math.random` は使わない方針にしています。棄却サンプリングで偏りをなくし、シャッフルは Fisher–Yates で行っています。" }
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/random.js` にすべての乱数をまとめ、`Math.random` は使わない方針にしています。棄却サンプリングで偏りをなくし、シャッフルは Fisher–Yates で行っています。",
+          "snippet": {
+            "file": "js/core/random.js",
+            "startLine": 17,
+            "endLine": 28,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "/** 0 以上 n 未満の整数を偏りなく返す */\nexport function randInt(n) {\n  if (!Number.isInteger(n) || n <= 0 || n > RANGE) {\n    throw new RangeError(`randInt: n は 1〜2^32 の整数にしてください（${n}）`)\n  }\n  const limit = RANGE - (RANGE % n)\n  let x\n  do {\n    x = nextUint32()\n  } while (x >= limit)\n  return x % n\n}"
+          }
+        }
       ],
-      "related": [],
+      "related": [
+        "typed-arrays"
+      ],
       "links": [
-        { "label": "Crypto.getRandomValues()（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Crypto/getRandomValues", "kind": "mdn" },
-        { "label": "Can I use: getRandomValues", "url": "https://caniuse.com/getrandomvalues", "kind": "caniuse" }
+        {
+          "label": "Crypto.getRandomValues()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Crypto/getRandomValues",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: getRandomValues",
+          "url": "https://caniuse.com/getrandomvalues",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["乱数", "抽選", "公平"],
+      "tags": [
+        "乱数",
+        "抽選",
+        "公平"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "web-worker",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "Web Worker",
+      "aka": [
+        "ウェブワーカー",
+        "Worker",
+        "ワーカー"
+      ],
+      "keywords": [
+        "別スレッド",
+        "バックグラウンド",
+        "postMessage",
+        "重い処理",
+        "固まる",
+        "importScripts"
+      ],
+      "summary": "重い計算を画面とは別の場所（スレッド）で動かす仕組み。計算中も画面が固まらない。",
+      "what": "Web Worker は、JavaScript を画面の処理とは別の[[スレッド]]で動かす仕組みです。`new Worker('worker.js')` でファイルを指定して起動し、`postMessage()` でデータを送り、`message` イベントで結果を受け取ります。",
+      "why": "ブラウザの画面の処理（タップへの反応や描画）は、基本的に1つのスレッドで順番に行われます。そこで重い計算をすると、終わるまで画面が固まってしまいます。計算を Worker に任せれば、考えている間もボタンやスクロールが普通に動きます。",
+      "how": "Worker は画面とは別の世界で動くため、[[DOM]] にはさわれません。やり取りはメッセージだけで、送ったデータはコピーされて相手に届きます。\n\nWorker の中では `importScripts()` やモジュールの `import` で、ほかのファイルの関数を読み込めます。同じ計算用のファイルを、画面側と Worker 側の両方で使い回すこともできます。",
+      "pitfalls": [
+        "Worker からは画面（DOM）を直接変えられない。結果をメッセージで返し、画面側で表示する。",
+        "メッセージのたびにデータがコピーされるため、大きなデータを何度も送ると遅くなる。",
+        "Worker を作れない環境に備えて、画面側で計算する代わりの手段を用意しておくと安心。"
+      ],
+      "apps": [
+        {
+          "appId": "reversi",
+          "usage": "AI が次の一手を読む探索を `js/worker.js` で動かし、考えている間も盤面の操作が固まらないようにしています。Worker を作れないときや途中でエラーになったときは、`js/app.js` がメインスレッドでの計算に切り替えます。",
+          "snippet": {
+            "file": "js/worker.js",
+            "startLine": 8,
+            "endLine": 22,
+            "commitSha": "5d9931415d19e51b2ccfb1e41e412cbe31234fb3",
+            "lang": "js",
+            "code": "self.addEventListener('message', function (event) {\n  var msg = event.data || {};\n  var board = Int8Array.from(msg.board || []);\n\n  try {\n    if (msg.type === 'move') {\n      var picked = ReversiEngine.chooseMove(board, msg.player, msg.level);\n      self.postMessage({ type: 'move', id: msg.id, result: picked });\n    } else if (msg.type === 'analyze') {\n      var report = ReversiEngine.analyze(board, msg.player, msg.options);\n      self.postMessage({ type: 'analyze', id: msg.id, result: report });\n    } else if (msg.type === 'best') {\n      var best = ReversiEngine.bestMove(board, msg.player, msg.options);\n      self.postMessage({ type: 'best', id: msg.id, result: best });\n    }"
+          }
+        }
+      ],
+      "related": [
+        "typed-arrays",
+        "es-modules"
+      ],
+      "links": [
+        {
+          "label": "Web Workers API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Web_Workers_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Web Workers",
+          "url": "https://caniuse.com/webworkers",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "速さ",
+        "スレッド"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "clipboard-api",
+      "category": "web-api",
+      "level": "basic",
+      "title": "Clipboard API",
+      "aka": [
+        "クリップボード",
+        "コピー",
+        "navigator.clipboard"
+      ],
+      "keywords": [
+        "writeText",
+        "execCommand",
+        "コピーボタン",
+        "貼り付け",
+        "コピーできない"
+      ],
+      "summary": "JavaScript から文字をクリップボードにコピーする仕組み。コピーボタンを作るときに使う。",
+      "what": "Clipboard API は、`navigator.clipboard.writeText('文字')` を呼ぶと、その文字をクリップボードにコピーしてくれる仕組みです。コマンドやコードの横に置く「コピー」ボタンでよく使われます。",
+      "why": "利用者が長い文字を指で選んでコピーするのは大変です。ボタン1つでコピーできれば、コマンドやコードをそのまま別のアプリに貼り付けられます。",
+      "how": "`writeText()` は[[非同期処理]]で、成功すると Promise が解決します。セキュリティのため、[[HTTPS]] のページで、しかも[[ユーザー操作]]に続けて呼んだときだけ許可されます。\n\n古いやり方として、見えない入力欄に文字を入れて選び、`document.execCommand('copy')` を呼ぶ方法もあります。今は非推奨ですが、`writeText` が使えないときの代わりとして使われることがあります。",
+      "pitfalls": [
+        "タップの処理の中で、`await` を挟まずにすぐ呼ぶ。何かを待った後で呼ぶと、iPhone では失敗することがある。",
+        "どの方法でもコピーできないときに備えて、文字を選択状態にして「手動でコピーしてください」と伝える。",
+        "コピーに使う見えない入力欄の文字サイズが 16px 未満だと、iPhone で画面が拡大されることがある。"
+      ],
+      "iosNote": "iOS Safari では、タップの処理の中で同期的に `writeText` を呼び始めないと失敗することがあります。",
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`js/clipboard.js` で、1. `navigator.clipboard.writeText` → 2. 見えない入力欄と `execCommand('copy')` → 3. 選択状態にして手動コピーを促す、の順に試します。",
+          "snippet": {
+            "file": "js/clipboard.js",
+            "startLine": 43,
+            "endLine": 57,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "  const fallback = () => {\n    if (execCopy(text)) {\n      cb.onSuccess();\n    } else {\n      if (cb.selectEl) selectContents(cb.selectEl);\n      cb.onManual();\n    }\n  };\n  let p = null;\n  try {\n    p = navigator.clipboard?.writeText(text) ?? null;\n  } catch {\n    p = null;\n  }\n  if (p) p.then(cb.onSuccess, fallback);"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/share.js` で、共有シートが使えないときに結果をクリップボードへコピーします。"
+        }
+      ],
+      "related": [
+        "web-share-api",
+        "https-secure-context"
+      ],
+      "links": [
+        {
+          "label": "Clipboard API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Clipboard_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Clipboard.writeText()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Clipboard/writeText",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Async Clipboard API",
+          "url": "https://caniuse.com/async-clipboard",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "コピー",
+        "iPhone"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "page-visibility",
+      "category": "web-api",
+      "level": "basic",
+      "title": "Page Visibility API",
+      "aka": [
+        "ページの表示状態",
+        "visibilitychange",
+        "visibilityState"
+      ],
+      "keywords": [
+        "バックグラウンド",
+        "アプリの切り替え",
+        "画面に戻る",
+        "hidden",
+        "visible"
+      ],
+      "summary": "ページが画面に見えているか、裏に回っているかを知る仕組み。アプリに戻ってきたときの処理に使う。",
+      "what": "Page Visibility API は、`document.visibilityState` でページが見えている（`visible`）か隠れている（`hidden`）かを教えてくれる仕組みです。状態が変わると `visibilitychange` [[イベント]]が起きます。",
+      "why": "ほかのアプリに切り替えたり、タブを切り替えたりすると、ページは裏に回ります。そのときに音や演出を止めたり、戻ってきたときに最新の状態を確かめたりすると、無駄がなく使いやすいアプリになります。",
+      "how": "`document.addEventListener('visibilitychange', 処理)` で登録し、処理の中で `document.visibilityState` を見て分岐します。\n\nホーム画面から起動したアプリは、閉じずに裏へ回したまま何日も使われることがあります。表示に戻ったときに更新を確かめると、新しい版に気づきやすくなります。",
+      "pitfalls": [
+        "ページが隠れると、画面のスリープ防止（ウェイクロック）などは自動で外れる。戻ったときに取り直す。",
+        "隠れている間はタイマーの動きが遅くなることがある。時間を正確に数えたいときは、時刻の差で計算する。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/wakelock.js` で、アプリに戻ってきたときに演出が続いていれば、画面のスリープ防止を取り直します。",
+          "snippet": {
+            "file": "js/core/wakelock.js",
+            "startLine": 34,
+            "endLine": 37,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "// アプリを切り替えて戻ってきたとき、演出が続いていれば取り直す\ndocument.addEventListener('visibilitychange', () => {\n  if (holders > 0 && document.visibilityState === 'visible') request()\n})"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "`js/pwa.js` で、表示に戻ったときに `reg.update()` を呼び、Service Worker の新しい版がないかを確かめます。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "`src/pwa.ts` で、表示に戻ったときに Service Worker の更新を確かめています。"
+        }
+      ],
+      "related": [
+        "screen-wake-lock",
+        "service-worker"
+      ],
+      "links": [
+        {
+          "label": "ページ可視性 API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Page_Visibility_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Page Visibility",
+          "url": "https://caniuse.com/pagevisibility",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "イベント",
+        "ホーム画面"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "blob-object-url",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "Blob と Object URL",
+      "aka": [
+        "ブロブ",
+        "オブジェクトURL",
+        "createObjectURL",
+        "ダウンロード"
+      ],
+      "keywords": [
+        "ファイル",
+        "保存",
+        "revokeObjectURL",
+        "download 属性",
+        "バックアップ",
+        "JSON 書き出し"
+      ],
+      "summary": "ブラウザの中で作ったデータをファイルのように扱い、一時的な URL を付けて表示やダウンロードに使う仕組み。",
+      "what": "[[Blob]] は、画像や文字などの中身をひとかたまりで持つ入れ物です。`URL.createObjectURL(blob)` を呼ぶと、その Blob を指す `blob:` で始まる一時的な URL が作られます。この URL は `<img>` の表示や、`<a download>` によるダウンロードに使えます。",
+      "why": "サーバーを使わないアプリでも、作った画像やバックアップの JSON を「ファイルとして保存」させたい場面があります。Blob と Object URL を使えば、ブラウザの中だけでダウンロードを作れます。",
+      "how": "`new Blob([文字列], { type: 'application/json' })` で Blob を作り、Object URL を付けた `<a>` 要素の `download` 属性にファイル名を入れて `click()` すると、ダウンロードが始まります。\n\nObject URL は、ページを閉じるか `URL.revokeObjectURL()` を呼ぶまでメモリを使い続けます。使い終わったら解放します。",
+      "pitfalls": [
+        "作った直後に `revokeObjectURL` すると、ダウンロードが始まらないブラウザがある。少し時間をおいてから解放する。",
+        "解放を忘れると、大きな画像を何枚も扱ったときにメモリが足りなくなる。"
+      ],
+      "iosNote": "iPhone では、ダウンロードしたファイルは「ファイル」アプリの「ダウンロード」に保存されます（保存先は設定によって変わります）。",
+      "apps": [
+        {
+          "appId": "image-tool",
+          "usage": "共有シートが使えないときは、`js/output/share.js` の `downloadBlob` で画像をダウンロードさせます。すぐに解放すると失敗するブラウザがあるため、60 秒後に `revokeObjectURL` します。",
+          "snippet": {
+            "file": "js/output/share.js",
+            "startLine": 32,
+            "endLine": 43,
+            "commitSha": "92ec285288b3bc672dcb9b08f4ed6d806a650c25",
+            "lang": "js",
+            "code": "export function downloadBlob(blob, name) {\n  const url = URL.createObjectURL(blob)\n  const a = document.createElement('a')\n  a.href = url\n  a.download = name\n  a.rel = 'noopener'\n  document.body.appendChild(a)\n  a.click()\n  a.remove()\n  // すぐに revoke するとダウンロードが始まらないブラウザがあるため少し待つ\n  setTimeout(() => URL.revokeObjectURL(url), 60_000)\n}"
+          }
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "`src/lib/backup.ts` で、記録を JSON の Blob にしてダウンロードさせ、バックアップのファイルを作ります。",
+          "snippet": {
+            "file": "src/lib/backup.ts",
+            "startLine": 11,
+            "endLine": 23,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "ts",
+            "code": "export function downloadJson(data: AppData): void {\n  const content = JSON.stringify(buildExportFile(data), null, 2)\n  const blob = new Blob([content], { type: 'application/json' })\n  const url = URL.createObjectURL(blob)\n  const anchor = document.createElement('a')\n  anchor.href = url\n  anchor.download = `workout-calendar-${todayISO()}.json`\n  document.body.appendChild(anchor)\n  anchor.click()\n  anchor.remove()\n  // 少し待ってから解放する（Safari 対策）\n  window.setTimeout(() => URL.revokeObjectURL(url), 1000)\n}"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "設定画面のエクスポートで、保存データを JSON の Blob にしてダウンロードさせます。"
+        }
+      ],
+      "related": [
+        "canvas-api",
+        "web-share-api",
+        "image-decode"
+      ],
+      "links": [
+        {
+          "label": "Blob（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Blob",
+          "kind": "mdn"
+        },
+        {
+          "label": "URL.createObjectURL()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/URL/createObjectURL_static",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "ファイル",
+        "保存",
+        "バックアップ"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "image-decode",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "画像の読み込み（img.decode と createImageBitmap）",
+      "aka": [
+        "画像のデコード",
+        "createImageBitmap",
+        "decode()",
+        "ImageBitmap"
+      ],
+      "keywords": [
+        "画像ファイル",
+        "HEIC",
+        "向き",
+        "Orientation",
+        "写真",
+        "input type=file"
+      ],
+      "summary": "利用者が選んだ画像ファイルを、canvas で加工できる形に読み込む方法。",
+      "what": "画像を加工するには、まずファイル（JPEG や PNG などの圧縮されたデータ）を、[[ピクセル]]の並びに戻す必要があります。これを**デコード**と呼びます。ブラウザでは、`<img>` 要素の `decode()` を使う方法と、`createImageBitmap()` を使う方法がよく使われます。",
+      "why": "写真を縮小したり切り取ったりする前に、確実に読み込みが終わっていることを確かめる必要があります。デコードが終わるのを待ってから canvas に描けば、真っ白な画像になるなどの失敗を防げます。",
+      "how": "`<img>` を使う場合は、[[Blob]] から Object URL を作って `src` に入れ、`img.decode()` の完了を待ちます。`createImageBitmap(file)` を使う場合は、ファイルを直接渡すと、描画にすぐ使える `ImageBitmap` が返ります。\n\nスマートフォンの写真には「縦向きで撮った」などの向きの情報が入っていて、新しいブラウザは描くときにそれを反映します。",
+      "pitfalls": [
+        "向きを自分で回転させる処理を足すと、ブラウザの回転と重なって二重に回ってしまうことがある。",
+        "使い終わった `ImageBitmap` は `close()`、Object URL は `revokeObjectURL()` でメモリを手放す。",
+        "iPhone の写真（HEIC 形式）は、ブラウザや OS によって読めないことがある。"
+      ],
+      "iosNote": "写真の向きの自動反映や HEIC の読み込みに対応した iOS のバージョンは要確認です。",
+      "apps": [
+        {
+          "appId": "image-tool",
+          "usage": "`js/core/decode.js` で、まず `<img>` の `decode()` で読み込み、読めないときは `createImageBitmap` を試します。写真の向きはブラウザに任せ、自分では回転させない方針です。",
+          "snippet": {
+            "file": "js/core/decode.js",
+            "startLine": 41,
+            "endLine": 50,
+            "commitSha": "92ec285288b3bc672dcb9b08f4ed6d806a650c25",
+            "lang": "js",
+            "code": "async function decodeWithBitmap(file) {\n  const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })\n  return {\n    source: bitmap,\n    width: bitmap.width,\n    height: bitmap.height,\n    close() {\n      bitmap.close()\n    },\n  }"
+          }
+        }
+      ],
+      "related": [
+        "canvas-api",
+        "blob-object-url",
+        "exif-privacy"
+      ],
+      "links": [
+        {
+          "label": "createImageBitmap()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/createImageBitmap",
+          "kind": "mdn"
+        },
+        {
+          "label": "HTMLImageElement.decode()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/HTMLImageElement/decode",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: createImageBitmap",
+          "url": "https://caniuse.com/createimagebitmap",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "画像",
+        "端末内"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "typed-arrays",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "型付き配列（TypedArray）",
+      "aka": [
+        "TypedArray",
+        "Int8Array",
+        "Uint32Array",
+        "Uint8Array"
+      ],
+      "keywords": [
+        "配列",
+        "数値",
+        "メモリ",
+        "高速",
+        "バイナリ",
+        "盤面"
+      ],
+      "summary": "決まった種類の数値だけを、決まった数だけ詰めて持つ配列。普通の配列より速く、メモリも少なくて済む。",
+      "what": "型付き配列は、`Int8Array`（-128〜127 の整数）や `Uint32Array`（0〜約43億の整数）のように、入れられる数値の種類と個数が決まった配列です。`new Int8Array(64)` とすると、0 で埋まった 64 個の箱ができます。",
+      "why": "普通の配列（`[]`）には何でも入れられる代わりに、中身を調べる手間がかかります。数値だけを大量に扱う計算（ゲームの盤面、画像のピクセル、乱数など）では、型付き配列の方が速く、使うメモリも少なくて済みます。",
+      "how": "型付き配列は、メモリ上に数値をすき間なく並べて持っています。範囲外の値を入れると、決まったルールで丸められます（例：`Int8Array` に 200 を入れると -56 になる）。\n\n`Int8Array.from(配列)` で普通の配列から作れます。Worker とのやり取りや、`crypto.getRandomValues()` の受け皿にも使われます。",
+      "pitfalls": [
+        "範囲外の値を入れてもエラーにならず、黙って別の値になる。型の範囲を確かめてから使う。",
+        "長さは後から変えられない。`push` などは使えない。"
+      ],
+      "apps": [
+        {
+          "appId": "reversi",
+          "usage": "`js/engine.js` で、64 マスの盤面を `Int8Array` で持っています（0＝空き、1＝黒、-1＝白）。AI の探索では盤面を何度も調べるため、速さと使うメモリの少なさを優先しています。",
+          "snippet": {
+            "file": "js/engine.js",
+            "startLine": 53,
+            "endLine": 60,
+            "commitSha": "5d9931415d19e51b2ccfb1e41e412cbe31234fb3",
+            "lang": "js",
+            "code": "  function initialBoard() {\n    var b = new Int8Array(64);\n    b[27] = WHITE; // d4\n    b[28] = BLACK; // e4\n    b[35] = BLACK; // d5\n    b[36] = WHITE; // e5\n    return b;\n  }"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/random.js` で、`crypto.getRandomValues()` の受け皿として `Uint32Array` を使っています。"
+        }
+      ],
+      "related": [
+        "web-worker",
+        "crypto-getrandomvalues"
+      ],
+      "links": [
+        {
+          "label": "TypedArray（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/TypedArray",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Typed Arrays",
+          "url": "https://caniuse.com/typedarrays",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "JavaScript",
+        "速さ"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "dialog-element",
+      "category": "web-api",
+      "level": "basic",
+      "title": "<dialog> 要素",
+      "aka": [
+        "ダイアログ",
+        "dialog",
+        "モーダル",
+        "showModal"
+      ],
+      "keywords": [
+        "ポップアップ",
+        "確認ダイアログ",
+        "backdrop",
+        "inert",
+        "シート"
+      ],
+      "summary": "ポップアップや確認画面を作るための HTML の要素。開いている間は後ろの画面を操作できなくできる。",
+      "what": "`<dialog>` は、画面の上に重ねて表示する小さな窓を作るための HTML の要素です。`showModal()` で開くと、後ろの画面が暗くなり、閉じるまで後ろを操作できなくなります（モーダル）。`close()` で閉じます。",
+      "why": "確認画面やポップアップを自分で作ると、後ろの画面を操作できなくする、キーボードの Esc で閉じる、読み上げソフトに伝える、といった細かい対応が必要です。`<dialog>` を使えば、それらをブラウザが受け持ってくれます。",
+      "how": "`showModal()` で開いた dialog は、ほかのすべての要素より手前に表示されます。後ろの暗い部分は CSS の `::backdrop` で見た目を変えられます。\n\n背景をタップしたときは dialog 自身がタップされたことになるので、「タップされたのが dialog 自身なら閉じる」と書くと、背景タップで閉じられます。",
+      "pitfalls": [
+        "画面が切り替わっても dialog は勝手には閉じない。画面遷移のときに閉じる処理を入れる。",
+        "画面の下から出るシートのように位置が大事な表示では、端末によって位置がずれることがある。"
+      ],
+      "iosNote": "iPhone のホーム画面から起動したアプリで、dialog の位置の基準になる高さが実際の画面とずれることがあると、抽選ツールのコードに記録されています（再現条件は要確認）。",
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`js/ui/dialog.js` の確認ダイアログを `<dialog>` と `showModal()` で作っています。背景のタップや、画面の切り替え（`hashchange`）で閉じるようにしています。",
+          "snippet": {
+            "file": "js/ui/dialog.js",
+            "startLine": 41,
+            "endLine": 52,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "  const close = () => {\n    if (dlg.open) dlg.close();\n  };\n  dlg.addEventListener('close', () => dlg.remove());\n  // 背景（dialog 自身）をタップしたら閉じる\n  dlg.addEventListener('click', (e) => {\n    if (e.target === dlg) close();\n  });\n  window.addEventListener('hashchange', close, { once: true });\n  document.body.append(dlg);\n  dlg.showModal();\n  return dlg;"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/ui.js` では、あえて `<dialog>` を使っていません。ホーム画面アプリで下寄せのシートが画面の外に出てしまうことがあったため、body の中に重ねた要素と `inert` で代わりに作っています。",
+          "snippet": {
+            "file": "js/core/ui.js",
+            "startLine": 117,
+            "endLine": 121,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "/*\n * <dialog> は使わない。iPhone のホーム画面アプリでは、<dialog> や position: fixed の基準になる\n * 高さが実際の画面より大きくなることがあり、下寄せのシートが画面の外に出てしまうため。\n * 代わりに、画面全体の枠である body の中に重ね（CSS の .layer）、後ろの画面は inert で操作できなくする。\n */"
+          }
+        },
+        {
+          "appId": "image-tool",
+          "usage": "ヘルプの画面を `index.html` の `<dialog>` で作り、`showModal()` で開いています。"
+        }
+      ],
+      "related": [
+        "safe-area"
+      ],
+      "links": [
+        {
+          "label": "<dialog>（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/dialog",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Dialog element",
+          "url": "https://caniuse.com/dialog",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "HTML",
+        "ポップアップ",
+        "iPhone"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""

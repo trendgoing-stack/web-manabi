@@ -18,6 +18,8 @@
   --stale-bg: #fde8e4;
   --stale-text: #9a2a14;
   --code-bg: #eef0f4;
+  --danger: #c62828;
+  --fav: #e0a100;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   --cat-web-api: #2f62d8;
   --cat-pwa: #0f8a6b;
@@ -55,6 +57,8 @@
     --stale-bg: #45221b;
     --stale-text: #ffb4a2;
     --code-bg: #2a2e36;
+    --danger: #ff8a80;
+    --fav: #ffd24d;
     --shadow: none;
     --cat-web-api: #7ea4ff;
     --cat-pwa: #4fd1a8;
@@ -484,6 +488,7 @@ code {
   padding: 12px 16px;
 }
 .app-uses { display: grid; gap: 10px; }
+.app-uses > * { min-width: 0; }
 .app-use-head {
   display: inline-flex;
   align-items: center;
@@ -562,7 +567,7 @@ code {
 /* ---------- 設定 ---------- */
 .radio-group {
   border: 0;
-  margin: 0 0 12px;
+  margin: 16px 0 12px;
   padding: 0;
 }
 .radio-group legend { font-weight: 700; margin-bottom: 4px; padding: 0; }
@@ -584,6 +589,123 @@ code {
 .kv dt { color: var(--text-2); }
 .kv dd { margin: 0; }
 .prose p, .prose li { overflow-wrap: anywhere; }
+
+/* ---------- 詳細：お気に入り・コード抜粋・メモ ---------- */
+.title-row { display: flex; align-items: flex-start; gap: 8px; }
+.title-row .page-title { flex: 1; min-width: 0; }
+.fav-btn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-right: -8px;
+  border: 0;
+  background: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--text-2);
+  cursor: pointer;
+  border-radius: 10px;
+}
+.fav-btn.on { color: var(--fav); }
+
+.snippet {
+  margin: 12px 0 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--code-bg);
+}
+.snippet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 4px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.snippet-file {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.snippet-lines { color: var(--text-2); }
+.snippet-code {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  tab-size: 2;
+  white-space: pre;
+}
+.snippet-code code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  overflow-wrap: normal;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.snippet-foot { padding: 4px 12px 8px; background: var(--surface); }
+.snippet-foot p { margin: 4px 0 0 !important; }
+.snippet-links { display: flex; flex-wrap: wrap; column-gap: 16px; font-size: 0.875rem; }
+.snippet-status { display: block; font-size: 0.8125rem; color: var(--text-2); min-height: 0; }
+.snippet-status:empty { display: none; }
+
+.btn-small { min-height: 44px; padding: 4px 12px; font-size: 0.875rem; white-space: nowrap; flex: none; }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-danger-outline { color: var(--danger); border-color: var(--danger); background: transparent; }
+
+.memo-box { display: grid; gap: 4px; }
+.memo {
+  width: 100%;
+  min-height: 7.5em;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  line-height: 1.6;
+  resize: vertical;
+}
+.memo:focus { outline: 2px solid var(--accent); border-color: transparent; }
+.memo-foot { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8125rem; color: var(--text-2); }
+.memo-preview { white-space: pre-line; }
+
+/* ---------- マイ ---------- */
+.toolbar { display: flex; justify-content: flex-end; margin: 0 0 10px; }
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 6px 8px 6px 16px;
+}
+.edit-title { flex: 1; min-width: 0; font-weight: 700; overflow-wrap: anywhere; }
+.icon-btn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.icon-btn:disabled { opacity: 0.35; cursor: default; }
+.icon-btn.danger { color: var(--danger); }
+
+.form-error {
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--stale-bg);
+  color: var(--stale-text);
+  font-size: 0.875rem;
+}
 
 /* ---------- トースト ---------- */
 .toast {

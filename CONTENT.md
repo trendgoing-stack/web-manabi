@@ -151,6 +151,28 @@ Webまなび帳の技術項目・アプリ情報・用語集・クイズの書�
 3. 抜粋は、コミット済みの内容（`git show HEAD:<file>`）から取る。行番号もこの内容で数える
 4. 秘密情報がないことを確認してから `snippet` に書き込む
 
+1〜3 は `tools/snippets.mjs` でまとめて行えます（使う git コマンドは上の許可リストの読み取り専用のものだけです）。
+
+```bash
+node tools/snippets.mjs extract C:/Users/KATSUYA/manabi-sources/lottery-tools js/core/random.js 17 28
+```
+
+`snippet` の JSON（`commitSha` は HEAD の値）が表示されるので、中身を確かめてから技術項目の `apps[]` に貼り付けます。未コミットの変更があるときは、何も出力せずに止まります。
+
+### コード抜粋の `commitSha` を更新する
+
+対象アプリを更新したら、作者が参照用フォルダを最新にしてから（参照用フォルダでの `git pull` は作者が行う）、次のコマンドで点検します。
+
+```bash
+node tools/snippets.mjs check C:/Users/KATSUYA/manabi-sources
+```
+
+- `✓` … `commitSha` が HEAD と同じで、内容も一致
+- `△` … HEAD でも同じ行が同じ内容。`update` で `commitSha` を HEAD に書き換えてよい
+- `▲` … HEAD では内容が変わっている。行番号と `code` を `extract` で取り直し、`usage` も見直す
+
+`△` だけのときは `node tools/snippets.mjs update C:/Users/KATSUYA/manabi-sources` で `commitSha` をまとめて更新できます。更新したら検証を通し、データの版（`dataVersion`）を上げます。
+
 ## アプリ情報（apps.json）
 
 `{ id, name, summary, repo, pagesUrl, techStack }` の配列です。

@@ -6,8 +6,18 @@
       "category": "service",
       "level": "basic",
       "title": "GoatCounter",
-      "aka": ["ゴートカウンター", "アクセス解析"],
-      "keywords": ["アクセス数", "解析", "count.js", "プライバシー", "クッキーなし", "計測"],
+      "aka": [
+        "ゴートカウンター",
+        "アクセス解析"
+      ],
+      "keywords": [
+        "アクセス数",
+        "解析",
+        "count.js",
+        "プライバシー",
+        "クッキーなし",
+        "計測"
+      ],
       "summary": "クッキーを使わず、個人を追いかけない方針のアクセス解析サービス。小さなスクリプトを読み込むだけで、ページが開かれた回数を数えられる。",
       "what": "GoatCounter は、Webサイトが何回開かれたかを数えるアクセス解析サービスです。[[クッキー]]を使わず、訪問者一人ひとりを追いかけないことを方針にしています。ページに `count.js` という小さなスクリプトを読み込むと、表示のたびに記録が送られます。",
       "why": "アプリを公開したら、どのくらい使われているかを知りたくなります。一方で、利用者のプライバシーは守りたいものです。GoatCounter は集める情報が少ない作りなので、個人のアプリでも導入しやすいサービスです。",
@@ -18,17 +28,51 @@
         "外部の [[CDN]] から読み込むと、オフラインのときは読み込みに失敗する。失敗してもアプリが止まらないようにする。"
       ],
       "apps": [
-        { "appId": "git-manabi", "usage": "`count.js` をリポジトリに同梱し、`js/analytics.js` から読み込んでいます。送るパスは `/git-manabi/` に固定し、設定で「送信しない」を選ぶと `count.js` 自体を読み込みません。" },
-        { "appId": "reversi", "usage": "`index.html` の `<script>` タグで、GoatCounter の配信元（`gc.zgo.at`）から `count.js` を読み込んでいます。オフラインのときは読み込みに失敗するだけで、対局には影響しません。" },
-        { "appId": "lottery-tools", "usage": "`index.html` の最後で `count.js` を `async` で読み込んでいます。送信先は、ほかのアプリと共通のアカウント（`km-apps`）です。" },
-        { "appId": "workout-calendar", "usage": "`index.html` の `<script>` タグで `count.js` を読み込んでいます。React のアプリですが、計測はビルドとは関係なく HTML に直接書いています。" }
+        {
+          "appId": "git-manabi",
+          "usage": "`count.js` をリポジトリに同梱し、`js/analytics.js` から読み込んでいます。送るパスは `/git-manabi/` に固定し、設定で「送信しない」を選ぶと `count.js` 自体を読み込みません。",
+          "snippet": {
+            "file": "js/analytics.js",
+            "startLine": 6,
+            "endLine": 20,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "const ENDPOINT = 'https://km-apps.goatcounter.com/count';\n/** 送るパスは固定（ハッシュ、検索語、エントリ id は送らない） */\nconst FIXED_PATH = '/git-manabi/';\nconst FIXED_TITLE = 'Gitまなび帳';\n\nexport function startAnalytics() {\n  if (getSettings().analyticsOff) return;\n  const s = document.createElement('script');\n  s.src = './count.js';\n  s.async = true;\n  s.dataset.goatcounter = ENDPOINT;\n  s.dataset.path = FIXED_PATH;\n  s.dataset.title = FIXED_TITLE;\n  s.onerror = () => {};\n  document.head.append(s);"
+          }
+        },
+        {
+          "appId": "reversi",
+          "usage": "`index.html` の `<script>` タグで、GoatCounter の配信元（`gc.zgo.at`）から `count.js` を読み込んでいます。オフラインのときは読み込みに失敗するだけで、対局には影響しません。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`index.html` の最後で `count.js` を `async` で読み込んでいます。送信先は、ほかのアプリと共通のアカウント（`km-apps`）です。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "`index.html` の `<script>` タグで `count.js` を読み込んでいます。React のアプリですが、計測はビルドとは関係なく HTML に直接書いています。"
+        }
       ],
-      "related": ["github-pages"],
+      "related": [
+        "github-pages"
+      ],
       "links": [
-        { "label": "GoatCounter 公式サイト", "url": "https://www.goatcounter.com/", "kind": "official" },
-        { "label": "GoatCounter の使い方", "url": "https://www.goatcounter.com/help/start", "kind": "official" }
+        {
+          "label": "GoatCounter 公式サイト",
+          "url": "https://www.goatcounter.com/",
+          "kind": "official"
+        },
+        {
+          "label": "GoatCounter の使い方",
+          "url": "https://www.goatcounter.com/help/start",
+          "kind": "official"
+        }
       ],
-      "tags": ["アクセス解析", "プライバシー", "無料"],
+      "tags": [
+        "アクセス解析",
+        "プライバシー",
+        "無料"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""

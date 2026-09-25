@@ -19,7 +19,8 @@
 
 - 下書きは必ず `verified: false`、`lastReviewed: ""`。`verified: true` にするのは作者だけ
 - データを変えたら `node tools/validate-cli.mjs` でエラー 0 件を確認し、`data/meta.json` の `dataVersion` と `counts` を更新する
-- コード抜粋は参照用フォルダ `C:\Users\KATSUYA\manabi-sources\` から、読み取り専用のコマンドだけで作る（許可・禁止の一覧は CONTENT.md）
+- コード抜粋は参照用フォルダ `C:\Users\KATSUYA\manabi-sources\` から、読み取り専用のコマンドだけで作る（許可・禁止の一覧は CONTENT.md）。`node tools/snippets.mjs extract|check` を使う
+- `trendgoing-stack.github.io` の下のアプリは localStorage を共有する。全削除は `webmanabi:` で始まるキーだけを消す
 
 ## 手元で動かす
 

@@ -36,5 +36,7 @@
   { "term": "静的サイト", "reading": "せいてきさいと", "desc": "サーバー側でプログラムを動かさず、用意した HTML・CSS・JavaScript などのファイルをそのまま配るだけのサイト。" },
   { "term": "相対パス", "reading": "そうたいぱす", "desc": "今いる場所から見た位置でファイルを指す書き方。./css/app.css のように書く。/ から始まる書き方は絶対パスと呼ぶ。", "topicId": "subpath-relative-paths" },
   { "term": "乱数", "reading": "らんすう", "desc": "でたらめに選ばれた数。サイコロの出目のように、次に何が出るか分からない数のこと。", "topicId": "crypto-getrandomvalues" },
-  { "term": "非同期処理", "reading": "ひどうきしょり", "desc": "結果が出るまで待たずに次の処理へ進み、結果が出たときに続きを行う処理のやり方。JavaScript では Promise や await を使う。" }
+  { "term": "非同期処理", "reading": "ひどうきしょり", "desc": "結果が出るまで待たずに次の処理へ進み、結果が出たときに続きを行う処理のやり方。JavaScript では Promise や await を使う。" },
+  { "term": "スレッド", "reading": "すれっど", "desc": "プログラムの処理を順番に進める流れ。ブラウザの画面の処理は主に1本のスレッド（メインスレッド）で行われ、重い処理があると画面が固まる。", "topicId": "web-worker" },
+  { "term": "メタデータ", "reading": "めたでーた", "desc": "データそのものについての情報。写真なら、撮影日時、カメラの機種、撮影場所などが当たる。", "topicId": "exif-privacy" }
 ]

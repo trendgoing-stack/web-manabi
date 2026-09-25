@@ -6,8 +6,19 @@
       "category": "frontend",
       "level": "basic",
       "title": "ES Modules",
-      "aka": ["ESモジュール", "ESM", "import", "export"],
-      "keywords": ["type=module", "動的import", "import()", "ファイル分割", "モジュール"],
+      "aka": [
+        "ESモジュール",
+        "ESM",
+        "import",
+        "export"
+      ],
+      "keywords": [
+        "type=module",
+        "動的import",
+        "import()",
+        "ファイル分割",
+        "モジュール"
+      ],
       "summary": "JavaScript のファイルを部品に分けて、`import` と `export` で受け渡しする標準の仕組み。ビルドなしでもブラウザがそのまま扱える。",
       "what": "ES Modules は、JavaScript を複数のファイルに分け、必要なものだけを受け渡すための仕組みです。あるファイルで `export` した関数を、別のファイルで `import` して使います。HTML からは `<script type=\"module\">` で読み込みます。",
       "why": "1つのファイルにすべてを書くと、長くなって読みにくく、名前もぶつかりやすくなります。[[モジュール]]に分けると役割ごとにファイルを整理でき、どのファイルが何を使っているかも `import` を見れば分かります。今のブラウザは標準で対応しているので、[[ビルド]]なしでも使えます。",
@@ -18,17 +29,54 @@
         "モジュールのスクリプトは、HTML の読み込みが終わってから実行される。"
       ],
       "apps": [
-        { "appId": "git-manabi", "usage": "`index.html` から `js/app.js` を `type=\"module\"` で読み込み、検索・クイズ・保存などを多数のファイルに分けています。ビルドの工程はありません。" },
-        { "appId": "image-tool", "usage": "`js/core/`（読み込み・縮小・書き出し）、`js/editor/`（編集）、`js/ui/`（画面）のように、役割ごとのフォルダに分けています。" },
-        { "appId": "lottery-tools", "usage": "`js/core/` に共通の部品（乱数、効果音、共有など）、`js/features/` に機能ごとの画面を置いています。" },
-        { "appId": "reversi", "usage": "ES Modules は使わず、昔ながらの `<script>` を3本並べています。`engine.js` は即時関数で `ReversiEngine` という名前だけを外に出し、Web Worker からは `importScripts` で読み込んでいます。" }
+        {
+          "appId": "git-manabi",
+          "usage": "`index.html` から `js/app.js` を `type=\"module\"` で読み込み、検索・クイズ・保存などを多数のファイルに分けています。ビルドの工程はありません。"
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`js/core/`（読み込み・縮小・書き出し）、`js/editor/`（編集）、`js/ui/`（画面）のように、役割ごとのフォルダに分けています。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/` に共通の部品（乱数、効果音、共有など）、`js/features/` に機能ごとの画面を置いています。",
+          "snippet": {
+            "file": "js/app.js",
+            "startLine": 7,
+            "endLine": 17,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "import { APP_VERSION } from './version.js'\nimport * as settings from './core/settings.js'\nimport { unlock, sfx } from './core/sound.js'\nimport { clearAll, load, save } from './core/store.js'\nimport { h, openSheet, switchRow, confirmDialog, setHeader } from './core/ui.js'\nimport membersView from './features/members-view.js'\nimport dice from './features/dice.js'\nimport roulette from './features/roulette.js'\nimport amida from './features/amida.js'\nimport teams from './features/teams.js'\nimport more from './features/more.js'"
+          }
+        },
+        {
+          "appId": "reversi",
+          "usage": "ES Modules は使わず、昔ながらの `<script>` を3本並べています。`engine.js` は即時関数で `ReversiEngine` という名前だけを外に出し、Web Worker からは `importScripts` で読み込んでいます。"
+        }
       ],
-      "related": ["vite", "typescript"],
+      "related": [
+        "vite",
+        "typescript",
+        "jsdoc",
+        "web-worker"
+      ],
       "links": [
-        { "label": "JavaScript モジュール（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules", "kind": "mdn" },
-        { "label": "Can I use: JavaScript modules", "url": "https://caniuse.com/es6-module", "kind": "caniuse" }
+        {
+          "label": "JavaScript モジュール（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Modules",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: JavaScript modules",
+          "url": "https://caniuse.com/es6-module",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["JavaScript", "ビルド不要", "ファイル分割"],
+      "tags": [
+        "JavaScript",
+        "ビルド不要",
+        "ファイル分割"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -38,8 +86,18 @@
       "category": "frontend",
       "level": "intermediate",
       "title": "React",
-      "aka": ["リアクト", "React.js"],
-      "keywords": ["コンポーネント", "JSX", "TSX", "フック", "useState", "UI ライブラリ"],
+      "aka": [
+        "リアクト",
+        "React.js"
+      ],
+      "keywords": [
+        "コンポーネント",
+        "JSX",
+        "TSX",
+        "フック",
+        "useState",
+        "UI ライブラリ"
+      ],
       "summary": "画面を「コンポーネント」という部品の組み合わせで作る、JavaScript の UI ライブラリ。データが変わると画面を自動で描き直す。",
       "what": "React は、画面（UI）を作るための[[ライブラリ]]です。ボタンやカードのような部品を[[コンポーネント]]として関数で書き、それを組み合わせて画面全体を作ります。見た目は、HTML に似た JSX という書き方で表します。",
       "why": "画面の一部を書き換えるたびに [[DOM]] を手で操作すると、表示とデータがずれるなどの不具合が起きやすくなります。React では「データ（[[状態]]）がこうなら、画面はこう」と書くだけで、データが変わったときの書き換えは React が受け持ちます。",
@@ -50,14 +108,41 @@
         "小さなアプリでは、React を使わない方がシンプルなこともある。"
       ],
       "apps": [
-        { "appId": "workout-calendar", "usage": "カレンダー、記録の編集、統計、ルーティンの各画面を `src/pages/` と `src/components/` のコンポーネントで作っています。アプリ全体のデータは `src/store/` の Context で共有し、更新バナーは `useSyncExternalStore` で Service Worker の状態を受け取っています。" }
+        {
+          "appId": "workout-calendar",
+          "usage": "カレンダー、記録の編集、統計、ルーティンの各画面を `src/pages/` と `src/components/` のコンポーネントで作っています。アプリ全体のデータは `src/store/` の Context で共有し、更新バナーは `useSyncExternalStore` で Service Worker の状態を受け取っています。",
+          "snippet": {
+            "file": "src/components/UpdateBanner.tsx",
+            "startLine": 8,
+            "endLine": 22,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "tsx",
+            "code": "export function UpdateBanner() {\n  const { available, applying } = useSyncExternalStore(subscribeUpdate, getUpdateState)\n  if (!available) return null\n\n  return (\n    <button\n      type=\"button\"\n      onClick={applyUpdate}\n      disabled={applying}\n      className=\"sticky top-0 z-40 block w-full bg-indigo-600 px-4 pb-3 text-center text-[15px] font-bold text-white shadow-md active:bg-indigo-700 disabled:opacity-80\"\n      style={{ paddingTop: 'calc(env(safe-area-inset-top) + 12px)' }}\n    >\n      {applying ? '更新しています…' : '更新があります（タップで再読み込み）'}\n    </button>\n  )"
+          }
+        }
       ],
-      "related": ["vite", "typescript", "tailwind-css"],
+      "related": [
+        "vite",
+        "typescript",
+        "tailwind-css"
+      ],
       "links": [
-        { "label": "React 公式サイト", "url": "https://ja.react.dev/", "kind": "official" },
-        { "label": "React の学習ガイド", "url": "https://ja.react.dev/learn", "kind": "official" }
+        {
+          "label": "React 公式サイト",
+          "url": "https://ja.react.dev/",
+          "kind": "official"
+        },
+        {
+          "label": "React の学習ガイド",
+          "url": "https://ja.react.dev/learn",
+          "kind": "official"
+        }
       ],
-      "tags": ["UI", "ライブラリ", "ビルド必要"],
+      "tags": [
+        "UI",
+        "ライブラリ",
+        "ビルド必要"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -67,8 +152,19 @@
       "category": "frontend",
       "level": "intermediate",
       "title": "Vite",
-      "aka": ["ヴィート", "ビート"],
-      "keywords": ["ビルドツール", "開発サーバー", "バンドル", "npm run dev", "npm run build", "dist", "vite.config"],
+      "aka": [
+        "ヴィート",
+        "ビート"
+      ],
+      "keywords": [
+        "ビルドツール",
+        "開発サーバー",
+        "バンドル",
+        "npm run dev",
+        "npm run build",
+        "dist",
+        "vite.config"
+      ],
       "summary": "開発中はすぐに画面へ反映し、公開用には必要なファイルをまとめて小さく出力してくれるビルドツール。",
       "what": "Vite は、Webアプリの開発を助ける[[ビルド]]ツールです。開発中は手元でサーバーを動かし、ファイルを保存するとすぐにブラウザへ反映します。公開するときは、ソースコードを[[バンドル]]・圧縮して、配布用のファイル（`dist` フォルダ）を出力します。",
       "why": "React の JSX や TypeScript は、ブラウザがそのままでは読めません。Vite がそれらを変換し、たくさんのファイルを配布しやすい形にまとめます。設定が少なくても始められ、動作が速いのも特長です。",
@@ -79,13 +175,37 @@
         "入れたパッケージの版によって動きが変わるため、`package-lock.json` もリポジトリに入れる。"
       ],
       "apps": [
-        { "appId": "workout-calendar", "usage": "`vite.config.ts` で React と Tailwind CSS のプラグインを読み込み、`base: './'` を指定しています。さらに自作のプラグインで、キャッシュ対象の一覧とハッシュを埋め込んだ `sw.js` を出力しています。" }
+        {
+          "appId": "workout-calendar",
+          "usage": "`vite.config.ts` で React と Tailwind CSS のプラグインを読み込み、`base: './'` を指定しています。さらに自作のプラグインで、キャッシュ対象の一覧とハッシュを埋め込んだ `sw.js` を出力しています。",
+          "snippet": {
+            "file": "vite.config.ts",
+            "startLine": 68,
+            "endLine": 81,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "ts",
+            "code": "// https://vite.dev/config/\nexport default defineConfig({\n  // 相対パスで出力する。こうすると GitHub Pages のような\n  // サブパス配信（https://user.github.io/repo/）でも、\n  // Netlify のようなドメイン直下でも、同じビルドがそのまま動く。\n  base: './',\n  define: {\n    __APP_VERSION__: JSON.stringify(APP_VERSION),\n  },\n  plugins: [react(), tailwindcss(), serviceWorker()],\n  server: {\n    host: true, // iPhone から LAN 経由で開けるように\n  },\n})"
+          }
+        }
       ],
-      "related": ["react", "typescript", "tailwind-css", "subpath-relative-paths"],
+      "related": [
+        "react",
+        "typescript",
+        "tailwind-css",
+        "npm-package-json",
+        "subpath-relative-paths"
+      ],
       "links": [
-        { "label": "Vite 公式サイト", "url": "https://ja.vite.dev/", "kind": "official" }
+        {
+          "label": "Vite 公式サイト",
+          "url": "https://ja.vite.dev/",
+          "kind": "official"
+        }
       ],
-      "tags": ["ビルド必要", "開発ツール"],
+      "tags": [
+        "ビルド必要",
+        "開発ツール"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -95,8 +215,19 @@
       "category": "frontend",
       "level": "intermediate",
       "title": "TypeScript",
-      "aka": ["タイプスクリプト", "TS"],
-      "keywords": ["型", "型チェック", "tsc", ".ts", ".tsx", "interface", "JSDoc"],
+      "aka": [
+        "タイプスクリプト",
+        "TS"
+      ],
+      "keywords": [
+        "型",
+        "型チェック",
+        "tsc",
+        ".ts",
+        ".tsx",
+        "interface",
+        "JSDoc"
+      ],
       "summary": "JavaScript に「型」を書けるようにした言語。書いた内容の食い違いを、実行する前に見つけられる。",
       "what": "TypeScript は、JavaScript に[[型]]の情報を加えた言語です。「この変数には数値が入る」「この関数は文字列を返す」といった約束を書いておくと、それに反するコードをエディタやコマンドが指摘してくれます。",
       "why": "JavaScript は、数値のつもりの値に文字列が入っていても、実行するまで気づけません。TypeScript なら、書いている途中や[[ビルド]]の前に間違いが分かります。エディタの補完も賢くなり、大きなアプリでも安心して書き換えられます。",
@@ -106,15 +237,46 @@
         "`any` 型を多用すると、チェックが効かなくなる。"
       ],
       "apps": [
-        { "appId": "workout-calendar", "usage": "`src/` 以下をすべて `.ts`／`.tsx` で書き、データの形を `src/types/index.ts` にまとめています。`npm run build` では、`tsc -b` で型をチェックしてから Vite でビルドします。" },
-        { "appId": "git-manabi", "usage": "TypeScript は使っていませんが、`js/types.js` に JSDoc で型を書き、エディタの補完やチェックに役立てています。" }
+        {
+          "appId": "workout-calendar",
+          "usage": "`src/` 以下をすべて `.ts`／`.tsx` で書き、データの形を `src/types/index.ts` にまとめています。`npm run build` では、`tsc -b` で型をチェックしてから Vite でビルドします。",
+          "snippet": {
+            "file": "src/types/index.ts",
+            "startLine": 7,
+            "endLine": 21,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "ts",
+            "code": "/** 'YYYY-MM-DD' 形式のローカル日付 */\nexport type ISODate = string\n\n/** ISO 8601 のタイムスタンプ（例: '2026-09-09T12:34:56.789Z'） */\nexport type Timestamp = string\n\n/** 部位タグ（胸・背中 など）。ユーザーが追加・色変更できる */\nexport interface MuscleGroup {\n  id: string\n  name: string\n  /** #rrggbb 形式のカラーコード */\n  color: string\n  /** 表示順（小さいほど先） */\n  order: number\n}"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "TypeScript は使っていませんが、`js/types.js` に JSDoc で型を書き、エディタの補完やチェックに役立てています。"
+        }
       ],
-      "related": ["vite", "react", "es-modules"],
+      "related": [
+        "jsdoc",
+        "vite",
+        "react",
+        "npm-package-json"
+      ],
       "links": [
-        { "label": "TypeScript 公式サイト", "url": "https://www.typescriptlang.org/ja/", "kind": "official" },
-        { "label": "TypeScript のドキュメント", "url": "https://www.typescriptlang.org/ja/docs/", "kind": "official" }
+        {
+          "label": "TypeScript 公式サイト",
+          "url": "https://www.typescriptlang.org/ja/",
+          "kind": "official"
+        },
+        {
+          "label": "TypeScript のドキュメント",
+          "url": "https://www.typescriptlang.org/ja/docs/",
+          "kind": "official"
+        }
       ],
-      "tags": ["型", "ビルド必要", "言語"],
+      "tags": [
+        "型",
+        "ビルド必要",
+        "言語"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -124,8 +286,18 @@
       "category": "frontend",
       "level": "basic",
       "title": "Tailwind CSS",
-      "aka": ["テイルウィンド", "Tailwind"],
-      "keywords": ["ユーティリティクラス", "CSS フレームワーク", "className", "レスポンシブ", "ダークモード", "dark:"],
+      "aka": [
+        "テイルウィンド",
+        "Tailwind"
+      ],
+      "keywords": [
+        "ユーティリティクラス",
+        "CSS フレームワーク",
+        "className",
+        "レスポンシブ",
+        "ダークモード",
+        "dark:"
+      ],
       "summary": "`flex` や `p-4` のような小さなクラス名を HTML に並べて見た目を作る CSS フレームワーク。使ったクラスの CSS だけが出力される。",
       "what": "Tailwind CSS は、「余白を 1rem」「文字を太く」といった1つの役割だけを持つクラス（ユーティリティクラス）をたくさん用意した CSS の[[フレームワーク]]です。CSS ファイルに見た目を書く代わりに、HTML（React なら `className`）にクラス名を並べて見た目を決めます。",
       "why": "自分で CSS を書くと、クラス名を考えたり、どの CSS がどこに効いているかを追ったりする手間がかかります。Tailwind なら見た目がその場で分かり、余白や色もあらかじめ決められた段階から選ぶので、画面全体の統一感を保ちやすくなります。",
@@ -135,13 +307,386 @@
         "クラスが長く並んで読みにくくなりやすい。繰り返す部分はコンポーネントにまとめる。"
       ],
       "apps": [
-        { "appId": "workout-calendar", "usage": "`src/index.css` の先頭で `@import \"tailwindcss\"` し、Vite のプラグイン（`@tailwindcss/vite`）で組み込んでいます。画面の高さには `min-h-dvh` のようなクラスを使っています。" }
+        {
+          "appId": "workout-calendar",
+          "usage": "`src/index.css` の先頭で `@import \"tailwindcss\"` し、Vite のプラグイン（`@tailwindcss/vite`）で組み込んでいます。画面の高さには `min-h-dvh` のようなクラスを使っています。",
+          "snippet": {
+            "file": "src/App.tsx",
+            "startLine": 24,
+            "endLine": 32,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "tsx",
+            "code": "  return (\n    <div className=\"min-h-dvh pb-20\">\n      <UpdateBanner />\n      <main className=\"mx-auto max-w-lg\">\n        {tab === 'calendar' && <CalendarPage />}\n        {tab === 'stats' && <StatsPage />}\n        {tab === 'routines' && <RoutinesPage />}\n        {tab === 'settings' && <SettingsPage />}\n      </main>"
+          }
+        }
       ],
-      "related": ["react", "vite"],
+      "related": [
+        "react",
+        "vite",
+        "dynamic-viewport-units"
+      ],
       "links": [
-        { "label": "Tailwind CSS のドキュメント", "url": "https://tailwindcss.com/docs/installation/using-vite", "kind": "official" }
+        {
+          "label": "Tailwind CSS のドキュメント",
+          "url": "https://tailwindcss.com/docs/installation/using-vite",
+          "kind": "official"
+        }
       ],
-      "tags": ["CSS", "ビルド必要"],
+      "tags": [
+        "CSS",
+        "ビルド必要"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "dark-mode",
+      "category": "frontend",
+      "level": "basic",
+      "title": "ダークモード対応（prefers-color-scheme）",
+      "aka": [
+        "ダークモード",
+        "prefers-color-scheme",
+        "color-scheme",
+        "theme-color"
+      ],
+      "keywords": [
+        "黒い画面",
+        "配色",
+        "CSS 変数",
+        "ライトモード",
+        "matchMedia"
+      ],
+      "summary": "端末の「ダークモード」の設定に合わせて、アプリの配色を自動で切り替える方法。",
+      "what": "CSS の `@media (prefers-color-scheme: dark)` を使うと、端末がダークモードのときだけ効くスタイルを書けます。色を CSS の変数（`--bg` など）にまとめておき、ダークモードのときに変数の値だけを入れ替えるのが定番のやり方です。",
+      "why": "夜に明るい画面を見るとまぶしく、ダークモードにしている人には白い画面が目立ちます。端末の設定に合わせて配色を変えれば、どちらの人にも読みやすいアプリになります。",
+      "how": "ページの色はすべて `var(--text)` のように変数で指定し、`:root` にライト用の値、`@media (prefers-color-scheme: dark)` の中にダーク用の値を書きます。\n\n`<meta name=\"color-scheme\" content=\"light dark\">` を書くと、入力欄やスクロールバーなどブラウザが描く部品も配色に合わせてくれます。`<meta name=\"theme-color\">` に `media` を付けると、ブラウザの上部の色も切り替えられます。JavaScript からは `matchMedia('(prefers-color-scheme: dark)')` で判定できます。",
+      "pitfalls": [
+        "色を直接書いた場所が残っていると、ダークモードで文字が読めなくなることがある。色は変数にまとめる。",
+        "canvas に描いた図は CSS の切り替えでは色が変わらない。JavaScript で判定して描き分ける。"
+      ],
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`css/base.css` で、色をすべて `:root` の変数にまとめ、`@media (prefers-color-scheme: dark)` の中で入れ替えています。",
+          "snippet": {
+            "file": "css/base.css",
+            "startLine": 50,
+            "endLine": 60,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "css",
+            "code": "/* ---- 配色（ダーク） ---- */\n@media (prefers-color-scheme: dark) {\n  :root {\n    --bg: #16181d;\n    --surface: #1f2228;\n    --surface-2: #2a2e36;\n    --text: #e8eaed;\n    --text-sub: #a3abb6;\n    --border: #3a3f48;\n    --accent: #5aa9f5;\n    --accent-text: #0d1117;"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "CSS の変数で配色を切り替えるほか、canvas に描くルーレットは `matchMedia('(prefers-color-scheme: dark)')` で判定して描き分けています（`js/features/roulette.js`）。"
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`index.html` で、`theme-color` をライト用とダーク用の 2 つ書き、`media` 属性で切り替えています。"
+        }
+      ],
+      "related": [
+        "safe-area",
+        "apple-web-app-meta"
+      ],
+      "links": [
+        {
+          "label": "prefers-color-scheme（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/At-rules/@media/prefers-color-scheme",
+          "kind": "mdn"
+        },
+        {
+          "label": "theme-color（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/meta/name/theme-color",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: prefers-color-scheme",
+          "url": "https://caniuse.com/prefers-color-scheme",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "CSS",
+        "見た目"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "safe-area",
+      "category": "frontend",
+      "level": "basic",
+      "title": "safe-area と viewport-fit",
+      "aka": [
+        "セーフエリア",
+        "safe-area-inset",
+        "env()",
+        "viewport-fit=cover",
+        "ノッチ"
+      ],
+      "keywords": [
+        "ホームバー",
+        "ダイナミックアイランド",
+        "余白",
+        "全画面",
+        "タブバー"
+      ],
+      "summary": "iPhone の画面の角の丸みや上部の切り欠き、下のホームバーに、ボタンや文字が隠れないようにする方法。",
+      "what": "iPhone の画面には、上部のカメラ部分や、下部のホームバー（横線）があります。そこに重ならない安全な範囲を**セーフエリア**と呼びます。CSS の `env(safe-area-inset-top)` などで、上下左右にどれだけ余白をとればよいかを受け取れます。",
+      "why": "ホーム画面から起動したアプリを画面いっぱいに表示すると、タブバーがホームバーに重なったり、見出しがカメラ部分に隠れたりします。セーフエリアの分だけ余白を足せば、画面を広く使いながら、操作する部分は隠れないようにできます。",
+      "how": "まず `<meta name=\"viewport\">` に `viewport-fit=cover` を付けて、画面の端まで描くようにします。そのうえで、`padding-bottom: calc(56px + env(safe-area-inset-bottom))` のように、必要な場所へセーフエリアの余白を足します。\n\n`env()` の 2 番目の値（`env(safe-area-inset-top, 0px)`）は、対応していない環境で使われる値です。",
+      "pitfalls": [
+        "`viewport-fit=cover` を付けないと、`env(safe-area-inset-*)` は 0 になる。",
+        "横向きにすると、左右にもセーフエリアができる。左右の余白も考えておく。"
+      ],
+      "iosNote": "セーフエリアの大きさは機種や向き、ホーム画面から起動したかどうかで変わります。実機で確認するのが確実です。",
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`css/base.css` で、`env(safe-area-inset-*)` の値を `--safe-top` などの CSS 変数にまとめ、ヘッダーやタブバーの余白に使っています。",
+          "snippet": {
+            "file": "css/base.css",
+            "startLine": 24,
+            "endLine": 27,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "css",
+            "code": "  --safe-top: env(safe-area-inset-top, 0px);\n  --safe-bottom: env(safe-area-inset-bottom, 0px);\n  --safe-left: env(safe-area-inset-left, 0px);\n  --safe-right: env(safe-area-inset-right, 0px);"
+          }
+        },
+        {
+          "appId": "reversi",
+          "usage": "`css/style.css` で、画面の四方の余白を `calc(env(safe-area-inset-top) + 12px)` のように計算しています。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "更新のバナー（`src/components/UpdateBanner.tsx`）の上の余白に、`env(safe-area-inset-top)` を足しています。"
+        }
+      ],
+      "related": [
+        "dynamic-viewport-units",
+        "apple-web-app-meta",
+        "dark-mode"
+      ],
+      "links": [
+        {
+          "label": "env()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Values/env",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: CSS env()",
+          "url": "https://caniuse.com/css-env-function",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "CSS",
+        "iPhone",
+        "レイアウト"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "dynamic-viewport-units",
+      "category": "frontend",
+      "level": "basic",
+      "title": "dvh（画面の高さの単位）",
+      "aka": [
+        "dvh",
+        "svh",
+        "lvh",
+        "100vh 問題",
+        "ビューポート単位"
+      ],
+      "keywords": [
+        "高さ",
+        "100vh",
+        "アドレスバー",
+        "はみ出す",
+        "全画面"
+      ],
+      "summary": "画面の実際の高さに合わせて変わる CSS の単位。`100vh` だと下がはみ出す問題を避けられる。",
+      "what": "`vh` は画面の高さの 1% を表す単位で、`100vh` で画面の高さいっぱいになる…はずでした。ところがスマートフォンでは、アドレスバーが出たり引っ込んだりするため、`100vh` が実際に見えている高さより大きくなることがあります。`dvh`（dynamic viewport height）は、そのときの実際の高さに合わせて変わる単位です。",
+      "why": "画面の下にボタンやタブバーを置くアプリで `100vh` を使うと、下の部分がアドレスバーの裏に隠れてしまうことがあります。`100dvh` を使えば、見えている範囲にぴったり収まります。",
+      "how": "`height: 100dvh;` のように使います。似た単位に、アドレスバーが出ているときの高さを表す `svh`（small）と、引っ込んだときの高さを表す `lvh`（large）もあります。\n\n古いブラウザ向けに、`height: 100vh;` を先に書き、次の行で `height: 100dvh;` と上書きすると、対応していない環境では `100vh` が使われます。",
+      "pitfalls": [
+        "`dvh` はスクロールに合わせて値が変わるため、要素の高さがちらつくことがある。気になるときは `svh` を使う。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`css/base.css` で、body の高さを `100vh` と書いた後に `100dvh` で上書きし、対応していない環境でも崩れないようにしています。",
+          "snippet": {
+            "file": "css/base.css",
+            "startLine": 70,
+            "endLine": 76,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "css",
+            "code": "body {\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  height: 100vh;\n  height: 100dvh;\n  background: var(--bg);"
+          }
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "Tailwind CSS の `min-h-dvh` や `max-h-[92dvh]` を使い、画面の高さに合わせて表示しています。"
+        }
+      ],
+      "related": [
+        "safe-area",
+        "tailwind-css"
+      ],
+      "links": [
+        {
+          "label": "<length>（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Values/length",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: Small, Large, and Dynamic viewport units",
+          "url": "https://caniuse.com/viewport-unit-variants",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "CSS",
+        "iPhone",
+        "レイアウト"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "jsdoc",
+      "category": "frontend",
+      "level": "basic",
+      "title": "JSDoc",
+      "aka": [
+        "ジェイエスドック",
+        "型コメント",
+        "@typedef",
+        "@param"
+      ],
+      "keywords": [
+        "型",
+        "コメント",
+        "補完",
+        "ビルド不要",
+        "TypeScript"
+      ],
+      "summary": "JavaScript のコメントに、関数の説明や引数の型を書く書き方。ビルドなしで型の助けを借りられる。",
+      "what": "JSDoc は、`/** ... */` の形のコメントに `@param {string} name` や `@returns {number}` のような決まった書き方で、関数の説明や[[型]]を書く方法です。`@typedef` を使うと、データの形に名前を付けられます。",
+      "why": "TypeScript を使うと[[ビルド]]が必要になります。JSDoc なら、普通の JavaScript のまま型の情報を書けます。VS Code などのエディタは JSDoc を読み取るので、入力の補完が効き、間違いにも気づきやすくなります。",
+      "how": "エディタは JSDoc の型を TypeScript と同じ仕組みで解釈します。ほかのファイルで定義した型は、`import('./types.js').Entry` のように書いて参照できます。\n\n型を書くだけのファイル（実行する処理がないファイル）を作り、各モジュールからそこを参照すると、データの形を1か所にまとめられます。",
+      "pitfalls": [
+        "コメントなので、書いた型と実際の処理が食い違っていても動いてしまう。変更したらコメントも直す。",
+        "チェックを厳しくしたいときは、エディタの設定（`// @ts-check` など）が必要。"
+      ],
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`js/types.js` に、辞書データや設定の形を `@typedef` でまとめています。各モジュールは `import('./types.js')` でこの型を参照します。",
+          "snippet": {
+            "file": "js/types.js",
+            "startLine": 1,
+            "endLine": 15,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "// 型定義だけを置くファイル（実行コードなし）。\n// 各モジュールからは import('./types.js').Entry のように参照する。\n\n/** @typedef {'git'|'gh'|'github-web'} Tool */\n/** @typedef {'safe'|'caution'|'danger'} Danger */\n\n/**\n * 構文中の <key> に対応する入力欄。\n * quote: true のときは値を \" で囲み、値の中の \" を \\\" にする。\n * @typedef {Object} Placeholder\n * @property {string} key\n * @property {string} label\n * @property {string} example\n * @property {boolean} [quote]\n */"
+          }
+        }
+      ],
+      "related": [
+        "typescript",
+        "es-modules"
+      ],
+      "links": [
+        {
+          "label": "JSDoc 公式サイト",
+          "url": "https://jsdoc.app/",
+          "kind": "official"
+        },
+        {
+          "label": "JSDoc で使える型（TypeScript ハンドブック）",
+          "url": "https://www.typescriptlang.org/ja/docs/handbook/jsdoc-supported-types.html",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "型",
+        "ビルド不要"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "npm-package-json",
+      "category": "frontend",
+      "level": "basic",
+      "title": "npm と package.json",
+      "aka": [
+        "エヌピーエム",
+        "package.json",
+        "package-lock.json",
+        "npm scripts"
+      ],
+      "keywords": [
+        "npm install",
+        "npm ci",
+        "npm run build",
+        "依存パッケージ",
+        "node_modules",
+        "Node.js"
+      ],
+      "summary": "JavaScript のライブラリや開発ツールを入れて管理する仕組み。使うものの一覧とコマンドを `package.json` に書く。",
+      "what": "npm は、JavaScript の[[ライブラリ]]やツール（パッケージ）を入れたり、版を管理したりするための道具です。`package.json` には、そのプロジェクトが使うパッケージの一覧と、`npm run build` のように呼び出すコマンド（スクリプト）を書きます。",
+      "why": "React や Vite のようなツールを使うには、決まった版のパッケージを手元に入れる必要があります。`package.json` に書いておけば、別のパソコンや GitHub Actions でも、同じコマンドで同じ環境を用意できます。",
+      "how": "`npm install` を実行すると、`package.json` を読んでパッケージを `node_modules` フォルダに入れ、実際に入れた版を `package-lock.json` に記録します。`npm ci` は、この記録どおりの版をそのまま入れるコマンドで、自動のビルドでよく使われます。\n\n`\"scripts\"` に書いたコマンドは `npm run 名前` で実行できます。",
+      "pitfalls": [
+        "`node_modules` はリポジトリに入れない（`.gitignore` に書く）。`package-lock.json` は入れる。",
+        "知らないパッケージを入れると、悪意のあるコードが混ざる危険がある。入れる前に出どころを確かめる。"
+      ],
+      "apps": [
+        {
+          "appId": "workout-calendar",
+          "usage": "`package.json` の `scripts` に、開発用の `dev`、公開用の `build`（型チェックとビルド）、コードの点検用の `lint` を書いています。React・Vite・Tailwind CSS・TypeScript はすべて npm で入れています。",
+          "snippet": {
+            "file": "package.json",
+            "startLine": 5,
+            "endLine": 11,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "json",
+            "code": "  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"tsc -b && vite build\",\n    \"lint\": \"oxlint\",\n    \"preview\": \"vite preview\"\n  },"
+          }
+        }
+      ],
+      "related": [
+        "vite",
+        "github-actions-pages"
+      ],
+      "links": [
+        {
+          "label": "package.json（npm Docs）",
+          "url": "https://docs.npmjs.com/cli/configuring-npm/package-json/",
+          "kind": "official"
+        },
+        {
+          "label": "npm ci（npm Docs）",
+          "url": "https://docs.npmjs.com/cli/commands/npm-ci/",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "ビルド必要",
+        "開発ツール"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""

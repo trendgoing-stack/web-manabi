@@ -1,4 +1,258 @@
 {
   "category": "security",
-  "topics": []
+  "topics": [
+    {
+      "id": "exif-privacy",
+      "category": "security",
+      "level": "basic",
+      "title": "画像のメタデータ（EXIF）と位置情報",
+      "aka": [
+        "EXIF",
+        "イグジフ",
+        "メタデータ",
+        "位置情報の削除"
+      ],
+      "keywords": [
+        "写真",
+        "撮影場所",
+        "GPS",
+        "プライバシー",
+        "個人情報",
+        "再エンコード"
+      ],
+      "summary": "写真のファイルには、撮影場所などの情報が入っていることがある。canvas で描き直して保存すると、その情報は残らない。",
+      "what": "スマートフォンで撮った写真のファイルには、画像そのものとは別に、撮影日時・カメラの機種・撮影した場所（位置情報）などの[[メタデータ]]が入っていることがあります。JPEG ではこれを EXIF と呼びます。",
+      "why": "位置情報の入った写真をそのまま SNS やメールで送ると、自宅の場所などが相手に分かってしまうおそれがあります。画像を加工するアプリで EXIF を取り除けば、安心して写真を送れます。",
+      "how": "画像を canvas に描いてから `toBlob()` で書き出すと、書き出されるのは canvas のピクセルだけです。元のファイルの EXIF は引き継がれないため、結果として位置情報などは消えます。\n\nただし、撮影日時も消えるので、写真アプリに保存すると「保存した日の写真」として並びます。",
+      "pitfalls": [
+        "写真の向きの情報も EXIF に入っている。描き直すときは、ブラウザが向きを反映してから描く必要がある。",
+        "ぼかしやモザイクは読みにくくするだけで、完全に隠せるとは限らない。確実に隠したい部分は塗りつぶす。"
+      ],
+      "apps": [
+        {
+          "appId": "image-tool",
+          "usage": "画像を canvas に描き直してから `canvas.toBlob()`（`js/core/encode.js`）で書き出すため、位置情報などの EXIF はすべて取り除かれます。README と画面の説明でも、そのことを伝えています。",
+          "snippet": {
+            "file": "js/core/encode.js",
+            "startLine": 36,
+            "endLine": 49,
+            "commitSha": "92ec285288b3bc672dcb9b08f4ed6d806a650c25",
+            "lang": "js",
+            "code": "/** @returns {Promise<Blob>} */\nexport function canvasToBlob(canvas, type, qualityPercent) {\n  return new Promise((resolve, reject) => {\n    const q = type === 'image/jpeg' ? qualityPercent / 100 : undefined\n    canvas.toBlob(\n      (blob) => {\n        if (blob) resolve(blob)\n        else reject(new Error('画像の書き出しに失敗しました（メモリ不足の可能性があります）'))\n      },\n      type,\n      q,\n    )\n  })\n}"
+          }
+        }
+      ],
+      "related": [
+        "canvas-api",
+        "image-decode"
+      ],
+      "links": [
+        {
+          "label": "HTMLCanvasElement.toBlob()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/HTMLCanvasElement/toBlob",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "プライバシー",
+        "画像"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "xss-textcontent",
+      "category": "security",
+      "level": "intermediate",
+      "title": "innerHTML と XSS（textContent で安全に表示）",
+      "aka": [
+        "XSS",
+        "クロスサイトスクリプティング",
+        "innerHTML",
+        "textContent"
+      ],
+      "keywords": [
+        "セキュリティ",
+        "エスケープ",
+        "DOM",
+        "入力値",
+        "createElement"
+      ],
+      "summary": "入力された文字を HTML として画面に入れると、悪意のあるスクリプトが動いてしまうことがある。文字は textContent で入れる。",
+      "what": "XSS（クロスサイトスクリプティング）は、利用者やデータから来た文字が HTML として解釈され、仕込まれたスクリプトが動いてしまう問題です。`element.innerHTML = 文字` のように、文字を HTML として入れる書き方で起きやすくなります。",
+      "why": "スクリプトが動くと、保存データを読まれたり、画面を書き換えられたりするおそれがあります。自分のアプリでも、メモやインポートしたファイルなど、外から来た文字を表示する場面はあります。最初から安全な書き方にしておけば、心配が減ります。",
+      "how": "`textContent` に入れた文字は、HTML としてではなく、ただの文字として表示されます。`<script>` と書かれていても、その文字がそのまま見えるだけです。\n\n要素を組み立てるときは、`document.createElement()` で作った要素に `textContent` で文字を入れ、`append()` で組み合わせます。これを短く書くための小さな関数を用意すると便利です。",
+      "pitfalls": [
+        "`innerHTML` を使うのは、中身がすべて自分で書いた固定の文字のときだけにする。",
+        "`href` に `javascript:` で始まる文字が入ると、リンクをタップしたときにスクリプトが動く。URL は `https://` で始まるかを確かめる。"
+      ],
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`js/ui/dom.js` の `h()` 関数で、要素を `createElement` で作り、文字はテキストとして追加しています。辞書データや利用者のメモを HTML として入れないようにしています。",
+          "snippet": {
+            "file": "js/ui/dom.js",
+            "startLine": 14,
+            "endLine": 28,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "export function h(tag, attrs, ...children) {\n  const el = document.createElement(tag);\n  if (attrs) {\n    for (const [k, v] of Object.entries(attrs)) {\n      if (v == null || v === false) continue;\n      if (k.startsWith('on') && typeof v === 'function') {\n        el.addEventListener(k.slice(2), v);\n      } else if (k === 'class') {\n        el.className = v;\n      } else if (k === 'dataset') {\n        Object.assign(el.dataset, v);\n      } else if (k === 'value' || k === 'checked' || k === 'selected' || k === 'disabled') {\n        el[k] = v;\n      } else {\n        el.setAttribute(k, v === true ? '' : String(v));"
+          }
+        }
+      ],
+      "related": [
+        "same-origin-storage"
+      ],
+      "links": [
+        {
+          "label": "クロスサイトスクリプティング（MDN 用語集）",
+          "url": "https://developer.mozilla.org/ja/docs/Glossary/Cross-site_scripting",
+          "kind": "mdn"
+        },
+        {
+          "label": "Node.textContent（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Node/textContent",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "セキュリティ",
+        "DOM"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "same-origin-storage",
+      "category": "security",
+      "level": "intermediate",
+      "title": "同じオリジンのアプリで保存場所を共有する",
+      "aka": [
+        "オリジンの共有",
+        "github.io の保存データ",
+        "キーの接頭辞",
+        "プレフィックス"
+      ],
+      "keywords": [
+        "localStorage",
+        "GitHub Pages",
+        "キー",
+        "衝突",
+        "全削除",
+        "同一オリジンポリシー"
+      ],
+      "summary": "`ユーザー名.github.io` の下にある複数のアプリは同じオリジンなので、localStorage などの保存場所を共有する。キーの付け方に注意が必要。",
+      "what": "ブラウザは、保存データを[[オリジン]]（https・ドメイン・ポートの組み合わせ）ごとに分けて守ります。`https://trendgoing-stack.github.io/reversi/` と `https://trendgoing-stack.github.io/lottery-tools/` はパスが違うだけなので、同じオリジンです。そのため、localStorage も同じ保存場所を使います。",
+      "why": "同じ名前のキー（例：`settings`）を別々のアプリが使うと、お互いのデータを上書きしてしまいます。また「全データ削除」を `localStorage.clear()` で作ると、ほかのアプリのデータまで消えてしまいます。",
+      "how": "キーの先頭に、アプリごとの決まった文字（接頭辞）を付けます（例：`lt.`、`webmanabi:`）。削除するときは、その接頭辞で始まるキーだけを探して消します。\n\n反対に、同じオリジンのほかのアプリからは、自分のデータも読めてしまいます。人に見られて困る情報は保存しないようにします。",
+      "pitfalls": [
+        "`localStorage.clear()` は、同じオリジンのほかのアプリのデータも消してしまう。",
+        "独自ドメインを使えば別のオリジンになるが、ドメインの管理が必要になる。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/store.js` で、キーに必ず `lt.` を付けています。全削除のときは、`lt.` で始まるキーだけを消します。",
+          "snippet": {
+            "file": "js/core/store.js",
+            "startLine": 1,
+            "endLine": 10,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "/**\n * localStorage の読み書き。\n *\n * GitHub Pages では同じアカウントの他のアプリ（/reversi/ など）と保存領域を共有するため、\n * キーには必ず接頭辞 \"lt.\" を付けて、ほかのアプリのデータと混ざらないようにする。\n * 読み込めない・壊れているときは初期値を返す（アプリが止まらないことを優先）。\n */\nimport { randInt } from './random.js'\n\nconst PREFIX = 'lt.'"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "`js/storage.js` で、すべてのキーに共通の接頭辞を付けて、ほかのアプリのデータと混ざらないようにしています。"
+        }
+      ],
+      "related": [
+        "localstorage",
+        "github-pages",
+        "storage-separation"
+      ],
+      "links": [
+        {
+          "label": "同一オリジンポリシー（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/Security/Defenses/Same-origin_policy",
+          "kind": "mdn"
+        },
+        {
+          "label": "Window.localStorage（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/localStorage",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "保存",
+        "GitHub Pages",
+        "プライバシー"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "https-secure-context",
+      "category": "security",
+      "level": "basic",
+      "title": "HTTPS と安全なコンテキスト",
+      "aka": [
+        "安全なコンテキスト",
+        "Secure Context",
+        "isSecureContext",
+        "SSL"
+      ],
+      "keywords": [
+        "https",
+        "http",
+        "localhost",
+        "動かない",
+        "実機確認",
+        "暗号化"
+      ],
+      "summary": "多くの新しい Web の機能は、HTTPS で開いたページ（安全なコンテキスト）でしか使えない。",
+      "what": "[[HTTPS]] は、通信を暗号化して、途中で盗み見られたり書き換えられたりしないようにする仕組みです。ブラウザは、HTTPS で開いたページや [[localhost]] を**安全なコンテキスト**として扱い、そこでだけ使える機能を用意しています。",
+      "why": "Service Worker、クリップボード、共有シート、画面のスリープ防止などは、悪用されると困る強力な機能です。そのため、安全なコンテキストでしか使えません。手元のパソコンの IP アドレスに iPhone から http でつなぐと、これらの機能は動きません。",
+      "how": "JavaScript からは `window.isSecureContext` で、今のページが安全なコンテキストかどうかを確かめられます。\n\nGitHub Pages は HTTPS で配信されるため、push して公開したページを iPhone で開けば、これらの機能を実機で確かめられます。",
+      "pitfalls": [
+        "パソコンでは localhost で動いたのに、iPhone から LAN の IP アドレスで開くと動かないことがある。",
+        "HTTPS のページから http の画像やスクリプトを読み込むと、ブロックされることがある。"
+      ],
+      "apps": [
+        {
+          "appId": "image-tool",
+          "usage": "GitHub Pages の HTTPS で公開しているため、共有シート（Web Share API）で画像を渡せます。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "HTTPS で公開しているため、共有シート、クリップボード、画面のスリープ防止が使えます。"
+        }
+      ],
+      "related": [
+        "service-worker",
+        "clipboard-api",
+        "web-share-api",
+        "github-pages"
+      ],
+      "links": [
+        {
+          "label": "安全なコンテキスト（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/Security/Defenses/Secure_Contexts",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "セキュリティ",
+        "HTTPS",
+        "実機確認"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    }
+  ]
 }
