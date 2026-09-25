@@ -3,10 +3,9 @@
 
 import { h, clear, icon, ICONS } from '../ui/dom.js';
 import { show } from '../ui/shell.js';
-import { hiddenNotice, topicRow } from '../ui/badges.js';
+import { topicRow } from '../ui/badges.js';
 import { getStore } from '../data.js';
 import { buildIndex, search } from '../search.js';
-import { isVisible } from '../status.js';
 import { LEVEL_LABELS, SEARCH_DEBOUNCE_MS, SEARCH_LIMIT } from '../config.js';
 
 const state = { query: '', category: '', level: '', app: '' };
@@ -108,7 +107,6 @@ export function renderSearch() {
       /** @type {ReturnType<typeof buildIndex>} */ (index),
       state.query,
       (t) =>
-        isVisible(t) &&
         (!state.category || t.category === state.category) &&
         (!state.level || t.level === state.level) &&
         (!appTopics || appTopics.has(t)),
@@ -137,7 +135,6 @@ function homeSections() {
   return h(
     'div',
     {},
-    hiddenNotice(store.topics),
     h('h2', { class: 'section-title' }, 'カテゴリから探す'),
     categoryList(),
     h('h2', { class: 'section-title' }, 'ほかの探し方'),
@@ -156,7 +153,7 @@ export function categoryList() {
     'ul',
     { class: 'cat-grid' },
     store.categories.map((c) => {
-      const n = store.topics.filter((t) => t.category === c.id && isVisible(t)).length;
+      const n = store.topics.filter((t) => t.category === c.id).length;
       return h(
         'li',
         {},

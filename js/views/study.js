@@ -102,6 +102,6 @@ export function studySetup({ kind, scope, mode, onStart }) {
     modes,
     status,
     startBtn,
-    h('p', { class: 'muted small' }, '確認済みの項目だけが出題されます。回答するとライトナー方式で次に復習する日が決まり、クイズとフラッシュカードの両方で同じ記録を使います。'),
+    h('p', { class: 'muted small' }, '回答するとライトナー方式で次に復習する日が決まり、クイズとフラッシュカードの両方で同じ記録を使います。'),
   );
 }

@@ -57,7 +57,6 @@
         "プライバシー",
         "画像"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -120,7 +119,6 @@
         "セキュリティ",
         "DOM"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -191,7 +189,6 @@
         "GitHub Pages",
         "プライバシー"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -250,7 +247,6 @@
         "HTTPS",
         "実機確認"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -320,7 +316,6 @@
         "保存",
         "セキュリティ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -402,7 +397,6 @@
         "セキュリティ",
         "オフライン"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     }

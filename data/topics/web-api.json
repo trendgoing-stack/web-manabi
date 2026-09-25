@@ -83,7 +83,6 @@
         "端末内",
         "オフライン"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -162,7 +161,6 @@
         "描画",
         "端末内"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": "",
       "demo": "canvas-resize"
@@ -235,7 +233,6 @@
         "共有",
         "iPhone"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": "",
       "demo": "web-share-text"
@@ -311,7 +308,6 @@
         "タッチ操作",
         "イベント"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": "",
       "demo": "pointer-draw"
@@ -376,7 +372,6 @@
         "音",
         "iPhone"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": "",
       "demo": "web-audio-beep"
@@ -441,7 +436,6 @@
         "画面",
         "iPhone"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -508,7 +502,6 @@
         "抽選",
         "公平"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": "",
       "demo": "random-compare"
@@ -574,7 +567,6 @@
         "速さ",
         "スレッド"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -648,7 +640,6 @@
         "コピー",
         "iPhone"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -719,7 +710,6 @@
         "イベント",
         "ホーム画面"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -803,7 +793,6 @@
         "保存",
         "バックアップ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -876,7 +865,6 @@
         "画像",
         "端末内"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -945,7 +933,6 @@
         "JavaScript",
         "速さ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -1028,7 +1015,6 @@
         "ポップアップ",
         "iPhone"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -1092,7 +1078,6 @@
         "JavaScript",
         "データ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -1155,7 +1140,6 @@
         "HTML",
         "アクセシビリティ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     }

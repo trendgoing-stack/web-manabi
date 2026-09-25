@@ -77,7 +77,6 @@
         "ビルド不要",
         "ファイル分割"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -143,7 +142,6 @@
         "ライブラリ",
         "ビルド必要"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -206,7 +204,6 @@
         "ビルド必要",
         "開発ツール"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -277,7 +274,6 @@
         "ビルド必要",
         "言語"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -336,7 +332,6 @@
         "CSS",
         "ビルド必要"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -415,7 +410,6 @@
         "CSS",
         "見た目"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -491,7 +485,6 @@
         "iPhone",
         "レイアウト"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -560,7 +553,6 @@
         "iPhone",
         "レイアウト"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -624,7 +616,6 @@
         "型",
         "ビルド不要"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -691,7 +682,6 @@
         "ビルド必要",
         "開発ツール"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -760,7 +750,6 @@
         "画面遷移",
         "ビルド不要"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -832,7 +821,6 @@
         "CSS",
         "見た目"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -902,7 +890,6 @@
         "CSS",
         "アクセシビリティ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -976,7 +963,6 @@
         "HTML",
         "アクセシビリティ"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -1050,7 +1036,6 @@
         "開発ツール",
         "自動化"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -1115,7 +1100,6 @@
         "開発ツール",
         "ビルド必要"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     }

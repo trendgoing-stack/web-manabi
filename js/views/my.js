@@ -1,5 +1,4 @@
 // マイ（#/my）とその下の一覧（#/my/favorites、#/my/history、#/my/notes、#/my/stats）。
-// 一覧には、未確認項目を表示しない設定でも、自分で登録した項目は表示する。
 
 import { h, clear, icon, ICONS } from '../ui/dom.js';
 import { show } from '../ui/shell.js';
@@ -225,8 +224,8 @@ function computeStats() {
   for (const t of store.topics) {
     const p = progress[t.id];
     if (p) boxes[p.box]++;
-    else if (t.verified) unlearned++;
-    if (t.verified && isDue(p, now)) due++;
+    else unlearned++;
+    if (isDue(p, now)) due++;
   }
   const byCategory = store.categories.map((c) => {
     let correct = 0;
@@ -287,7 +286,7 @@ export function renderStats() {
       h(
         'ul',
         { class: 'bars' },
-        boxRow('未学習', s.unlearned, '確認済みで記録なし'),
+        boxRow('未学習', s.unlearned, 'まだ回答していない項目'),
         [1, 2, 3, 4, 5].map((b) => boxRow(`箱 ${b}`, s.boxes[b], `正解すると${intervals[Math.min(5, b + 1)]}`)),
       ),
       h('h2', { class: 'section-title' }, 'カテゴリ別の正答率'),

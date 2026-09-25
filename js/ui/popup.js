@@ -2,7 +2,6 @@
 
 import { h, clear } from './dom.js';
 import { getStore } from '../data.js';
-import { isVisible } from '../status.js';
 
 /** @type {HTMLDialogElement | null} */
 let dialog = null;
@@ -36,7 +35,7 @@ export function openGlossary(term) {
       h(
         'div',
         { class: 'popup-actions' },
-        topic && isVisible(topic)
+        topic
           ? h('a', { href: `#/topic/${encodeURIComponent(topic.id)}`, class: 'btn btn-primary', onclick: () => d.close() }, `「${topic.title}」を見る`)
           : null,
         h('button', { type: 'button', class: 'btn', onclick: () => d.close() }, '閉じる'),

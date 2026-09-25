@@ -133,12 +133,10 @@ export function validate(raw, opt) {
       if (t?.iosNote != null && typeof t.iosNote !== 'string') err(w, 'iosNote は文字列にします');
       if (t?.demo != null && (typeof t.demo !== 'string' || !ID_RE.test(t.demo))) err(w, 'demo は英小文字とハイフンの id にします');
       else if (t?.demo != null && opt.demoIds && !opt.demoIds.has(t.demo)) err(w, `demo の「${t.demo}」に対応する js/demos/${t.demo}.js がありません`);
-      if (typeof t?.verified !== 'boolean') err(w, 'verified は true か false です');
-      if (typeof t?.verifiedNote !== 'string') err(w, 'verifiedNote は文字列にします（未確認なら空）');
+      if ('verified' in (t ?? {})) warn(w, 'verified は使わなくなりました（削除してください）');
+      if (typeof t?.verifiedNote !== 'string') err(w, 'verifiedNote は文字列にします（なければ空）');
       if (typeof t?.lastReviewed !== 'string' || (t.lastReviewed !== '' && !isYmd(t.lastReviewed))) err(w, 'lastReviewed は YYYY-MM-DD か空にします');
-      if (t?.verified === true && !t.lastReviewed) err(w, '確認済みなのに lastReviewed がありません');
-      if (t?.verified === true && !t.verifiedNote) warn(w, '確認済みなら verifiedNote に確認した内容を書きます');
-      if (t?.verified === false && t.lastReviewed) warn(w, '未確認なのに lastReviewed が入っています');
+      if (t?.lastReviewed && !t.verifiedNote) warn(w, 'lastReviewed を書いたら verifiedNote に確認した内容も書きます');
       if (!Array.isArray(t?.apps)) err(w, 'apps は配列にします');
       if (!Array.isArray(t?.links)) err(w, 'links は配列にします');
       for (const l of t?.links ?? []) {
@@ -243,20 +241,16 @@ export function validate(raw, opt) {
 
   // ---------- 集計 ----------
   const byCat = new Map((meta?.categories ?? []).map((c) => [c.id, c]));
-  let unverified = 0;
   let stale = 0;
   for (const t of topics) {
     const s = reviewState(t, byCat, opt.today);
-    if (s === 'unverified') unverified++;
     if (s === 'stale') stale++;
   }
-  if (unverified) info('技術項目', `未確認：${unverified} 件`);
   if (stale) info('技術項目', `要再確認：${stale} 件`);
 
   /** @type {Record<string, number | string>} */
   const stats = {
     技術項目: topics.length,
-    未確認: unverified,
     要再確認: stale,
     アプリ: apps.length,
     用語: glossary.length,

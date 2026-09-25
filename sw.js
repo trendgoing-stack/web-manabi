@@ -8,7 +8,7 @@
 // - 別のオリジンへのリクエスト（GoatCounter への送信など）には介入しない（キャッシュせず、そのまま通す）
 // - tools/ 以下（検証ページなど）はキャッシュしない
 // - パスはすべて sw.js の場所からの相対パスなので、サブパス（/web-manabi/）でもそのまま動く
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const CACHE_PREFIX = 'webmanabi-';
 const CACHE = `${CACHE_PREFIX}v${VERSION}`;
 

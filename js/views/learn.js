@@ -4,22 +4,20 @@ import { h, clear } from '../ui/dom.js';
 import { show } from '../ui/shell.js';
 import { getStore } from '../data.js';
 import { normalize } from '../normalize.js';
-import { isVisible } from '../status.js';
 import { getProgress } from '../storage.js';
 import { today } from '../date.js';
 import { isDue } from '../leitner.js';
 import { navRow } from './search.js';
 
-/** 今日の復習の件数（確認済みの項目だけ） */
+/** 今日の復習の件数 */
 export function dueCount() {
   const progress = getProgress();
   const now = today();
-  return getStore().topics.filter((t) => t.verified && isDue(progress[t.id], now)).length;
+  return getStore().topics.filter((t) => isDue(progress[t.id], now)).length;
 }
 
 export function renderLearn() {
   const store = getStore();
-  const verified = store.topics.filter((t) => t.verified).length;
   const due = dueCount();
   show({
     title: '学ぶ',
@@ -50,7 +48,6 @@ export function renderLearn() {
         navRow('#/learn/glossary', '用語集', `${store.glossary.length} 語を五十音順で`),
         navRow('#/my/stats', '学習状況', '箱ごとの件数、カテゴリ別の正答率'),
       ),
-      h('p', { class: 'muted small' }, `クイズとフラッシュカードには、確認済みの項目だけが出題されます（現在 ${verified} 件／全 ${store.topics.length} 件）。`),
     ),
   });
 }
@@ -71,7 +68,7 @@ export function renderGlossary() {
       const topic = g.topicId ? store.topicById.get(g.topicId) : null;
       list.append(
         h('dt', {}, g.term, h('span', { class: 'reading' }, g.reading)),
-        h('dd', {}, h('p', {}, g.desc), topic && isVisible(topic) ? h('a', { href: `#/topic/${encodeURIComponent(topic.id)}`, class: 'more' }, `「${topic.title}」を見る`) : null),
+        h('dd', {}, h('p', {}, g.desc), topic ? h('a', { href: `#/topic/${encodeURIComponent(topic.id)}`, class: 'more' }, `「${topic.title}」を見る`) : null),
       );
     }
   };
