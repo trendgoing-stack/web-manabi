@@ -92,9 +92,9 @@
         "PWA",
         "キャッシュ"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "web-app-manifest",
@@ -256,9 +256,9 @@
         "キャッシュ",
         "更新"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "apple-web-app-meta",

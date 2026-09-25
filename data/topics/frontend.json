@@ -389,6 +389,8 @@
         }
       ],
       "related": [
+        "css-custom-properties",
+        "reduced-motion",
         "safe-area",
         "apple-web-app-meta"
       ],
@@ -669,7 +671,9 @@
       ],
       "related": [
         "vite",
-        "github-actions-pages"
+        "github-actions-pages",
+        "linter",
+        "dev-scripts"
       ],
       "links": [
         {
@@ -686,6 +690,430 @@
       "tags": [
         "ビルド必要",
         "開発ツール"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "hash-routing",
+      "category": "frontend",
+      "level": "intermediate",
+      "title": "ハッシュルーティング",
+      "aka": [
+        "ハッシュ",
+        "hashchange",
+        "#/ の画面遷移",
+        "ルーター"
+      ],
+      "keywords": [
+        "画面遷移",
+        "URL",
+        "戻るボタン",
+        "SPA",
+        "location.hash",
+        "history.state"
+      ],
+      "summary": "URL の `#` より後ろの部分で画面を切り替える方法。サーバーの設定なしで、戻る操作や直接リンクに対応できる。",
+      "what": "ハッシュルーティングは、`https://…/web-manabi/#/topic/localstorage` のように、URL の `#` より後ろ（ハッシュ）で「どの画面を出すか」を決める方法です。ページを読み直さずに画面を切り替える、1 ページのアプリでよく使われます。",
+      "why": "ハッシュはサーバーに送られないため、[[静的サイト]]でもサーバーの設定なしで画面ごとの URL を作れます。ブラウザの戻る・進むも使え、特定の画面へのリンクを人に送ることもできます。",
+      "how": "ハッシュが変わると `hashchange` [[イベント]]が起きます。そのたびに `location.hash` を読み、決めておいた規則（例：`#/topic/<id>`）に当てはめて画面を描き直します。\n\n`history.state` に画面の深さやスクロール位置を覚えておくと、戻ったときに前の状態を復元できます。",
+      "pitfalls": [
+        "ホーム画面から起動したアプリにはブラウザの戻るボタンがない。画面の中に戻るボタンを用意する。",
+        "画面を切り替えるたびに履歴が増える。入力のたびにハッシュを書き換えると、戻る操作が使いにくくなる。"
+      ],
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`js/router.js` で、`#/entry/<id>` のようなハッシュを規則に当てはめて画面を切り替えています。`history.state` にアプリ内での深さを保存し、戻る操作でも正しく復元します。",
+          "snippet": {
+            "file": "js/router.js",
+            "startLine": 56,
+            "endLine": 70,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "  const st = history.state;\n  if (st && typeof st.d === 'number') depth = st.d;\n  else history.replaceState({ d: 0 }, '');\n  window.addEventListener('hashchange', () => {\n    const s = history.state;\n    if (s && typeof s.d === 'number') {\n      depth = s.d;\n    } else {\n      depth += 1;\n      history.replaceState({ d: depth }, '');\n    }\n    dispatch();\n  });\n  dispatch();\n}"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/app.js` で `hashchange` を受け取り、サイコロやルーレットなどのタブを切り替えています。"
+        }
+      ],
+      "related": [
+        "subpath-relative-paths",
+        "es-modules"
+      ],
+      "links": [
+        {
+          "label": "hashchange イベント（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/hashchange_event",
+          "kind": "mdn"
+        },
+        {
+          "label": "履歴 API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/History_API",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "画面遷移",
+        "ビルド不要"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "css-custom-properties",
+      "category": "frontend",
+      "level": "basic",
+      "title": "CSS 変数（カスタムプロパティ）",
+      "aka": [
+        "CSS 変数",
+        "カスタムプロパティ",
+        "var()",
+        "--変数"
+      ],
+      "keywords": [
+        "色",
+        "配色",
+        "テーマ",
+        "ダークモード",
+        ":root"
+      ],
+      "summary": "色や大きさなどの値に名前を付けて、CSS のあちこちで使い回せる仕組み。まとめて入れ替えるのも簡単。",
+      "what": "CSS 変数は、`--accent: #2f62d8;` のように `--` で始まる名前で値を定義し、`color: var(--accent);` のように呼び出す仕組みです。ふつうは `:root`（ページ全体）に定義して、どこからでも使えるようにします。",
+      "why": "同じ色を何十か所にも直接書くと、色を変えたいときに全部を直す必要があります。変数にしておけば 1 か所を直すだけで済みます。ダークモードのときに変数の値だけを入れ替える、といった使い方もできます。",
+      "how": "変数は、定義した要素とその中の要素で使えます。`@media` の中で値を上書きすると、条件に合うときだけ別の値になります。\n\n`var(--gap, 8px)` のように 2 番目の値を書くと、変数が定義されていないときに使われます。",
+      "pitfalls": [
+        "変数名のつづりを間違えてもエラーにならず、値が効かないだけになる。",
+        "変数の中身は文字列のように扱われるため、計算するときは `calc()` を使う。"
+      ],
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`css/base.css` の `:root` に、背景・文字・強調の色や、タップ領域の大きさ（`--tap`）をまとめて定義しています。",
+          "snippet": {
+            "file": "css/base.css",
+            "startLine": 1,
+            "endLine": 15,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "css",
+            "code": "/* ---- 配色（ライト） ---- */\n:root {\n  color-scheme: light dark;\n  --bg: #f6f7f9;\n  --surface: #ffffff;\n  --surface-2: #eef0f3;\n  --text: #1c1f24;\n  --text-sub: #5b6470;\n  --border: #d9dde3;\n  --accent: #0b6bcb;\n  --accent-text: #ffffff;\n  --accent-soft: #e3effb;\n  --code-bg: #eef1f5;\n  --code-text: #1c2b3a;\n  --ph-missing: #b3261e;"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`css/base.css` で、配色のほか、セーフエリアの余白も `--safe-top` などの変数にまとめています。"
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`css/app.css` で、セーフエリアの余白を `--safe-top` などの変数にまとめています。"
+        }
+      ],
+      "related": [
+        "dark-mode",
+        "safe-area"
+      ],
+      "links": [
+        {
+          "label": "CSS カスタムプロパティの使用（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: CSS Variables",
+          "url": "https://caniuse.com/css-variables",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "CSS",
+        "見た目"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "reduced-motion",
+      "category": "frontend",
+      "level": "basic",
+      "title": "動きを減らす設定（prefers-reduced-motion）",
+      "aka": [
+        "prefers-reduced-motion",
+        "視差効果を減らす",
+        "アニメーションを減らす"
+      ],
+      "keywords": [
+        "アニメーション",
+        "動き",
+        "アクセシビリティ",
+        "酔う",
+        "transition"
+      ],
+      "summary": "端末の「動きを減らす」設定に合わせて、アニメーションを止めたり控えめにしたりする方法。",
+      "what": "iPhone の「視差効果を減らす」のように、画面の動きを減らす設定をしている人がいます。CSS の `@media (prefers-reduced-motion: reduce)` を使うと、その設定のときだけ効くスタイルを書けます。",
+      "why": "画面が大きく動くアニメーションで、気分が悪くなる人がいます。設定に合わせて動きを止めれば、見た目の楽しさを保ちながら、誰でも使いやすいアプリにできます。",
+      "how": "`@media (prefers-reduced-motion: reduce)` の中で `animation: none` や `transition: none` を指定します。すべての動きを止める方法のほか、画面の出入りの動きだけを止め、結果を伝えるための演出は別の設定で切り替える、という分け方もあります。JavaScript からは `matchMedia` で判定できます。",
+      "pitfalls": [
+        "動きを止めると、動きの終わりを待つ処理（`transitionend` など）が呼ばれなくなることがある。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`css/base.css` で、動きを減らす設定のときはシートや通知の出入りの動きだけを止めています。抽選の演出は、アプリの「演出スキップ」で別に切り替えます。",
+          "snippet": {
+            "file": "css/base.css",
+            "startLine": 910,
+            "endLine": 919,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "css",
+            "code": "/* 端末の「視差効果を減らす」では、画面の出入りの動きだけを止める。\n   抽選の演出はアプリの「演出スキップ」で切り替える */\n@media (prefers-reduced-motion: reduce) {\n  .layer,\n  .sheet,\n  .toast,\n  .stage {\n    animation: none;\n  }\n}"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "`css/base.css` で、動きを減らす設定のときはすべてのアニメーションとトランジションを止めています。"
+        },
+        {
+          "appId": "reversi",
+          "usage": "`css/style.css` に、動きを減らす設定のときのスタイルを書いています。"
+        }
+      ],
+      "related": [
+        "dark-mode",
+        "aria-attributes"
+      ],
+      "links": [
+        {
+          "label": "prefers-reduced-motion（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: prefers-reduced-motion",
+          "url": "https://caniuse.com/prefers-reduced-motion",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "CSS",
+        "アクセシビリティ"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "aria-attributes",
+      "category": "frontend",
+      "level": "basic",
+      "title": "aria 属性（aria-pressed・aria-live）",
+      "aka": [
+        "ARIA",
+        "アリア",
+        "aria-pressed",
+        "aria-live",
+        "アクセシビリティ"
+      ],
+      "keywords": [
+        "読み上げ",
+        "VoiceOver",
+        "スクリーンリーダー",
+        "トグルボタン",
+        "状態"
+      ],
+      "summary": "ボタンの状態や、画面の中で変わった部分を、読み上げソフトに伝えるための HTML の属性。",
+      "what": "aria 属性は、見た目だけでは伝わらない情報を、VoiceOver などの読み上げソフトに伝えるための属性です。たとえば `aria-pressed=\"true\"` は「押された状態のボタン」を、`aria-live=\"polite\"` は「ここの中身が変わったら読み上げてほしい」ことを表します。",
+      "why": "オン／オフを色だけで表したボタンは、画面を見られない人には状態が分かりません。aria 属性で状態を伝えれば、読み上げでも同じ情報が得られます。また `aria-pressed` のような属性は CSS の条件にも使えるので、状態と見た目をそろえやすくなります。",
+      "how": "状態が変わるたびに JavaScript で `setAttribute('aria-pressed', String(on))` のように書き換えます。CSS では `button[aria-pressed='true']` のように書いて、押された状態の見た目を付けられます。\n\n`aria-live` を付けた要素の文字が変わると、読み上げソフトが区切りのよいところで読み上げます。",
+      "pitfalls": [
+        "`<button>` などの標準の要素で表せるものは、まず標準の要素を使う。aria 属性は足りない情報を補うためのもの。",
+        "`aria-live` をたくさん付けると、読み上げが多すぎて聞き取りにくくなる。"
+      ],
+      "apps": [
+        {
+          "appId": "reversi",
+          "usage": "`index.html` の黒／白の選択や、アシスト・解説などの切り替えボタンに `aria-pressed` を付け、`css/style.css` ではその値で見た目を変えています。スコアの表示には `aria-live` を付けています。",
+          "snippet": {
+            "file": "index.html",
+            "startLine": 30,
+            "endLine": 39,
+            "commitSha": "5d9931415d19e51b2ccfb1e41e412cbe31234fb3",
+            "lang": "html",
+            "code": "          <div class=\"color-choice\" id=\"colorChoice\">\n            <button type=\"button\" class=\"color-btn\" data-color=\"1\" aria-pressed=\"true\">\n              <span class=\"stone stone-black\" aria-hidden=\"true\"></span>\n              <span>黒（先手）</span>\n            </button>\n            <button type=\"button\" class=\"color-btn\" data-color=\"-1\" aria-pressed=\"false\">\n              <span class=\"stone stone-white\" aria-hidden=\"true\"></span>\n              <span>白（後手）</span>\n            </button>\n          </div>"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "お気に入りのボタンやオプションの切り替えに `aria-pressed` を、コマンドの出力や通知に `aria-live` を使っています。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "効果音のオン・オフのボタンに `aria-pressed` を、サイコロの合計や通知の領域に `aria-live` を使っています。"
+        }
+      ],
+      "related": [
+        "inert-attribute",
+        "reduced-motion",
+        "dialog-element"
+      ],
+      "links": [
+        {
+          "label": "aria-live（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-live",
+          "kind": "mdn"
+        },
+        {
+          "label": "ARIA オーサリングプラクティスガイド（W3C）",
+          "url": "https://www.w3.org/WAI/ARIA/apg/",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "HTML",
+        "アクセシビリティ"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "dev-scripts",
+      "category": "frontend",
+      "level": "basic",
+      "title": "開発用の Node.js スクリプト",
+      "aka": [
+        "開発用スクリプト",
+        "Node.js",
+        "scripts/",
+        "bump-version",
+        "generate-icons"
+      ],
+      "keywords": [
+        "自動化",
+        "アイコン生成",
+        "バージョンを上げる",
+        "node",
+        ".mjs"
+      ],
+      "summary": "アプリ本体とは別に、アイコンの生成や版番号の書き換えなど、開発中の手作業を自動にする小さなプログラム。",
+      "what": "Node.js を使うと、ブラウザの外（パソコンの上）で JavaScript を実行できます。これを使って、アイコンの画像を作る、版番号を書き換える、データを点検する、といった開発中の作業を小さなスクリプトにまとめておけます。公開するアプリには含めない、開発者だけが使う道具です。",
+      "why": "版番号を複数のファイルで書き換える、何種類もの大きさのアイコンを作る、といった作業は、手でやると忘れや間違いが起きます。スクリプトにしておけば、毎回同じ手順を確実に実行できます。",
+      "how": "`scripts/` などのフォルダに `.mjs` のファイルを置き、`node scripts/bump-version.mjs 1.1.0` のように実行します。ファイルの読み書き（`node:fs`）や圧縮（`node:zlib`）など、Node.js に最初から入っている機能だけで書けば、パッケージを入れなくても動きます。",
+      "pitfalls": [
+        "スクリプトは公開するファイルと一緒に置かれることが多い。秘密の情報を書かない。",
+        "ほかの人やほかのパソコンでも動くよう、使い方をファイルの先頭のコメントに書いておく。"
+      ],
+      "apps": [
+        {
+          "appId": "reversi",
+          "usage": "`scripts/generate-icons.mjs` で、外部のライブラリを使わずに PNG のアイコンを作っています。`scripts/bump-version.mjs` は、版番号の書き換えとキャッシュ対象の点検をまとめて行います。",
+          "snippet": {
+            "file": "scripts/generate-icons.mjs",
+            "startLine": 1,
+            "endLine": 12,
+            "commitSha": "5d9931415d19e51b2ccfb1e41e412cbe31234fb3",
+            "lang": "js",
+            "code": "/**\n * PWA 用アイコン(PNG)を生成するスクリプト。外部ライブラリは使わない。\n *   node scripts/generate-icons.mjs\n *\n * 緑の盤に、黒と白で塗り分けた石を1つ置いたデザイン。\n */\nimport { deflateSync } from 'node:zlib'\nimport { mkdirSync, writeFileSync } from 'node:fs'\nimport { dirname, join } from 'node:path'\nimport { fileURLToPath } from 'node:url'\n\nconst OUT_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'icons')"
+          }
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`scripts/bump-version.mjs` と `scripts/generate-icons.mjs` で、版番号の更新とアイコンの生成を行っています。"
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`scripts/` に、版番号の更新・アイコンの生成・手元で動かすためのサーバー（`serve.mjs`）のスクリプトを置いています。"
+        }
+      ],
+      "related": [
+        "npm-package-json",
+        "cache-versioning",
+        "app-icons"
+      ],
+      "links": [
+        {
+          "label": "Node.js 公式サイト",
+          "url": "https://nodejs.org/ja",
+          "kind": "official"
+        },
+        {
+          "label": "zlib（Node.js ドキュメント）",
+          "url": "https://nodejs.org/api/zlib.html",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "開発ツール",
+        "自動化"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "linter",
+      "category": "frontend",
+      "level": "intermediate",
+      "title": "リンター（oxlint）",
+      "aka": [
+        "リンター",
+        "lint",
+        "oxlint",
+        "ESLint"
+      ],
+      "keywords": [
+        "コードの点検",
+        "静的解析",
+        "npm run lint",
+        "ルール",
+        "バグの予防"
+      ],
+      "summary": "コードを実行せずに読み、間違いやすい書き方を指摘してくれる道具。",
+      "what": "リンターは、ソースコードを読んで、決められたルールに合わない書き方（使っていない変数、書き間違えやすい書き方など）を見つけて教えてくれる道具です。JavaScript では ESLint が有名で、oxlint は同じような点検を高速に行う新しいリンターです。",
+      "why": "バグの多くは、よくある書き間違いから生まれます。実行する前にリンターで点検すれば、動かしてみるまで気づけない問題を早めに見つけられます。React の決まりごと（フックの呼び方など）のように、人が覚えておくのが大変なルールも確認してくれます。",
+      "how": "設定ファイル（例：`.oxlintrc.json`）で、使うルールや、`error`（必ず直す）／`warn`（注意）の強さを決めます。`package.json` の `scripts` に `\"lint\": \"oxlint\"` のように登録しておき、`npm run lint` で実行します。",
+      "pitfalls": [
+        "ルールを厳しくしすぎると、指摘が多すぎて見なくなってしまう。大事なルールから始める。",
+        "リンターが通っても、動きが正しいとは限らない。実際に動かしての確認も必要。"
+      ],
+      "apps": [
+        {
+          "appId": "workout-calendar",
+          "usage": "`.oxlintrc.json` で、React・TypeScript 向けのルールを有効にし、フックの呼び方の間違いはエラーにしています。`npm run lint` で実行します。",
+          "snippet": {
+            "file": ".oxlintrc.json",
+            "startLine": 1,
+            "endLine": 8,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "json",
+            "code": "{\n  \"$schema\": \"./node_modules/oxlint/configuration_schema.json\",\n  \"plugins\": [\"react\", \"typescript\", \"oxc\"],\n  \"rules\": {\n    \"react/rules-of-hooks\": \"error\",\n    \"react/only-export-components\": [\"warn\", { \"allowConstantExport\": true }]\n  }\n}"
+          }
+        }
+      ],
+      "related": [
+        "npm-package-json",
+        "typescript",
+        "react"
+      ],
+      "links": [
+        {
+          "label": "Oxlint のドキュメント",
+          "url": "https://oxc.rs/docs/guide/usage/linter",
+          "kind": "official"
+        },
+        {
+          "label": "ESLint 公式サイト",
+          "url": "https://eslint.org/",
+          "kind": "other"
+        }
+      ],
+      "tags": [
+        "開発ツール",
+        "ビルド必要"
       ],
       "verified": false,
       "verifiedNote": "",

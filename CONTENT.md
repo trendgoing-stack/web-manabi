@@ -55,7 +55,7 @@ Webまなび帳の技術項目・アプリ情報・用語集・クイズの書�
 | `related` | 関連項目の id |
 | `links` | `{ label, url, kind }`。`kind` は `official`／`mdn`／`caniuse`／`other` |
 | `tags` | 絞り込み用のタグ |
-| `demo` | ミニデモの id（任意。フェーズ4） |
+| `demo` | ミニデモの id（任意）。`js/demos/<id>.js` が必要（「ミニデモ」を参照） |
 | `verified` | 確認済みなら `true` |
 | `verifiedNote` | 確認した内容（例：`iOS 18.1 実機で確認`）。未確認なら空 |
 | `lastReviewed` | 最終確認日（`YYYY-MM-DD`）。未確認なら空 |
@@ -173,6 +173,24 @@ node tools/snippets.mjs check C:/Users/KATSUYA/manabi-sources
 
 `△` だけのときは `node tools/snippets.mjs update C:/Users/KATSUYA/manabi-sources` で `commitSha` をまとめて更新できます。更新したら検証を通し、データの版（`dataVersion`）を上げます。
 
+## ミニデモ（demo）
+
+詳細画面の「ミニデモ」は、`demo` に書いた id の `js/demos/<id>.js` を、画面を開いたときに読み込みます。
+
+- モジュールは `isSupported()`（使える環境か）と `mount(要素)`（表示して、後片付けの関数を返す）を export する
+- 使えない環境では「この端末では使えません」と表示される
+- カメラ・マイク・位置情報・通知など、許可を求める API のデモは作らない
+- デモで扱うデータは外部に送信しない。画像を扱うときは ObjectURL を revoke し、canvas の幅と高さを 0 にしてメモリを手放す
+- ファイルを追加したら `sw.js` の `SHELL` にも加える（検証ツールが漏れを知らせる）
+
+| id | 項目 | 内容 |
+|---|---|---|
+| `canvas-resize` | Canvas API | 端末内の画像を縮小し、前後の大きさを比べる |
+| `random-compare` | crypto.getRandomValues | Math.random と出目の分布を比べる |
+| `web-share-text` | Web Share API | テキストを共有シートで渡す |
+| `pointer-draw` | Pointer Events | 指やペンで線を描く |
+| `web-audio-beep` | Web Audio API | 効果音をその場で作って鳴らす |
+
 ## アプリ情報（apps.json）
 
 `{ id, name, summary, repo, pagesUrl, techStack }` の配列です。
@@ -215,4 +233,5 @@ node tools/snippets.mjs check C:/Users/KATSUYA/manabi-sources
 - 公式リンクがない `claude-code` 項目
 - `meta.json` の `counts` と実際の件数の食い違い
 - `sw.js` の `VERSION` と `js/config.js` の `APP_VERSION` の食い違い
+- `demo` に対応する `js/demos/<id>.js` がないもの、`sw.js` の `SHELL` に入っていないファイル（`node tools/validate-cli.mjs` のみ）
 - 未確認の件数、要再確認の件数

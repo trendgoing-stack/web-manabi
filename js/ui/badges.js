@@ -3,7 +3,7 @@
 import { h, icon, ICONS } from './dom.js';
 import { getStore } from '../data.js';
 import { LEVEL_LABELS } from '../config.js';
-import { topicState } from '../status.js';
+import { isVisible, topicState } from '../status.js';
 import { plain } from './rich.js';
 
 /** @param {string} categoryId */
@@ -76,5 +76,21 @@ export function topicRow(topic) {
       ),
       icon(ICONS.chevron, 'icon icon-chevron'),
     ),
+  );
+}
+
+/**
+ * 未確認の項目を隠しているときの案内（隠している項目がなければ null）
+ * @param {import('../types.js').Topic[]} topics この画面に出すはずだった項目
+ */
+export function hiddenNotice(topics) {
+  const n = topics.filter((t) => !isVisible(t)).length;
+  if (!n) return null;
+  return h(
+    'p',
+    { class: 'notice' },
+    `未確認の項目 ${n} 件は表示していません。設定の「未確認項目の表示」で表示できます。`,
+    ' ',
+    h('a', { href: '#/settings' }, '設定を開く'),
   );
 }

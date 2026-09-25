@@ -41,6 +41,8 @@ const TOKEN_RE = /\[\[([^\]\n]+?)\]\]|`([^`\n]+)`|\*\*([^*\n]+?)\*\*/g;
  * @param {string} opt.today YYYY-MM-DD
  * @param {string} [opt.appVersion] js/config.js の APP_VERSION
  * @param {string | null} [opt.swText] sw.js の中身（まだなければ null）
+ * @param {Set<string>} [opt.demoIds] js/demos/ にあるデモの id（分からなければ省略）
+ * @param {string[]} [opt.swMissing] sw.js のキャッシュ対象に入っていないファイル（分からなければ省略）
  * @returns {{findings: Finding[], stats: Record<string, number | string>}}
  */
 export function validate(raw, opt) {
@@ -130,6 +132,7 @@ export function validate(raw, opt) {
       }
       if (t?.iosNote != null && typeof t.iosNote !== 'string') err(w, 'iosNote は文字列にします');
       if (t?.demo != null && (typeof t.demo !== 'string' || !ID_RE.test(t.demo))) err(w, 'demo は英小文字とハイフンの id にします');
+      else if (t?.demo != null && opt.demoIds && !opt.demoIds.has(t.demo)) err(w, `demo の「${t.demo}」に対応する js/demos/${t.demo}.js がありません`);
       if (typeof t?.verified !== 'boolean') err(w, 'verified は true か false です');
       if (typeof t?.verifiedNote !== 'string') err(w, 'verifiedNote は文字列にします（未確認なら空）');
       if (typeof t?.lastReviewed !== 'string' || (t.lastReviewed !== '' && !isYmd(t.lastReviewed))) err(w, 'lastReviewed は YYYY-MM-DD か空にします');
@@ -235,6 +238,8 @@ export function validate(raw, opt) {
     if (!m) warn('sw.js', 'VERSION が見つかりません');
     else if (opt.appVersion && m[1] !== opt.appVersion) err('sw.js', `VERSION（${m[1]}）と js/config.js の APP_VERSION（${opt.appVersion}）が違います`);
   }
+
+  for (const f of opt.swMissing ?? []) err('sw.js', `キャッシュ対象（SHELL）に ${f} がありません`);
 
   // ---------- 集計 ----------
   const byCat = new Map((meta?.categories ?? []).map((c) => [c.id, c]));

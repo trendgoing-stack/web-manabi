@@ -582,6 +582,8 @@ code {
   cursor: pointer;
 }
 .radio input { width: 20px; height: 20px; margin: 0; accent-color: var(--accent); }
+.check { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+.check input { width: 22px; height: 22px; margin: 0; accent-color: var(--accent); }
 .kv {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -877,6 +879,43 @@ code {
 @media (prefers-reduced-motion: reduce) {
   .flashcard { transition: none; }
 }
+
+/* ---------- 更新バナー ---------- */
+.banner-update {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+.banner-update:disabled { opacity: 0.8; }
+
+/* ---------- ミニデモ ---------- */
+.demo { display: grid; gap: 10px; }
+.demo p { margin: 0; }
+.demo .btn { justify-self: start; }
+.demo-out:empty { display: none; }
+.demo-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo-table { border-collapse: collapse; font-size: 0.875rem; width: 100%; }
+.demo-table th, .demo-table td { text-align: left; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--border); }
+.demo-table td { font-variant-numeric: tabular-nums; }
+.demo-preview { display: block; max-width: 100%; max-height: 240px; border-radius: 8px; margin-top: 8px; }
+.demo-canvas {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  /* 描く場所だけは、ブラウザのスクロールやズームに使わせない */
+  touch-action: none;
+}
+.demo-chart { margin-top: 8px; }
+.demo-chart-title { font-weight: 700; margin: 0 0 6px !important; }
 
 /* ---------- トースト ---------- */
 .toast {

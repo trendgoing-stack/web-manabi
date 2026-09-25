@@ -70,6 +70,8 @@ export function renderTopic(id) {
           )
         : h('p', { class: 'muted' }, 'コードから読み取れる使用例はまだ登録していません。'),
     ),
+    // 8. ミニデモ
+    t.demo ? section('ミニデモ', demoBox(t.demo)) : null,
     // 9. 関連項目
     related.length ? section('関連項目', h('ul', { class: 'list' }, related.map((r) => topicRow(/** @type {any} */ (r))))) : null,
     // 10. 参考リンク
@@ -172,4 +174,37 @@ function memoEditor(id) {
   window.addEventListener('pagehide', save, { once: true });
   paintCount();
   return h('div', { class: 'memo-box' }, ta, h('div', { class: 'memo-foot' }, status, counter));
+}
+
+/**
+ * ミニデモ。詳細画面を開いたときに js/demos/<id>.js を動的 import し、画面を離れるときに後片付けする。
+ * @param {string} id
+ */
+function demoBox(id) {
+  const box = h('div', { class: 'card demo' }, h('p', { class: 'muted' }, '読み込み中…'));
+  /** @type {(() => void) | null} */
+  let cleanup = null;
+  let left = false;
+  window.addEventListener(
+    'hashchange',
+    () => {
+      left = true;
+      cleanup?.();
+    },
+    { once: true },
+  );
+  import(`../demos/${id}.js`)
+    .then((m) => {
+      if (left) return;
+      box.replaceChildren();
+      if (!m.isSupported()) {
+        box.append(h('p', { class: 'muted' }, 'この端末では使えません。'));
+        return;
+      }
+      cleanup = m.mount(box) ?? null;
+    })
+    .catch(() => {
+      box.replaceChildren(h('p', { class: 'muted' }, 'デモを読み込めませんでした。'));
+    });
+  return box;
 }

@@ -63,7 +63,8 @@
       "related": [
         "same-origin-storage",
         "storage-separation",
-        "service-worker"
+        "data-validation",
+        "structured-clone"
       ],
       "links": [
         {
@@ -82,9 +83,9 @@
         "端末内",
         "オフライン"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "canvas-api",
@@ -163,7 +164,8 @@
       ],
       "verified": false,
       "verifiedNote": "",
-      "lastReviewed": ""
+      "lastReviewed": "",
+      "demo": "canvas-resize"
     },
     {
       "id": "web-share-api",
@@ -233,9 +235,10 @@
         "共有",
         "iPhone"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": "",
+      "demo": "web-share-text"
     },
     {
       "id": "pointer-events",
@@ -308,9 +311,10 @@
         "タッチ操作",
         "イベント"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": "",
+      "demo": "pointer-draw"
     },
     {
       "id": "web-audio-api",
@@ -374,7 +378,8 @@
       ],
       "verified": false,
       "verifiedNote": "",
-      "lastReviewed": ""
+      "lastReviewed": "",
+      "demo": "web-audio-beep"
     },
     {
       "id": "screen-wake-lock",
@@ -503,9 +508,10 @@
         "抽選",
         "公平"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": "",
+      "demo": "random-compare"
     },
     {
       "id": "web-worker",
@@ -642,9 +648,9 @@
         "コピー",
         "iPhone"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "page-visibility",
@@ -1001,6 +1007,8 @@
         }
       ],
       "related": [
+        "inert-attribute",
+        "aria-attributes",
         "safe-area"
       ],
       "links": [
@@ -1019,6 +1027,133 @@
         "HTML",
         "ポップアップ",
         "iPhone"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "structured-clone",
+      "category": "web-api",
+      "level": "basic",
+      "title": "structuredClone",
+      "aka": [
+        "ストラクチャードクローン",
+        "ディープコピー",
+        "深いコピー"
+      ],
+      "keywords": [
+        "コピー",
+        "複製",
+        "オブジェクト",
+        "配列",
+        "初期値",
+        "JSON.parse(JSON.stringify())"
+      ],
+      "summary": "オブジェクトや配列を、中身まで丸ごと複製する関数。元のデータを書き換えずに使いたいときに便利。",
+      "what": "`structuredClone(値)` は、オブジェクトや配列を、入れ子になった中身まで含めて丸ごとコピーした新しい値を返す関数です。",
+      "why": "JavaScript では、オブジェクトを別の変数に代入しても、同じものを指すだけで複製はされません。初期値のオブジェクトをそのまま渡すと、どこかで書き換えたときに初期値まで変わってしまいます。`structuredClone` で複製してから渡せば、この事故を防げます。",
+      "how": "以前は `JSON.parse(JSON.stringify(値))` で複製するやり方がよく使われていましたが、日付（`Date`）が文字列になるなどの欠点がありました。`structuredClone` は、日付や `Map` なども型を保ったまま複製できます。",
+      "pitfalls": [
+        "関数や DOM の要素は複製できず、エラーになる。",
+        "大きなデータを何度も複製すると遅くなる。必要なときだけ使う。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/store.js` で、保存データがないときや壊れていたときに、初期値を `structuredClone` で複製して返しています。初期値そのものが書き換わらないようにするためです。",
+          "snippet": {
+            "file": "js/core/store.js",
+            "startLine": 12,
+            "endLine": 21,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "export function load(key, fallback) {\n  try {\n    const raw = localStorage.getItem(PREFIX + key)\n    if (raw == null) return structuredClone(fallback)\n    const value = JSON.parse(raw)\n    return value ?? structuredClone(fallback)\n  } catch {\n    return structuredClone(fallback)\n  }\n}"
+          }
+        }
+      ],
+      "related": [
+        "localstorage",
+        "data-validation"
+      ],
+      "links": [
+        {
+          "label": "structuredClone()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Window/structuredClone",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: structuredClone",
+          "url": "https://caniuse.com/mdn-api_structuredclone",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "JavaScript",
+        "データ"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "inert-attribute",
+      "category": "web-api",
+      "level": "intermediate",
+      "title": "inert 属性",
+      "aka": [
+        "イナート",
+        "inert",
+        "操作できなくする"
+      ],
+      "keywords": [
+        "モーダル",
+        "シート",
+        "フォーカス",
+        "重ねて表示",
+        "アクセシビリティ"
+      ],
+      "summary": "要素とその中身を、タップ・フォーカス・読み上げの対象から外す HTML の属性。重ねて表示した画面の後ろを操作できなくするのに使う。",
+      "what": "`inert` 属性を付けた要素は、中のボタンやリンクも含めて「ないもの」のように扱われます。タップしても反応せず、キーボードのフォーカスも移らず、読み上げソフトにも読まれません。JavaScript からは `el.inert = true` で切り替えられます。",
+      "why": "シートや確認画面を重ねて出している間、後ろの画面のボタンを押せてしまうと混乱のもとになります。後ろの要素に `inert` を付ければ、手前の画面だけを操作できるようにできます。`<dialog>` を使わずに重ね表示を作るときに役立ちます。",
+      "how": "重ねて表示する画面を開いたら、それ以外の要素（`body` の直下の要素など）に `inert` を付け、閉じたら外します。見た目は変わらないので、後ろを暗くするなどの表示は CSS で別に付けます。",
+      "pitfalls": [
+        "外し忘れると、画面全体が操作できなくなる。閉じる処理を確実に通す。",
+        "通知（トースト）のように、重ね表示の間も読み上げたい要素には付けない。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`js/core/ui.js` で、いちばん手前に重ねた画面以外の要素に `inert` を付けています。通知の領域（`toastArea`）だけは対象から外しています。",
+          "snippet": {
+            "file": "js/core/ui.js",
+            "startLine": 125,
+            "endLine": 132,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "js",
+            "code": "/** いちばん手前の重ね表示だけを操作できるようにする */\nfunction updateInert() {\n  const top = openLayers[openLayers.length - 1] ?? null\n  for (const child of document.body.children) {\n    if (child.id === 'toastArea') continue\n    child.inert = top !== null && child !== top.el\n  }\n}"
+          }
+        }
+      ],
+      "related": [
+        "dialog-element",
+        "aria-attributes"
+      ],
+      "links": [
+        {
+          "label": "HTMLElement.inert（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/HTMLElement/inert",
+          "kind": "mdn"
+        },
+        {
+          "label": "Can I use: inert",
+          "url": "https://caniuse.com/mdn-html_global_attributes_inert",
+          "kind": "caniuse"
+        }
+      ],
+      "tags": [
+        "HTML",
+        "アクセシビリティ"
       ],
       "verified": false,
       "verifiedNote": "",

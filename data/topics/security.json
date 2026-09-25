@@ -191,9 +191,9 @@
         "GitHub Pages",
         "プライバシー"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     },
     {
       "id": "https-secure-context",
@@ -250,9 +250,161 @@
         "HTTPS",
         "実機確認"
       ],
-      "verified": true,
-      "verifiedNote": "動作確認用・内容未確認",
-      "lastReviewed": "2026-09-26"
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "data-validation",
+      "category": "security",
+      "level": "intermediate",
+      "title": "保存データの検証（壊れたデータから守る）",
+      "aka": [
+        "データの検証",
+        "バリデーション",
+        "正規化",
+        "normalize"
+      ],
+      "keywords": [
+        "インポート",
+        "localStorage",
+        "壊れたデータ",
+        "JSON.parse",
+        "スキーマ",
+        "形式チェック"
+      ],
+      "summary": "保存データやインポートしたファイルを、そのまま信じずに形を確かめてから使う考え方。",
+      "what": "localStorage のデータやインポートしたファイルは、古い版のアプリが保存したものだったり、途中で壊れていたり、まったく別のファイルだったりすることがあります。読み込むときに、期待する形になっているか（必要な項目があるか、数値や文字列の種類が合っているか）を確かめるのがデータの検証です。",
+      "why": "形の違うデータをそのまま使うと、アプリが途中で止まったり、正しいデータまで壊してしまったりします。検証して、おかしな部分は読み飛ばす・初期値に置き換える・何も変更せずにエラーを出す、と決めておけば、壊れたデータからアプリを守れます。",
+      "how": "`JSON.parse` は `try`／`catch` で囲み、読めなければ初期値を使います。読めたら、項目ごとに種類を確かめて、正しい形に整えて（正規化して）から使います。\n\nインポートでは、全体を確かめてから書き込み、途中で失敗したら書き込む前の状態に戻すと安全です。データに版番号を入れておくと、将来データの形を変えたときに古い形を変換できます。",
+      "pitfalls": [
+        "TypeScript の型は実行するときには消える。外から来たデータの形は、実行時に自分で確かめる。",
+        "1 か所でもおかしければ全体を拒否するのか、おかしな部分だけ捨てるのかを決めておく。"
+      ],
+      "apps": [
+        {
+          "appId": "workout-calendar",
+          "usage": "`src/lib/normalize.ts` の `normalizeAppData` で、どんな入力でも安全な形のデータに変換してから使っています。localStorage からの読み込みでもインポートでも、この関数を通します。",
+          "snippet": {
+            "file": "src/lib/normalize.ts",
+            "startLine": 146,
+            "endLine": 159,
+            "commitSha": "5d520f3bd87fe9f1584df396b4a51394a71a0863",
+            "lang": "ts",
+            "code": "/** 任意の入力値を安全な AppData に変換する（将来のマイグレーションの入口も兼ねる） */\nexport function normalizeAppData(input: unknown): AppData {\n  if (!isObject(input)) return createEmptyAppData()\n\n  const sessions = Array.isArray(input.sessions)\n    ? input.sessions\n        .map(normalizeSession)\n        .filter((s): s is WorkoutSession => s !== null)\n        .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))\n    : []\n\n  const routines = Array.isArray(input.routines)\n    ? input.routines.map(normalizeRoutine).filter((r): r is Routine => r !== null)\n    : []"
+          }
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "`js/storage.js` で、インポートの途中で書き込みに失敗したら、書き込む前の値に戻しています。"
+        },
+        {
+          "appId": "reversi",
+          "usage": "勝敗記録に `version: 1` を付けて保存し、後から形が変わっても見分けられるようにしています。"
+        }
+      ],
+      "related": [
+        "localstorage",
+        "structured-clone",
+        "xss-textcontent"
+      ],
+      "links": [
+        {
+          "label": "JSON.parse()（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "データ",
+        "保存",
+        "セキュリティ"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "self-hosted-scripts",
+      "category": "security",
+      "level": "basic",
+      "title": "外部のスクリプトを同梱する（CDN に頼らない）",
+      "aka": [
+        "同梱",
+        "セルフホスト",
+        "自前で配信",
+        "CDN を使わない"
+      ],
+      "keywords": [
+        "CDN",
+        "オフライン",
+        "サプライチェーン",
+        "count.js",
+        "外部スクリプト",
+        "SRI"
+      ],
+      "summary": "外部のサービスが配っているスクリプトを、自分のリポジトリに置いて自分のサイトから配る方法。オフラインでも動き、配布元の変化の影響も受けにくい。",
+      "what": "ライブラリや解析用のスクリプトは、配布元の [[CDN]] から直接読み込むこともできます。これに対し、ファイルを自分のリポジトリに入れ、自分のサイトから読み込むのが「同梱（セルフホスト）」です。公式のファイルをそのまま入れるほか、必要な機能だけを持つ小さなスクリプトを自分で書いて置き換える方法もあります。",
+      "why": "外部から読み込むと、配布元に障害があったときに読み込めず、[[オフライン]]でも動きません。また、配布元のファイルが書き換えられると、自分のサイトで知らないコードが動くことになります。同梱すれば、中身を確かめた版を使い続けられ、Service Worker でキャッシュしてオフラインでも使えます。",
+      "how": "ファイルを入手したら中身を読み、何をするファイルかを確かめてからリポジトリに入れます。`<script src=\"./count.js\">` のように自分のサイトのパスで読み込みます。\n\n外部から読み込む場合は、`integrity` 属性（SRI）でファイルの中身が変わっていないかをブラウザに確かめさせる方法もあります。",
+      "pitfalls": [
+        "同梱したファイルは自動では更新されない。不具合の修正などがあったら、自分で入れ替える。",
+        "ライセンスを確かめ、必要な表示を残す。"
+      ],
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "公式の `count.js` を読み込む代わりに、送る内容を固定のパスとタイトルだけに絞った小さな `count.js` を自作してリポジトリに入れ、`js/analytics.js` から `./count.js` として読み込んでいます。",
+          "snippet": {
+            "file": "js/analytics.js",
+            "startLine": 11,
+            "endLine": 21,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "export function startAnalytics() {\n  if (getSettings().analyticsOff) return;\n  const s = document.createElement('script');\n  s.src = './count.js';\n  s.async = true;\n  s.dataset.goatcounter = ENDPOINT;\n  s.dataset.path = FIXED_PATH;\n  s.dataset.title = FIXED_TITLE;\n  s.onerror = () => {};\n  document.head.append(s);\n}"
+          }
+        },
+        {
+          "appId": "reversi",
+          "usage": "`count.js` を GoatCounter の配布元（`gc.zgo.at`）から直接読み込んでいます。オフラインのときは読み込みに失敗するだけで、アプリの動作には影響しない作りです。",
+          "snippet": {
+            "file": "index.html",
+            "startLine": 178,
+            "endLine": 182,
+            "commitSha": "5d9931415d19e51b2ccfb1e41e412cbe31234fb3",
+            "lang": "html",
+            "code": "    <script\n      data-goatcounter=\"https://km-apps.goatcounter.com/count\"\n      async\n      src=\"//gc.zgo.at/count.js\"\n    ></script>"
+          }
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "リバーシと同じく、`count.js` を配布元から直接読み込んでいます。"
+        }
+      ],
+      "related": [
+        "goatcounter",
+        "service-worker",
+        "npm-package-json"
+      ],
+      "links": [
+        {
+          "label": "サブリソース完全性（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/Security/Defenses/Subresource_Integrity",
+          "kind": "mdn"
+        },
+        {
+          "label": "GoatCounter の使い方",
+          "url": "https://www.goatcounter.com/help/start",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "セキュリティ",
+        "オフライン"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
     }
   ]
 }

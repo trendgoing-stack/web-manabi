@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "2026.09.26-4",
+  "dataVersion": "2026.09.26-5",
   "counts": {
-    "topics": 42,
+    "topics": 55,
     "glossary": 40,
     "quiz": 10
   },
