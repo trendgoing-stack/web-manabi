@@ -19,6 +19,7 @@
   --stale-text: #9a2a14;
   --code-bg: #eef0f4;
   --danger: #c62828;
+  --ok: #1f7a4d;
   --fav: #e0a100;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   --cat-web-api: #2f62d8;
@@ -58,6 +59,7 @@
     --stale-text: #ffb4a2;
     --code-bg: #2a2e36;
     --danger: #ff8a80;
+    --ok: #7ee2a8;
     --fav: #ffd24d;
     --shadow: none;
     --cat-web-api: #7ea4ff;
@@ -71,6 +73,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -705,6 +708,174 @@ code {
   background: var(--stale-bg);
   color: var(--stale-text);
   font-size: 0.875rem;
+}
+
+/* ---------- 学ぶ：開始画面 ---------- */
+.field { display: grid; gap: 4px; margin: 0 0 8px; }
+.field-label { font-weight: 700; }
+.field-select {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.setup-status {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  font-size: 0.9375rem;
+}
+.setup-status.ng { background: var(--warn-bg); color: var(--warn-text); }
+
+.review-card { margin-bottom: 16px; }
+.review-title { font-size: 1rem; margin: 0; }
+.review-count { font-size: 1.75rem; font-weight: 700; margin: 2px 0; }
+.review-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.review-actions .btn { flex: 1; }
+
+/* ---------- クイズ ---------- */
+.quiz-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.quiz-bar {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: 6px 0 12px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.quiz-bar::-webkit-progress-bar { background: var(--surface-2); }
+.quiz-bar::-webkit-progress-value { background: var(--accent); }
+.quiz-bar::-moz-progress-bar { background: var(--accent); }
+.quiz-prompt { margin: 8px 0 4px; color: var(--text-2); }
+.quiz-subject {
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.quiz-subject.long { font-size: 1rem; font-weight: 400; line-height: 1.7; }
+.choices { display: grid; gap: 8px; }
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 14px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  line-height: 1.55;
+  cursor: pointer;
+}
+.choice-mark {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.choice[aria-disabled="true"] { cursor: default; }
+.choice.correct { border-color: var(--ok, #1f7a4d); background: color-mix(in srgb, var(--ok, #1f7a4d) 14%, var(--surface)); }
+.choice.wrong { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, var(--surface)); }
+.choice.correct .choice-mark { background: var(--ok, #1f7a4d); color: #fff; }
+.choice.wrong .choice-mark { background: var(--danger); color: #fff; }
+.quiz-feedback { margin-top: 14px; }
+.verdict { font-size: 1.25rem; font-weight: 700; margin: 0 0 4px; }
+.verdict.ok, .result-mark.ok { color: var(--ok, #1f7a4d); }
+.verdict.ng, .result-mark.ng { color: var(--danger); }
+.explanation { margin: 0 0 4px; }
+.result-score { font-size: 1.5rem; font-weight: 700; margin: 8px 0 0; }
+.result-mark { flex: none; width: 24px; font-size: 1.25rem; font-weight: 700; text-align: center; }
+
+/* ---------- フラッシュカード ---------- */
+.flashcard {
+  position: relative;
+  min-height: 240px;
+  margin: 4px 0 12px;
+  padding: 20px;
+  display: grid;
+  align-content: center;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  /* 横方向のスワイプは自分で扱い、縦スクロールはブラウザに任せる */
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.18s ease-out, opacity 0.18s ease-out, border-color 0.15s;
+}
+.flashcard.is-back { cursor: grab; }
+.flashcard.dragging { transition: none; }
+.flashcard.lean-right { border-color: var(--ok, #1f7a4d); }
+.flashcard.lean-left { border-color: var(--danger); }
+.flashcard.fly-right { transform: translateX(120%) rotate(8deg); opacity: 0; }
+.flashcard.fly-left { transform: translateX(-120%) rotate(-8deg); opacity: 0; }
+.card-face { display: grid; gap: 10px; justify-items: center; text-align: center; }
+.card-face[hidden] { display: none; }
+.card-title { margin: 0; font-size: 1.625rem; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.card-hint { margin: 0; color: var(--text-2); font-size: 0.8125rem; }
+.card-back { justify-items: start; text-align: left; }
+.card-back-title { margin: 0; font-weight: 700; color: var(--text-2); }
+.card-summary { margin: 0; font-size: 1.0625rem; }
+.card-apps { margin: 0; color: var(--text-2); font-size: 0.875rem; }
+.card-answers { display: flex; gap: 8px; }
+.card-answers[hidden] { display: none; }
+.card-answers .btn { margin-top: 0; }
+
+/* ---------- 学習状況 ---------- */
+.stat-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.stat-tile {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.stat-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+.stat-label { font-size: 0.75rem; color: var(--text-2); }
+.bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "label value" "track track";
+  gap: 4px 8px;
+}
+.bar-label { grid-area: label; font-weight: 700; font-size: 0.9375rem; }
+.bar-note { margin-left: 8px; font-weight: 400; font-size: 0.75rem; color: var(--text-2); }
+.bar-value { grid-area: value; font-variant-numeric: tabular-nums; }
+.bar-track { grid-area: track; height: 10px; border-radius: 5px; background: var(--surface-2); overflow: hidden; }
+.bar-fill { display: block; height: 100%; border-radius: 5px; background: var(--accent); }
+.bar-fill.cat-fill { background: var(--cat, var(--accent)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flashcard { transition: none; }
 }
 
 /* ---------- トースト ---------- */
