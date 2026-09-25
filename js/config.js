@@ -1,7 +1,7 @@
 // アプリ全体の定数。
 
 /** アプリ本体の版。sw.js の VERSION と同じ値にする（tools/validate.html で確認） */
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';
 
 export const GITHUB_OWNER = 'trendgoing-stack';
 export const GIT_MANABI_URL = 'https://trendgoing-stack.github.io/git-manabi/';

@@ -6,8 +6,18 @@
       "category": "pwa",
       "level": "intermediate",
       "title": "Service Worker",
-      "aka": ["サービスワーカー", "SW"],
-      "keywords": ["オフライン", "キャッシュ", "fetch", "更新", "sw.js", "register"],
+      "aka": [
+        "サービスワーカー",
+        "SW"
+      ],
+      "keywords": [
+        "オフライン",
+        "キャッシュ",
+        "fetch",
+        "更新",
+        "sw.js",
+        "register"
+      ],
       "summary": "ページとネットワークの間に入って通信を中継する、ブラウザの中で動くスクリプト。キャッシュを使って、アプリをオフラインでも動かせる。",
       "what": "Service Worker は、Webページとは別に[[ブラウザ]]の中で動く JavaScript のファイルです。ページがファイルを読み込もうとすると、その要求（リクエスト）はいったん Service Worker を通ります。Service Worker は、要求をそのまま[[ネットワーク]]に流すことも、手元の[[キャッシュ]]から答えを返すこともできます。\n\nページとは別に動くため、画面の[[DOM]]には直接さわれません。",
       "why": "普通のWebページは、電波がないと開けません。Service Worker で必要なファイルを先にキャッシュしておけば、[[オフライン]]でも起動できる、アプリのような使い心地を作れます。[[PWA]] の中心になる仕組みです。\n\nネットワークより先にキャッシュから返せるので、2回目以降の起動も速くなります。",
@@ -19,20 +29,69 @@
       ],
       "iosNote": "Safari で開いた場合とホーム画面から起動した場合では、キャッシュが別々に管理されます。しばらく使わないとキャッシュが消されることがあるとされています（条件は要確認）。",
       "apps": [
-        { "appId": "git-manabi", "usage": "`js/pwa.js` で Service Worker を登録し、新しい版が待機したら画面上部に「更新があります」を表示します。タップすると待機中の版に切り替えて再読み込みします。画面に戻ってきたときにも更新を確認しています。" },
-        { "appId": "image-tool", "usage": "`js/sw-register.js` で `sw.js` を登録し、アプリ本体をキャッシュしています。画像は端末の中だけで処理するので、電波がなくても最初から最後まで使えます。" },
-        { "appId": "lottery-tools", "usage": "アプリ本体の HTML・CSS・JS とアイコンをキャッシュし、電波のない場所でも抽選ツールを起動できるようにしています。" },
-        { "appId": "reversi", "usage": "`js/app.js` の中で Service Worker を登録しています。AI の思考を担当する `js/worker.js` もキャッシュ対象に入れ、オフラインでも対局できるようにしています。" },
-        { "appId": "workout-calendar", "usage": "`sw/sw.js` をひな形にして、ビルドのときに Vite のプラグインがキャッシュ対象の一覧を埋め込んだ `sw.js` を出力します。更新の通知は `src/pwa.ts` が受け持ちます。" }
+        {
+          "appId": "git-manabi",
+          "usage": "`js/pwa.js` で Service Worker を登録し、新しい版が待機したら画面上部に「更新があります」を表示します。タップすると待機中の版に切り替えて再読み込みします。画面に戻ってきたときにも更新を確認しています。",
+          "snippet": {
+            "file": "js/pwa.js",
+            "startLine": 29,
+            "endLine": 37,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "js",
+            "code": "      if (reg.waiting && navigator.serviceWorker.controller) notify(reg.waiting);\n      reg.addEventListener('updatefound', () => {\n        const w = reg.installing;\n        if (!w) return;\n        w.addEventListener('statechange', () => {\n          // 既存の Service Worker がある＝更新。初回インストールでは出さない\n          if (w.state === 'installed' && navigator.serviceWorker.controller) notify(w);\n        });\n      });"
+          }
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`js/sw-register.js` で `sw.js` を登録し、アプリ本体をキャッシュしています。画像は端末の中だけで処理するので、電波がなくても最初から最後まで使えます。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "アプリ本体の HTML・CSS・JS とアイコンをキャッシュし、電波のない場所でも抽選ツールを起動できるようにしています。"
+        },
+        {
+          "appId": "reversi",
+          "usage": "`js/app.js` の中で Service Worker を登録しています。AI の思考を担当する `js/worker.js` もキャッシュ対象に入れ、オフラインでも対局できるようにしています。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "`sw/sw.js` をひな形にして、ビルドのときに Vite のプラグインがキャッシュ対象の一覧を埋め込んだ `sw.js` を出力します。更新の通知は `src/pwa.ts` が受け持ちます。"
+        }
       ],
-      "related": ["cache-versioning", "web-app-manifest", "subpath-relative-paths"],
+      "related": [
+        "cache-versioning",
+        "web-app-manifest",
+        "subpath-relative-paths",
+        "page-visibility",
+        "https-secure-context"
+      ],
       "links": [
-        { "label": "Service Worker API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API", "kind": "mdn" },
-        { "label": "Service Worker の使用（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API/Using_Service_Workers", "kind": "mdn" },
-        { "label": "Service Workers 仕様（W3C）", "url": "https://www.w3.org/TR/service-workers/", "kind": "official" },
-        { "label": "Can I use: Service Workers", "url": "https://caniuse.com/serviceworkers", "kind": "caniuse" }
+        {
+          "label": "Service Worker API（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API",
+          "kind": "mdn"
+        },
+        {
+          "label": "Service Worker の使用（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API/Using_Service_Workers",
+          "kind": "mdn"
+        },
+        {
+          "label": "Service Workers 仕様（W3C）",
+          "url": "https://www.w3.org/TR/service-workers/",
+          "kind": "official"
+        },
+        {
+          "label": "Can I use: Service Workers",
+          "url": "https://caniuse.com/serviceworkers",
+          "kind": "caniuse"
+        }
       ],
-      "tags": ["オフライン", "PWA", "キャッシュ"],
+      "tags": [
+        "オフライン",
+        "PWA",
+        "キャッシュ"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -42,8 +101,21 @@
       "category": "pwa",
       "level": "basic",
       "title": "Web App Manifest",
-      "aka": ["ウェブアプリマニフェスト", "マニフェスト", "manifest.json", "manifest.webmanifest"],
-      "keywords": ["ホーム画面", "アイコン", "start_url", "scope", "display", "standalone", "apple-touch-icon"],
+      "aka": [
+        "ウェブアプリマニフェスト",
+        "マニフェスト",
+        "manifest.json",
+        "manifest.webmanifest"
+      ],
+      "keywords": [
+        "ホーム画面",
+        "アイコン",
+        "start_url",
+        "scope",
+        "display",
+        "standalone",
+        "apple-touch-icon"
+      ],
       "summary": "アプリの名前、アイコン、起動時の表示方法などをまとめた JSON ファイル。ホーム画面に追加したときの見た目を決める。",
       "what": "Web App Manifest は、Webアプリの「名刺」にあたる [[JSON]] ファイルです。アプリ名（`name`／`short_name`）、アイコン、起動するページ（`start_url`）、担当範囲（`scope`）、起動時の表示方法（`display`）などを書きます。HTML の `<link rel=\"manifest\">` でページと結び付けます。",
       "why": "[[ホーム画面に追加]]したとき、どの名前とアイコンで並べるか、アドレスバーを出すかどうかを、ブラウザはこのファイルから判断します。`display` を `standalone` にすると、アドレスバーのない、アプリのような画面で起動できます。",
@@ -55,18 +127,58 @@
       ],
       "iosNote": "iPhone のホーム画面のアイコンには `apple-touch-icon`（180×180 が目安）が使われます。manifest のどの項目が使われるかは iOS のバージョンによって違うため、要確認です。",
       "apps": [
-        { "appId": "git-manabi", "usage": "`manifest.json` に名前とアイコンを書き、`index.html` から読み込んでいます。ホーム画面での表示名は `apple-mobile-web-app-title` と `short_name` で「まなび帳」と短くしています。" },
-        { "appId": "image-tool", "usage": "`manifest.json` で `start_url` と `scope` を `./` にし、`display` を `standalone` にしています。通常のアイコンに加えて、形を切り抜かれても欠けにくい maskable 用のアイコン（`icon-maskable-512.png`）も用意しています。" },
-        { "appId": "lottery-tools", "usage": "`manifest.json` の `id`・`start_url`・`scope` をすべて `./` にし、テーマ色をアプリの紫（`#5847e0`）に合わせています。" },
-        { "appId": "reversi", "usage": "拡張子を `.webmanifest` にした `manifest.webmanifest` を使っています。`start_url` と `scope` は `.`（今いる階層）にしています。" },
-        { "appId": "workout-calendar", "usage": "`public/manifest.webmanifest` に置いています。Vite は `public/` の中身をビルド結果にそのままコピーするため、ファイル名が変わらずに公開されます。" }
+        {
+          "appId": "git-manabi",
+          "usage": "`manifest.json` に名前とアイコンを書き、`index.html` から読み込んでいます。ホーム画面での表示名は `apple-mobile-web-app-title` と `short_name` で「まなび帳」と短くしています。"
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`manifest.json` で `start_url` と `scope` を `./` にし、`display` を `standalone` にしています。通常のアイコンに加えて、形を切り抜かれても欠けにくい maskable 用のアイコン（`icon-maskable-512.png`）も用意しています。"
+        },
+        {
+          "appId": "lottery-tools",
+          "usage": "`manifest.json` の `id`・`start_url`・`scope` をすべて `./` にし、テーマ色をアプリの紫（`#5847e0`）に合わせています。",
+          "snippet": {
+            "file": "manifest.json",
+            "startLine": 1,
+            "endLine": 12,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "json",
+            "code": "{\n  \"name\": \"抽選ツール\",\n  \"short_name\": \"抽選ツール\",\n  \"description\": \"サイコロ・ルーレット・あみだくじ・チーム分けなど、抽選とランダムの道具箱。\",\n  \"id\": \"./\",\n  \"start_url\": \"./\",\n  \"scope\": \"./\",\n  \"display\": \"standalone\",\n  \"orientation\": \"portrait\",\n  \"background_color\": \"#f4f4f8\",\n  \"theme_color\": \"#5847e0\",\n  \"lang\": \"ja\","
+          }
+        },
+        {
+          "appId": "reversi",
+          "usage": "拡張子を `.webmanifest` にした `manifest.webmanifest` を使っています。`start_url` と `scope` は `.`（今いる階層）にしています。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "`public/manifest.webmanifest` に置いています。Vite は `public/` の中身をビルド結果にそのままコピーするため、ファイル名が変わらずに公開されます。"
+        }
       ],
-      "related": ["service-worker", "subpath-relative-paths"],
+      "related": [
+        "apple-web-app-meta",
+        "app-icons",
+        "service-worker",
+        "subpath-relative-paths"
+      ],
       "links": [
-        { "label": "ウェブアプリマニフェスト（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps/Manifest", "kind": "mdn" },
-        { "label": "Web Application Manifest 仕様（W3C）", "url": "https://www.w3.org/TR/appmanifest/", "kind": "official" }
+        {
+          "label": "ウェブアプリマニフェスト（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps/Manifest",
+          "kind": "mdn"
+        },
+        {
+          "label": "Web Application Manifest 仕様（W3C）",
+          "url": "https://www.w3.org/TR/appmanifest/",
+          "kind": "official"
+        }
       ],
-      "tags": ["PWA", "ホーム画面", "アイコン"],
+      "tags": [
+        "PWA",
+        "ホーム画面",
+        "アイコン"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -76,8 +188,21 @@
       "category": "pwa",
       "level": "intermediate",
       "title": "キャッシュ戦略とバージョン管理",
-      "aka": ["キャッシュファースト", "cache first", "キャッシュ名", "バージョン番号"],
-      "keywords": ["更新", "Cache API", "caches", "SKIP_WAITING", "古いキャッシュ", "更新があります", "VERSION"],
+      "aka": [
+        "キャッシュファースト",
+        "cache first",
+        "キャッシュ名",
+        "バージョン番号"
+      ],
+      "keywords": [
+        "更新",
+        "Cache API",
+        "caches",
+        "SKIP_WAITING",
+        "古いキャッシュ",
+        "更新があります",
+        "VERSION"
+      ],
       "summary": "Service Worker がキャッシュとネットワークのどちらを先に使うかという考え方と、キャッシュに版番号を付けて更新を確実に届ける仕組み。",
       "what": "キャッシュ戦略とは、Service Worker がリクエストを受けたときに「[[キャッシュ]]と[[ネットワーク]]のどちらを先に使うか」を決めるルールです。キャッシュにあればそれを返す**キャッシュファースト**と、まずネットワークに聞く**ネットワークファースト**が代表的です。\n\nバージョン管理は、キャッシュの名前に `app-v1.0.2` のような版番号を入れて、新旧を区別するやり方です。",
       "why": "キャッシュファーストは速くて[[オフライン]]にも強い反面、そのままでは古いファイルを返し続けます。版番号を変えれば、新しい名前でキャッシュを作り直して古いものを消せるので、「オフラインで動く」と「更新が届く」を両立できます。",
@@ -88,16 +213,252 @@
         "ファイルを追加したのにキャッシュ対象の一覧に入れ忘れると、オフラインのときにそのファイルだけ読めない。"
       ],
       "apps": [
-        { "appId": "reversi", "usage": "`sw.js` の `VERSION` をキャッシュ名に入れています。`scripts/bump-version.mjs` を実行すると、`sw.js` と `js/version.js` の版番号を同時に書き換え、キャッシュ対象の一覧に漏れがないかも確認します。" },
-        { "appId": "workout-calendar", "usage": "版番号に加えて、ビルド結果の中身から計算したハッシュ（`BUILD_ID`）をキャッシュ名に入れています。中身が変われば `sw.js` も必ず変わるので、版番号を上げ忘れても更新が届きます。" },
-        { "appId": "git-manabi", "usage": "アプリ本体の版（`sw.js` の `VERSION`）と、辞書データの版（`data/meta.json` の `dataVersion`）を分けて管理しています。どちらを変えたときも `VERSION` は必ず上げる決まりです。" }
+        {
+          "appId": "reversi",
+          "usage": "`sw.js` の `VERSION` をキャッシュ名に入れています。`scripts/bump-version.mjs` を実行すると、`sw.js` と `js/version.js` の版番号を同時に書き換え、キャッシュ対象の一覧に漏れがないかも確認します。",
+          "snippet": {
+            "file": "sw.js",
+            "startLine": 43,
+            "endLine": 56,
+            "commitSha": "5d9931415d19e51b2ccfb1e41e412cbe31234fb3",
+            "lang": "js",
+            "code": "self.addEventListener('activate', (event) => {\n  event.waitUntil(\n    caches\n      .keys()\n      .then((keys) =>\n        Promise.all(\n          keys\n            .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)\n            .map((key) => caches.delete(key)),\n        ),\n      )\n      .then(() => self.clients.claim()),\n  )\n})"
+          }
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "版番号に加えて、ビルド結果の中身から計算したハッシュ（`BUILD_ID`）をキャッシュ名に入れています。中身が変われば `sw.js` も必ず変わるので、版番号を上げ忘れても更新が届きます。"
+        },
+        {
+          "appId": "git-manabi",
+          "usage": "アプリ本体の版（`sw.js` の `VERSION`）と、辞書データの版（`data/meta.json` の `dataVersion`）を分けて管理しています。どちらを変えたときも `VERSION` は必ず上げる決まりです。"
+        }
       ],
-      "related": ["service-worker", "subpath-relative-paths"],
+      "related": [
+        "service-worker",
+        "subpath-relative-paths"
+      ],
       "links": [
-        { "label": "Cache（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Cache", "kind": "mdn" },
-        { "label": "Service Worker の使用（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API/Using_Service_Workers", "kind": "mdn" }
+        {
+          "label": "Cache（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Cache",
+          "kind": "mdn"
+        },
+        {
+          "label": "Service Worker の使用（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Service_Worker_API/Using_Service_Workers",
+          "kind": "mdn"
+        }
       ],
-      "tags": ["オフライン", "PWA", "キャッシュ", "更新"],
+      "tags": [
+        "オフライン",
+        "PWA",
+        "キャッシュ",
+        "更新"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "apple-web-app-meta",
+      "category": "pwa",
+      "level": "basic",
+      "title": "ホーム画面アプリ用の meta タグ",
+      "aka": [
+        "apple-mobile-web-app-capable",
+        "apple-mobile-web-app-title",
+        "apple-touch-icon",
+        "status-bar-style"
+      ],
+      "keywords": [
+        "ホーム画面に追加",
+        "iPhone",
+        "アイコン",
+        "全画面",
+        "アプリ名"
+      ],
+      "summary": "iPhone のホーム画面に追加したときの名前、アイコン、表示のしかたを決める HTML のタグ。",
+      "what": "iPhone の Safari は、manifest に加えて、HTML の `<head>` に書いた Apple 用のタグも読みます。`apple-touch-icon`（アイコン）、`apple-mobile-web-app-title`（ホーム画面での名前）、`apple-mobile-web-app-capable`（全画面で起動するか）、`apple-mobile-web-app-status-bar-style`（上部の時刻などの表示）が代表的です。",
+      "why": "これらを書かないと、ホーム画面のアイコンが画面の縮小画像になったり、名前がページのタイトルそのままで長すぎたりします。[[ホーム画面に追加]]したときにアプリらしく見せるために書いておきます。",
+      "how": "`<link rel=\"apple-touch-icon\" href=\"icons/icon-180.png\">` のように、180×180 ピクセルの PNG を指定するのが一般的です。ホーム画面の名前は短い方が切れずに表示されるので、正式名とは別に短い名前を付けることもあります。",
+      "pitfalls": [
+        "すでにホーム画面に追加したアプリは、タグを変えても名前やアイコンがすぐには変わらない。追加し直す。",
+        "アイコンの画像は透過させない方がよい。透過部分が黒く表示されることがある。"
+      ],
+      "iosNote": "どのタグが必要かは iOS のバージョンによって変わってきています。manifest との使い分けは要確認です。",
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "`index.html` で、`apple-touch-icon` に 180×180 のアイコンを指定し、ホーム画面の名前を「まなび帳」と短くしています。",
+          "snippet": {
+            "file": "index.html",
+            "startLine": 12,
+            "endLine": 18,
+            "commitSha": "b377c0b63be24a18f840050c5c2dc26b1764bae2",
+            "lang": "html",
+            "code": "  <link rel=\"manifest\" href=\"manifest.json\">\n  <link rel=\"icon\" href=\"icons/icon.svg\" type=\"image/svg+xml\">\n  <link rel=\"apple-touch-icon\" href=\"icons/icon-180.png\">\n  <meta name=\"mobile-web-app-capable\" content=\"yes\">\n  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n  <meta name=\"apple-mobile-web-app-title\" content=\"まなび帳\">\n  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"default\">"
+          }
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`index.html` で、ホーム画面の名前を「画像編集」と、正式名の「画像かんたん編集」より短くしています。"
+        }
+      ],
+      "related": [
+        "web-app-manifest",
+        "app-icons",
+        "safe-area"
+      ],
+      "links": [
+        {
+          "label": "<meta> の name 属性（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/meta/name",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "iPhone",
+        "ホーム画面",
+        "HTML"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "app-icons",
+      "category": "pwa",
+      "level": "basic",
+      "title": "アプリのアイコン（maskable と apple-touch-icon）",
+      "aka": [
+        "アイコン",
+        "maskable",
+        "マスカブルアイコン",
+        "favicon"
+      ],
+      "keywords": [
+        "192",
+        "512",
+        "180",
+        "purpose",
+        "PNG",
+        "SVG",
+        "アイコン生成"
+      ],
+      "summary": "ホーム画面やブラウザのタブに表示するアイコンの用意のしかた。用途ごとに大きさや形の決まりがある。",
+      "what": "Webアプリのアイコンは、1つでは足りません。manifest には 192×192 と 512×512 の PNG、iPhone 用には 180×180 の `apple-touch-icon`、ブラウザのタブ用には小さなアイコン（favicon）を用意するのが一般的です。\n\nmanifest の `purpose: \"maskable\"` は、端末に合わせて丸や角丸に切り抜かれても大丈夫なように、周りに余白をとったアイコンであることを示します。",
+      "why": "Android などでは、アイコンが端末ごとの形に切り抜かれます。ふつうのアイコンをそのまま使うと、端が欠けたり、小さく縮んで白い枠が付いたりします。maskable 用のアイコンを別に用意すると、どの端末でもきれいに表示されます。",
+      "how": "maskable アイコンは、中央の円（直径が画像の 80% 程度）の中に大事な部分を収め、外側は背景色で塗りつぶして作ります。\n\n大きさ違いのアイコンを手で作るのは大変なので、元になる SVG から、スクリプトでまとめて PNG を作ることもあります。",
+      "pitfalls": [
+        "maskable 用と通常用で同じ画像を使うと、どちらかで見た目が崩れる。",
+        "アイコンを変えても、キャッシュされた古いアイコンが表示されることがある。"
+      ],
+      "apps": [
+        {
+          "appId": "lottery-tools",
+          "usage": "`manifest.json` に、通常用（`purpose: \"any\"`）の 192・512 と、maskable 用の 512 を分けて書いています。アイコンの PNG は `scripts/generate-icons.mjs` で作っています。",
+          "snippet": {
+            "file": "manifest.json",
+            "startLine": 20,
+            "endLine": 31,
+            "commitSha": "b291fe4e06ac1832f3a2808fe6914f4ce9f4e71e",
+            "lang": "json",
+            "code": "    {\n      \"src\": \"icons/icon-512.png\",\n      \"sizes\": \"512x512\",\n      \"type\": \"image/png\",\n      \"purpose\": \"any\"\n    },\n    {\n      \"src\": \"icons/icon-maskable-512.png\",\n      \"sizes\": \"512x512\",\n      \"type\": \"image/png\",\n      \"purpose\": \"maskable\"\n    }"
+          }
+        },
+        {
+          "appId": "image-tool",
+          "usage": "`icons/` に、元になる `icon.svg` と、apple-touch-icon・192・512・maskable 用の PNG を置いています。"
+        },
+        {
+          "appId": "reversi",
+          "usage": "maskable 用を含む 4 種類の PNG を用意し、`scripts/generate-icons.mjs` で作っています。"
+        }
+      ],
+      "related": [
+        "web-app-manifest",
+        "apple-web-app-meta"
+      ],
+      "links": [
+        {
+          "label": "マスカブルアイコン（web.dev）",
+          "url": "https://web.dev/articles/maskable-icon",
+          "kind": "other"
+        },
+        {
+          "label": "ウェブアプリマニフェスト（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/Progressive_web_apps/Manifest",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "アイコン",
+        "ホーム画面"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "storage-separation",
+      "category": "pwa",
+      "level": "basic",
+      "title": "Safari とホーム画面で保存データが別になる",
+      "aka": [
+        "保存データの分離",
+        "ストレージの分離",
+        "データが消えた",
+        "データが見えない"
+      ],
+      "keywords": [
+        "ホーム画面",
+        "Safari",
+        "localStorage",
+        "エクスポート",
+        "インポート",
+        "移行"
+      ],
+      "summary": "iPhone では、Safari で開いた場合とホーム画面から起動した場合で、同じアプリでも保存データが別々になる。",
+      "what": "iPhone で Webアプリを[[ホーム画面に追加]]すると、ホーム画面から起動したアプリは、Safari とは別の保存場所を使います。そのため、Safari で付けたお気に入りや記録は、ホーム画面のアプリからは見えません（逆も同じです）。",
+      "why": "この違いを知らないと、「記録が消えた」と勘違いしてしまいます。アプリ側では、どちらで使うのがおすすめかを案内したり、データを書き出して（エクスポート）もう一方で読み込む（インポート）機能を用意したりすると親切です。",
+      "how": "localStorage や Service Worker のキャッシュなど、サイトが端末に保存するデータ全体が分かれます。\n\nエクスポートは保存データを JSON のファイルにして書き出し、インポートはそのファイルを読み込んで保存し直す、という流れで移せます。",
+      "pitfalls": [
+        "開発中に Safari で確かめたデータは、ホーム画面のアプリには入っていない。",
+        "ブラウザのデータを消去したり機種変更したりすると、保存データは消える。定期的なエクスポートを案内する。"
+      ],
+      "iosNote": "分かれ方の細かい条件（iOS のバージョンによる違いなど）は要確認です。",
+      "apps": [
+        {
+          "appId": "git-manabi",
+          "usage": "README で、Safari とホーム画面で保存が別になることを説明し、設定のエクスポート／インポートで移せるようにしています。"
+        },
+        {
+          "appId": "workout-calendar",
+          "usage": "記録はホーム画面のアイコンから付けるよう README で案内し、設定画面のエクスポート／インポートで別の端末へ移せるようにしています。"
+        },
+        {
+          "appId": "reversi",
+          "usage": "勝敗記録が Safari とホーム画面で別々になることを README で説明し、記録を残したい対局はホーム画面から遊ぶよう案内しています。"
+        }
+      ],
+      "related": [
+        "localstorage",
+        "blob-object-url",
+        "same-origin-storage"
+      ],
+      "links": [
+        {
+          "label": "ストレージの容量と削除の基準（MDN）",
+          "url": "https://developer.mozilla.org/ja/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria",
+          "kind": "mdn"
+        }
+      ],
+      "tags": [
+        "iPhone",
+        "保存",
+        "ホーム画面"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""

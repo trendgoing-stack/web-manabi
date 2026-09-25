@@ -6,8 +6,20 @@
       "category": "claude-code",
       "level": "basic",
       "title": "実装計画を先に承認する進め方",
-      "aka": ["実装計画", "プランモード", "plan mode", "計画から始める"],
-      "keywords": ["Claude Code", "指示書", "フェーズ分け", "承認", "確認", "やり直し"],
+      "aka": [
+        "実装計画",
+        "プランモード",
+        "plan mode",
+        "計画から始める"
+      ],
+      "keywords": [
+        "Claude Code",
+        "指示書",
+        "フェーズ分け",
+        "承認",
+        "確認",
+        "やり直し"
+      ],
       "summary": "Claude Code にいきなりコードを書かせず、まずファイル構成や手順の計画を出してもらい、確認してから実装に進むやり方。",
       "what": "大きめの機能を作るとき、最初に「どのファイルを作るか」「データの形はどうするか」「どの順番で進めるか」を Claude Code に計画としてまとめてもらい、それを読んで OK を出してから実装を始める進め方です。Claude Code には、計画を立てる間はファイルを変更しない**プランモード**もあります。",
       "why": "指示の読み違いや、思っていたのと違う設計に気づくのは、コードが書かれた後より計画の段階の方がずっと楽です。計画を先に見れば、足りない前提を補ったり、範囲を削ったりもできます。その結果、やり直しが減ります。",
@@ -17,12 +29,26 @@
         "承認した後で前提が変わったら、計画を直してもらってから進める。"
       ],
       "apps": [],
-      "related": ["claude-md"],
-      "links": [
-        { "label": "よくあるワークフロー（Claude Code 公式ドキュメント）", "url": "https://code.claude.com/docs/ja/common-workflows", "kind": "official" },
-        { "label": "Claude Code の概要（公式ドキュメント）", "url": "https://code.claude.com/docs/ja/overview", "kind": "official" }
+      "related": [
+        "phase-split",
+        "claude-md"
       ],
-      "tags": ["進め方", "AI開発"],
+      "links": [
+        {
+          "label": "よくあるワークフロー（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/common-workflows",
+          "kind": "official"
+        },
+        {
+          "label": "Claude Code の概要（公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/overview",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "進め方",
+        "AI開発"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
@@ -32,8 +58,19 @@
       "category": "claude-code",
       "level": "basic",
       "title": "CLAUDE.md",
-      "aka": ["クロードエムディー", "メモリファイル", "プロジェクトの指示"],
-      "keywords": ["Claude Code", "メモリ", "ルール", "指示", "/init", "スラッシュコマンド"],
+      "aka": [
+        "クロードエムディー",
+        "メモリファイル",
+        "プロジェクトの指示"
+      ],
+      "keywords": [
+        "Claude Code",
+        "メモリ",
+        "ルール",
+        "指示",
+        "/init",
+        "スラッシュコマンド"
+      ],
       "summary": "プロジェクトのいちばん上に置く、Claude Code 向けの説明書のファイル。作業のたびに読み込まれ、プロジェクトの決まりごとを伝えられる。",
       "what": "CLAUDE.md は、Claude Code が起動したときに自動で読み込む Markdown のファイルです。プロジェクトの概要、使っている技術、守ってほしいルール（「外部ライブラリを使わない」「文章は転載しない」など）、よく使うコマンドを書いておきます。",
       "why": "会話のたびに同じ説明を繰り返さなくても、Claude Code がプロジェクトの前提を知った状態で作業を始められます。新しい会話を始めたときや、会話が長くなって前の内容が要約されたときでも、大事な決まりが抜け落ちにくくなります。",
@@ -43,11 +80,132 @@
         "実際のコードと食い違った古い記述が残ると、かえって混乱のもとになる。変更したら見直す。"
       ],
       "apps": [],
-      "related": ["plan-first"],
-      "links": [
-        { "label": "Claude のメモリを管理する（Claude Code 公式ドキュメント）", "url": "https://code.claude.com/docs/ja/memory", "kind": "official" }
+      "related": [
+        "plan-first",
+        "slash-commands",
+        "phase-split"
       ],
-      "tags": ["進め方", "AI開発", "設定ファイル"],
+      "links": [
+        {
+          "label": "Claude のメモリを管理する（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/memory",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "進め方",
+        "AI開発",
+        "設定ファイル"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "phase-split",
+      "category": "claude-code",
+      "level": "basic",
+      "title": "フェーズ分割と実機確認",
+      "aka": [
+        "フェーズ分け",
+        "段階的な開発",
+        "実機確認",
+        "チェックリスト"
+      ],
+      "keywords": [
+        "Claude Code",
+        "報告",
+        "確認",
+        "iPhone",
+        "TESTING.md",
+        "小さく進める"
+      ],
+      "summary": "大きなアプリを一度に作らず、いくつかの段階（フェーズ）に分けて作り、段階ごとに実機で確かめてから次へ進むやり方。",
+      "what": "作りたい機能を、「最小限で動くもの」「便利な機能」「仕上げ」のようにいくつかのフェーズに分け、1つずつ Claude Code に作ってもらう進め方です。各フェーズの終わりに、変更内容と、実機で確かめてほしい点を報告してもらいます。",
+      "why": "一度に全部を作ると、どこで問題が起きたのか分かりにくく、直すのも大変です。小さく区切れば、早い段階で使い心地を確かめられ、方向がずれていても軌道修正しやすくなります。iPhone でしか起きない問題も、早めに見つかります。",
+      "how": "[[プロンプト]]（指示書）に、フェーズごとの範囲と、各フェーズの終わりに報告してほしい内容（変更内容、追加したもの、実機で確認すべき点）を書いておきます。\n\n実機での確認項目は、`TESTING.md` のようなチェックリストにまとめておくと、毎回同じ観点で確かめられます。",
+      "pitfalls": [
+        "フェーズを細かくしすぎると、確認の回数が増えて疲れてしまう。確認したい単位で区切る。",
+        "実機で確かめる前に次のフェーズへ進むと、問題が積み重なる。"
+      ],
+      "apps": [],
+      "related": [
+        "plan-first",
+        "claude-md"
+      ],
+      "links": [
+        {
+          "label": "Claude Code のベストプラクティス（公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/best-practices",
+          "kind": "official"
+        },
+        {
+          "label": "よくあるワークフロー（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/common-workflows",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "進め方",
+        "AI開発",
+        "実機確認"
+      ],
+      "verified": false,
+      "verifiedNote": "",
+      "lastReviewed": ""
+    },
+    {
+      "id": "slash-commands",
+      "category": "claude-code",
+      "level": "basic",
+      "title": "スラッシュコマンド",
+      "aka": [
+        "スラッシュコマンド",
+        "/コマンド",
+        "slash command",
+        "スキル"
+      ],
+      "keywords": [
+        "Claude Code",
+        "/init",
+        "/clear",
+        "/help",
+        "カスタムコマンド",
+        "よく使う指示"
+      ],
+      "summary": "Claude Code で `/` から始まる短いコマンドを入力して、決まった操作やよく使う指示を呼び出す仕組み。",
+      "what": "スラッシュコマンドは、Claude Code の入力欄で `/` から始まる言葉を打つと実行される、決まった操作です。`/init`（CLAUDE.md の下書きを作る）や `/clear`（会話をリセットする）のように最初から用意されているもののほかに、よく使う指示を自分で登録することもできます。",
+      "why": "毎回同じ長い指示を打つのは手間で、書き方が毎回少しずつ変わってしまいます。スラッシュコマンドにしておけば、短い入力で、いつも同じ手順を呼び出せます。",
+      "how": "入力欄で `/` を打つと、使えるコマンドの一覧が表示されます。自分用のコマンドは、決まった場所に置いた Markdown のファイルに指示を書いて登録します（置き場所や書き方は公式ドキュメントを参照）。\n\nよく使う指示をコマンドにしておくと、[[コンテキスト]]に入れたい決まりごとを毎回確実に伝えられます。",
+      "pitfalls": [
+        "コマンドの種類や名前は、Claude Code の版によって変わることがある。一覧は `/` を打って確かめる。"
+      ],
+      "apps": [],
+      "related": [
+        "claude-md",
+        "plan-first"
+      ],
+      "links": [
+        {
+          "label": "コマンド（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/commands",
+          "kind": "official"
+        },
+        {
+          "label": "スキル（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/skills",
+          "kind": "official"
+        },
+        {
+          "label": "インタラクティブモード（Claude Code 公式ドキュメント）",
+          "url": "https://code.claude.com/docs/ja/interactive-mode",
+          "kind": "official"
+        }
+      ],
+      "tags": [
+        "AI開発",
+        "効率化"
+      ],
       "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
