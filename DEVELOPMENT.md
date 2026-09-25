@@ -28,7 +28,7 @@ js/
   storage.js            localStorage（お気に入り・履歴・メモ・学習記録・設定、エクスポート／インポート）
   normalize.js          検索用の正規化（NFKC、小文字化、カタカナ→ひらがな）
   search.js             優先順位つきの AND 検索
-  status.js             未確認／要再確認の判定、表示するかどうか
+  status.js             要再確認の判定（最終確認日から日数がたった項目）
   date.js               ローカル日付の計算
   leitner.js            ライトナー方式（箱 1〜5、間隔 1・2・4・8・16 日）
   quiz-gen.js           クイズとフラッシュカードの出題（DOM を使わない純粋な関数）

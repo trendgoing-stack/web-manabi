@@ -1,5 +1,4 @@
 // クイズとフラッシュカードの出題（DOM を使わない純粋な関数）。
-// 出題対象は verified: true の項目だけ（未確認項目の表示設定に関係なく）。
 //
 // 自動出題の種類：
 //   title-summary … 技術名を見て、要約を 4 択で選ぶ
@@ -48,20 +47,19 @@ export function shuffle(arr, rng = Math.random) {
 }
 
 /**
- * 出題範囲に入る確認済みの項目
+ * 出題範囲に入る項目
  * @param {import('./types.js').Store} store
  * @param {Scope} scope
  */
 export function scopeTopics(store, scope) {
-  const verified = store.topics.filter((t) => t.verified);
-  if (scope.kind === 'category') return verified.filter((t) => t.category === scope.id);
-  if (scope.kind === 'app') return verified.filter((t) => t.apps.some((a) => a.appId === scope.id));
-  return verified;
+  if (scope.kind === 'category') return store.topics.filter((t) => t.category === scope.id);
+  if (scope.kind === 'app') return store.topics.filter((t) => t.apps.some((a) => a.appId === scope.id));
+  return store.topics;
 }
 
 /**
  * モードに応じた出題対象（並び順つき）
- * @param {import('./types.js').Topic[]} pool 範囲内の確認済みの項目
+ * @param {import('./types.js').Topic[]} pool 範囲内の項目
  * @param {Mode} mode
  * @param {Record<string, import('./storage.js').Progress>} progress
  * @param {string} today
@@ -80,13 +78,12 @@ export function pickTargets(pool, mode, progress, today, rng = Math.random) {
 }
 
 /**
- * 出題できる手書き問題（関係する項目がすべて確認済みで、ids のどれかに関係するもの）
+ * 出題できる手書き問題（関係する項目がすべて存在し、ids のどれかに関係するもの）
  * @param {import('./types.js').Store} store
  * @param {Set<string>} ids
  */
 export function eligibleManual(store, ids) {
-  const verifiedIds = new Set(store.topics.filter((t) => t.verified).map((t) => t.id));
-  return store.quiz.filter((q) => q.topicIds.length > 0 && q.topicIds.every((id) => verifiedIds.has(id)) && q.topicIds.some((id) => ids.has(id)));
+  return store.quiz.filter((q) => q.topicIds.length > 0 && q.topicIds.every((id) => store.topicById.has(id)) && q.topicIds.some((id) => ids.has(id)));
 }
 
 /**
@@ -103,12 +100,8 @@ export function checkStart(store, scope, mode, progress, today, kind = 'quiz') {
   const min = kind === 'quiz' ? MIN_TOPICS : 1;
   const unit = kind === 'quiz' ? '問を出題します' : '枚のカードを出します';
   const pool = scopeTopics(store, scope);
-  const allVerified = store.topics.filter((t) => t.verified).length;
-  if (allVerified < min) {
-    return { ok: false, count: 0, message: `確認済みの項目が ${allVerified} 件のため、まだ出題できません（${min} 件以上必要です）。未確認の項目は出題されません。` };
-  }
   if (pool.length < min) {
-    return { ok: false, count: pool.length, message: `この範囲の確認済みの項目は ${pool.length} 件です。${min} 件以上になると出題できます。` };
+    return { ok: false, count: pool.length, message: `この範囲の項目は ${pool.length} 件です。${min} 件以上になると出題できます。` };
   }
   const targets = pickTargets(pool, mode, progress, today);
   if (mode === 'weak' && !targets.length) return { ok: false, count: 0, message: 'この範囲で間違えたことのある項目はありません。' };
@@ -116,7 +109,7 @@ export function checkStart(store, scope, mode, progress, today, kind = 'quiz') {
   // 通常モードのクイズは手書き問題も数える。弱点・今日の復習は対象の項目 1 件につき 1 問
   const extra = kind === 'quiz' && mode === 'normal' ? eligibleManual(store, new Set(pool.map((t) => t.id))).length : 0;
   const n = Math.min(SET_SIZE, targets.length + extra);
-  const desc = mode === 'weak' ? '間違えたことのある項目から、不正解率の高い順に' : mode === 'today' ? '今日の復習の項目から' : `確認済みの ${pool.length} 件から`;
+  const desc = mode === 'weak' ? '間違えたことのある項目から、不正解率の高い順に' : mode === 'today' ? '今日の復習の項目から' : `${pool.length} 件から`;
   return { ok: true, count: n, message: `${desc} ${n} ${unit}。` };
 }
 
@@ -158,14 +151,14 @@ function arrange(correct, wrongs, rng) {
  * 1 項目から自動の問題を作る（作れなければ null）
  * @param {import('./types.js').Store} store
  * @param {import('./types.js').Topic} target
- * @param {import('./types.js').Topic[]} verified すべての確認済みの項目
+ * @param {import('./types.js').Topic[]} all すべての項目（誤答の候補）
  * @param {Scope} scope
  * @param {(s: string) => string} plain 記法を取り除く関数
  * @param {() => number} rng
  * @returns {Question | null}
  */
-export function makeAutoQuestion(store, target, verified, scope, plain, rng = Math.random) {
-  const others = verified.filter((t) => t.id !== target.id);
+export function makeAutoQuestion(store, target, all, scope, plain, rng = Math.random) {
+  const others = all.filter((t) => t.id !== target.id);
   /** @type {Array<() => Question | null>} */
   const makers = [
     () => {
@@ -224,7 +217,6 @@ export function makeManualQuestion(item, rng = Math.random) {
  * @returns {Question[]}
  */
 export function buildQuiz(store, scope, mode, progress, today, plain, rng = Math.random) {
-  const verified = store.topics.filter((t) => t.verified);
   const pool = scopeTopics(store, scope);
   const targets = pickTargets(pool, mode, progress, today, rng);
 
@@ -252,7 +244,7 @@ export function buildQuiz(store, scope, mode, progress, today, plain, rng = Math
   const out = [];
   for (const s of slots) {
     if (out.length >= SET_SIZE) break;
-    const q = s.kind === 'auto' ? makeAutoQuestion(store, s.topic, verified, scope, plain, rng) : makeManualQuestion(s.item, rng);
+    const q = s.kind === 'auto' ? makeAutoQuestion(store, s.topic, store.topics, scope, plain, rng) : makeManualQuestion(s.item, rng);
     if (q) out.push(q);
   }
   return out;

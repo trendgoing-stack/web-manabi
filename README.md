@@ -55,7 +55,6 @@ AndroidやPCでも、ChromeやEdgeなどのブラウザで同じように使え�
 
 - 説明文はすべてオリジナルの要約です。正確な仕様は、各項目の参考リンク（公式ドキュメントや MDN）で確認してください
 - ブラウザの対応状況やサービスの仕様は変わることがあります。確認してから一定の日数（Claude Code の項目は 90 日、ほかは 180 日）がたった項目には「要再確認」のバッジが付きます
-- 「未確認」のバッジが付いた項目は、作者が実際に内容を確かめる前の下書きです。はじめは表示しない設定になっています。表示したいときは、設定の「未確認項目の表示」で切り替えてください。クイズとフラッシュカードには確認済みの項目だけが出題されます
 - コードの抜粋は、記載したコミット時点のものです。最新版とは異なる場合があります
 - Git や GitHub の操作は扱っていません。[Gitまなび帳](https://trendgoing-stack.github.io/git-manabi/) で調べられます
 
@@ -92,7 +91,7 @@ http://localhost:8766/ を開きます（ファイルを直接開くと動きま
   3. `node tools/validate-cli.mjs` でエラーが 0 件であることを確認する（ブラウザで `tools/validate.html` を開いても同じ）
   4. push する
 - **アプリ本体（HTML・CSS・JS）を変えたとき** — `sw.js` の `VERSION` と `js/config.js` の `APP_VERSION` を上げます。ファイルを追加・削除したときは `sw.js` の `SHELL` も直します（`node tools/validate-cli.mjs` が漏れを知らせます）。出題の仕組みを変えたときは `node tools/test-logic.mjs` も実行します
-- **動作や内容を確かめた項目があるとき** — その項目を `verified: true` にし、`verifiedNote` に確認した内容（例：`iOS 18.1 実機で確認`）、`lastReviewed` に確認した日を書いて、学習データと同じ手順で公開します
+- **動作や内容を確かめた項目があるとき** — その項目の `lastReviewed` に確認した日、`verifiedNote` に確認した内容（例：`iOS 18.1 実機で確認`）を書いて、学習データと同じ手順で公開します。確認日から一定の日数がたつと「要再確認」のバッジが付きます
 - **対象アプリを更新したとき（コード抜粋の `commitSha` の更新）**
   1. 参照用フォルダ（`C:\Users\KATSUYA\manabi-sources\`）の各リポジトリを最新にする（参照用フォルダの更新は作者が行う）
   2. `node tools/snippets.mjs check C:/Users/KATSUYA/manabi-sources` で点検する

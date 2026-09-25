@@ -75,7 +75,6 @@ export function buildStore(raw) {
         related: arr(t.related),
         links: arr(t.links),
         tags: arr(t.tags),
-        verified: t.verified === true,
         lastReviewed: t.lastReviewed || '',
       };
       topics.push(topic);

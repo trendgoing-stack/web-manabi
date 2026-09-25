@@ -7,7 +7,7 @@ import { show } from '../ui/shell.js';
 import { appIcon, categoryBadge, levelBadge, stateBadge, topicRow } from '../ui/badges.js';
 import { inline, paragraphs } from '../ui/rich.js';
 import { getStore } from '../data.js';
-import { isVisible, topicState } from '../status.js';
+import { topicState } from '../status.js';
 import { LINK_KIND_LABELS } from '../config.js';
 import { addHistory, getNote, isFavorite, notesSize, NOTES_SOFT_LIMIT, NOTE_MAX_LENGTH, setNote, toggleFavorite } from '../storage.js';
 import { renderNotFound } from './not-found.js';
@@ -20,13 +20,12 @@ export function renderTopic(id) {
 
   const state = topicState(t);
   const cat = store.categoryById.get(t.category);
-  const related = t.related.map((r) => store.topicById.get(r)).filter((r) => r && isVisible(r));
+  const related = t.related.map((r) => store.topicById.get(r)).filter(Boolean);
   addHistory(t.id);
 
   const node = h(
     'article',
     { class: 'page topic' },
-    !isVisible(t) ? h('p', { class: 'notice' }, 'この項目は未確認のため、一覧や検索には表示していません。') : null,
     // 1. タイトルとバッジ
     h(
       'header',
@@ -89,14 +88,10 @@ export function renderTopic(id) {
     // 11. 最終確認日
     section(
       '最終確認日',
-      state === 'unverified'
-        ? h('p', {}, '未確認（作者が内容を確かめる前の下書きです）')
-        : [
-            h('p', {}, t.lastReviewed || '—', t.verifiedNote ? `（${t.verifiedNote}）` : ''),
-            state === 'stale'
-              ? h('p', { class: 'muted small' }, `最終確認から ${cat?.reviewDays ?? 180} 日以上たっています。ブラウザの対応状況やサービスの仕様が変わっている可能性があります。`)
-              : null,
-          ],
+      h('p', {}, t.lastReviewed || '記録なし', t.verifiedNote ? `（${t.verifiedNote}）` : ''),
+      state === 'stale'
+        ? h('p', { class: 'muted small' }, `最終確認から ${cat?.reviewDays ?? 180} 日以上たっています。ブラウザの対応状況やサービスの仕様が変わっている可能性があります。`)
+        : null,
     ),
     // 12. 自分用メモ
     section('自分用メモ', memoEditor(t.id)),

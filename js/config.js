@@ -1,7 +1,7 @@
 // アプリ全体の定数。
 
 /** アプリ本体の版。sw.js の VERSION と同じ値にする（tools/validate.html で確認） */
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.1.0';
 
 export const GITHUB_OWNER = 'trendgoing-stack';
 export const GIT_MANABI_URL = 'https://trendgoing-stack.github.io/git-manabi/';
@@ -23,12 +23,10 @@ export const LINK_KIND_LABELS = { official: '公式', mdn: 'MDN', caniuse: 'Can 
 
 /**
  * 設定の初期値。
- * showUnverified は公開向けに false（未確認項目を表示しない）。開発中（フェーズ1〜3）は true にしていた。
  * @type {import('./types.js').Settings}
  */
 export const DEFAULT_SETTINGS = {
   fontSize: 'normal',
-  showUnverified: false,
   analyticsOff: false,
 };
 

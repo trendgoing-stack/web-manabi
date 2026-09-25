@@ -80,7 +80,6 @@
         "無料",
         "HTTPS"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -157,7 +156,6 @@
         "パス",
         "トラブル"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -230,7 +228,6 @@
         "公開",
         "自動化"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     },
@@ -291,7 +288,6 @@
         "公開",
         "トラブル"
       ],
-      "verified": false,
       "verifiedNote": "",
       "lastReviewed": ""
     }

@@ -377,7 +377,6 @@ code {
   background: color-mix(in srgb, var(--cat, var(--accent)) 12%, transparent);
 }
 .badge-level { background: var(--surface-2); color: var(--text-2); }
-.badge-unverified { background: var(--warn-bg); color: var(--warn-text); }
 .badge-stale { background: var(--stale-bg); color: var(--stale-text); }
 .cat-web-api { --cat: var(--cat-web-api); }
 .cat-pwa { --cat: var(--cat-pwa); }

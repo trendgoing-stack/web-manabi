@@ -80,7 +80,10 @@ export function initStorage() {
 /** @returns {import('./types.js').Settings} */
 export function getSettings() {
   const saved = read('settings', {});
-  return { ...DEFAULT_SETTINGS, ...(saved && typeof saved === 'object' ? saved : {}) };
+  const s = { ...DEFAULT_SETTINGS, ...(saved && typeof saved === 'object' ? saved : {}) };
+  // 以前の版にあった設定（未確認項目の表示）は使わない
+  delete s.showUnverified;
+  return s;
 }
 
 /**
@@ -253,7 +256,7 @@ export function checkExportFile(file) {
     const s = d.settings;
     if (!isPlainObject(s)) return '設定の形式が正しくありません。';
     if (s.fontSize != null && !['normal', 'large'].includes(s.fontSize)) return '設定（文字サイズ）の値が正しくありません。';
-    for (const k of ['showUnverified', 'analyticsOff']) if (s[k] != null && typeof s[k] !== 'boolean') return `設定（${k}）の値が正しくありません。`;
+    for (const k of ['analyticsOff']) if (s[k] != null && typeof s[k] !== 'boolean') return `設定（${k}）の値が正しくありません。`;
   }
   return null;
 }

@@ -9,7 +9,7 @@ Webまなび帳の技術項目・アプリ情報・用語集・クイズの書�
 - **初心者が読んで分かる平易な日本語**で書く。専門用語は `[[用語]]` で用語集にリンクする
 - **確かでない数値は書かない**。iOS の対応バージョンなど、確かめていない値は「要確認」と書く。対応表は転載せず、MDN／Can I use にリンクする
 - Git／GitHub の操作は扱わない。関連する箇所では「Gitまなび帳」（https://trendgoing-stack.github.io/git-manabi/）にリンクする
-- **Claude Code が作った下書きは、すべて `verified: false`、`lastReviewed: ""` で登録する**。作者が内容を確認した項目だけを `verified: true` にする（「確認のルール」を参照）
+- **Claude Code が作った下書きでは、`lastReviewed` と `verifiedNote` を空にする**。作者が内容を確かめたときに記入する（「確認のルール」を参照）
 
 ## ファイル構成
 
@@ -56,9 +56,8 @@ Webまなび帳の技術項目・アプリ情報・用語集・クイズの書�
 | `links` | `{ label, url, kind }`。`kind` は `official`／`mdn`／`caniuse`／`other` |
 | `tags` | 絞り込み用のタグ |
 | `demo` | ミニデモの id（任意）。`js/demos/<id>.js` が必要（「ミニデモ」を参照） |
-| `verified` | 確認済みなら `true` |
-| `verifiedNote` | 確認した内容（例：`iOS 18.1 実機で確認`）。未確認なら空 |
-| `lastReviewed` | 最終確認日（`YYYY-MM-DD`）。未確認なら空 |
+| `verifiedNote` | 確認した内容（例：`iOS 18.1 実機で確認`）。なければ空 |
+| `lastReviewed` | 最終確認日（`YYYY-MM-DD`）。なければ空。「要再確認」の判定に使う |
 
 ### 本文のインライン記法
 
@@ -103,7 +102,6 @@ Webまなび帳の技術項目・アプリ情報・用語集・クイズの書�
     { "label": "Screen Wake Lock API（MDN）", "url": "https://developer.mozilla.org/ja/docs/Web/API/Screen_Wake_Lock_API", "kind": "mdn" }
   ],
   "tags": ["画面"],
-  "verified": false,
   "verifiedNote": "",
   "lastReviewed": ""
 }
@@ -212,14 +210,14 @@ node tools/snippets.mjs check C:/Users/KATSUYA/manabi-sources
 `{ id, question, choices, answer, explanation, topicIds }` の配列です。
 
 - `choices` は 4 つ。`answer` は正解の位置（0〜3）
-- `topicIds` に関係する技術項目の id を書く。**すべて確認済み（`verified: true`）の項目のときだけ出題される**
+- `topicIds` に関係する技術項目の id を書く。範囲やモードに合う項目に関係するときに出題される
 
 ## 確認のルール
 
 1. 作者が項目の内容（説明、使われ方、コード抜粋、リンク）を確かめる
-2. 確かめた項目を `verified: true` にし、`verifiedNote` に確認した内容（例：`iOS 18.1 実機で確認`、`MDN と照合`）、`lastReviewed` に確認した日（`YYYY-MM-DD`）を書く
-3. 確認済みの項目でも、最終確認からカテゴリの日数（`claude-code` は 90 日、ほかは 180 日）を超えると「要再確認」のバッジが付く。もう一度確かめたら `lastReviewed` を更新する
-4. クイズとフラッシュカードには、確認済みの項目だけが出題される
+2. 確かめた項目の `lastReviewed` に確認した日（`YYYY-MM-DD`）、`verifiedNote` に確認した内容（例：`iOS 18.1 実機で確認`、`MDN と照合`）を書く
+3. 最終確認からカテゴリの日数（`claude-code` は 90 日、ほかは 180 日）を超えると「要再確認」のバッジが付く。もう一度確かめたら `lastReviewed` を更新する
+4. すべての項目が、一覧・検索・クイズ・フラッシュカードの対象になる（確認日の有無には関係しない）
 
 ## 検証
 
@@ -234,4 +232,4 @@ node tools/snippets.mjs check C:/Users/KATSUYA/manabi-sources
 - `meta.json` の `counts` と実際の件数の食い違い
 - `sw.js` の `VERSION` と `js/config.js` の `APP_VERSION` の食い違い
 - `demo` に対応する `js/demos/<id>.js` がないもの、`sw.js` の `SHELL` に入っていないファイル（`node tools/validate-cli.mjs` のみ）
-- 未確認の件数、要再確認の件数
+- 要再確認の件数

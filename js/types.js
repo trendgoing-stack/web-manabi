@@ -71,9 +71,8 @@
  * @property {Link[]} links
  * @property {string[]} tags
  * @property {string} [demo]
- * @property {boolean} verified
- * @property {string} verifiedNote
- * @property {string} lastReviewed YYYY-MM-DD。未確認なら空文字
+ * @property {string} verifiedNote 確認した内容（例：iOS 18.1 実機で確認）。なければ空文字
+ * @property {string} lastReviewed 最終確認日 YYYY-MM-DD。なければ空文字（「要再確認」の判定に使う）
  */
 
 /**
@@ -133,7 +132,6 @@
  * ユーザー設定（localStorage）
  * @typedef {Object} Settings
  * @property {'normal'|'large'} fontSize
- * @property {boolean} showUnverified 未確認項目を表示するか
  * @property {boolean} analyticsOff アクセス解析を送信しない
  */
 
