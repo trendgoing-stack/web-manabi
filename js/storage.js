@@ -4,6 +4,7 @@
 
 import { DEFAULT_SETTINGS } from './config.js';
 import { isYmd } from './date.js';
+import { nextProgress } from './leitner.js';
 
 const PREFIX = 'webmanabi:';
 export const STORAGE_SCHEMA = 1;
@@ -189,7 +190,7 @@ export function notesSize() {
   return JSON.stringify(getNotes()).length;
 }
 
-// ---------- 学習記録（フェーズ3で使う） ----------
+// ---------- 学習記録（ライトナー方式。計算は leitner.js） ----------
 
 /** @returns {Record<string, Progress>} */
 export function getProgress() {
@@ -199,6 +200,18 @@ export function getProgress() {
   const out = {};
   for (const [k, p] of Object.entries(v)) if (isProgress(p)) out[k] = p;
   return out;
+}
+
+/**
+ * クイズとフラッシュカードの回答を記録する（同じ記録を更新する）
+ * @param {string[]} ids
+ * @param {boolean} correct
+ * @param {string} today YYYY-MM-DD
+ */
+export function recordAnswer(ids, correct, today) {
+  const all = getProgress();
+  for (const id of ids) all[id] = nextProgress(all[id], correct, today);
+  return write('progress', all);
 }
 
 // ---------- 形のチェック ----------

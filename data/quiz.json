@@ -1,1 +1,132 @@
-[]
+[
+  {
+    "id": "sw-update-not-arriving",
+    "question": "アプリのファイルを更新して公開したのに、ホーム画面のアプリが古いままです。まず疑うべきことは？",
+    "choices": [
+      "sw.js の版番号（キャッシュ名）を上げ忘れている",
+      "manifest.json の name が長すぎる",
+      "localStorage の容量が足りない",
+      "HTML に apple-touch-icon を書いていない"
+    ],
+    "answer": 0,
+    "explanation": "キャッシュファーストの Service Worker は、sw.js が変わらない限り古いキャッシュを返し続けます。更新のたびに版番号を上げ、新しい名前のキャッシュを作ります。",
+    "topicIds": ["cache-versioning", "service-worker"]
+  },
+  {
+    "id": "subpath-broken-css",
+    "question": "GitHub Pages で公開したら CSS が効かず、表示が崩れました。手元では問題ありません。原因として考えやすいのは？",
+    "choices": [
+      "CSS を /css/app.css のように / から始まるパスで読み込んでいる",
+      "CSS の変数を使っている",
+      "ダークモードに対応している",
+      "CSS ファイルが 2 つ以上ある"
+    ],
+    "answer": 0,
+    "explanation": "リポジトリごとのサイトは /リポジトリ名/ の下で公開されるため、/ から始まるパスはドメインの直下を指してしまいます。./ から始まる相対パスで書きます。",
+    "topicIds": ["subpath-relative-paths", "github-pages"]
+  },
+  {
+    "id": "shared-localstorage-clear",
+    "question": "同じ github.io のアカウントで複数のアプリを公開しています。「全データ削除」で localStorage.clear() を使うと、何が起きる？",
+    "choices": [
+      "同じオリジンのほかのアプリのデータまで消えてしまう",
+      "そのアプリのデータだけがきれいに消える",
+      "Service Worker のキャッシュも一緒に消える",
+      "何も消えない"
+    ],
+    "answer": 0,
+    "explanation": "ユーザー名.github.io の下のアプリはすべて同じオリジンなので、localStorage を共有しています。キーに接頭辞を付け、その接頭辞のキーだけを消します。",
+    "topicIds": ["same-origin-storage", "localstorage"]
+  },
+  {
+    "id": "copy-after-await",
+    "question": "iPhone で「コピー」ボタンを押すと失敗することがあります。よくある原因は？",
+    "choices": [
+      "タップの処理の中で、await で待った後に writeText を呼んでいる",
+      "コピーする文字が日本語だった",
+      "ボタンが 44px より大きかった",
+      "ダークモードで開いていた"
+    ],
+    "answer": 0,
+    "explanation": "iOS Safari では、タップの処理の中で同期的にコピーを始めないと、ユーザー操作との結び付きが切れて失敗することがあります。",
+    "topicIds": ["clipboard-api"]
+  },
+  {
+    "id": "share-sheet-condition",
+    "question": "Web Share API で共有シートを開くときの条件として正しいものは？",
+    "choices": [
+      "HTTPS のページで、タップなどのユーザー操作の中で呼ぶ",
+      "ページを開いたらすぐ、自動で呼ぶ",
+      "Service Worker の中から呼ぶ",
+      "localhost 以外では使えない"
+    ],
+    "answer": 0,
+    "explanation": "共有シートは HTTPS（安全なコンテキスト）で、利用者の操作に続けて呼んだときだけ開けます。",
+    "topicIds": ["web-share-api", "https-secure-context"]
+  },
+  {
+    "id": "modulo-bias",
+    "question": "crypto.getRandomValues で作った大きな整数を「% 6」で 1〜6 の出目に変えると、どうなる？",
+    "choices": [
+      "ごくわずかに小さい数が出やすくなる",
+      "6 が出なくなる",
+      "毎回同じ数になる",
+      "偏りはまったく生じない"
+    ],
+    "answer": 0,
+    "explanation": "割り切れない端の範囲があるため、ごくわずかに偏ります。端の範囲に入った値を捨てて引き直す（棄却サンプリング）と偏りをなくせます。",
+    "topicIds": ["crypto-getrandomvalues"]
+  },
+  {
+    "id": "swipe-touch-action",
+    "question": "横スワイプで操作するカードを Pointer Events で作ります。縦スクロールも普通にできるようにするには、CSS の touch-action を何にする？",
+    "choices": [
+      "pan-y",
+      "none",
+      "manipulation",
+      "pan-x"
+    ],
+    "answer": 0,
+    "explanation": "pan-y にすると、縦のスクロールはブラウザに任せ、横方向の動きだけを自分で受け取れます。none にすると縦スクロールもできなくなります。",
+    "topicIds": ["pointer-events"]
+  },
+  {
+    "id": "separate-storage",
+    "question": "iPhone で、Safari で付けたお気に入りが、ホーム画面から起動したアプリでは見えません。どう案内するのがよい？",
+    "choices": [
+      "エクスポートしたファイルを、ホーム画面のアプリでインポートしてもらう",
+      "アプリを削除して入れ直してもらう",
+      "Safari の履歴を消してもらう",
+      "しばらく待てば自動で同じになると伝える"
+    ],
+    "answer": 0,
+    "explanation": "Safari とホーム画面のアプリは保存場所が別です。エクスポートとインポートでデータを移せます。",
+    "topicIds": ["storage-separation", "localstorage"]
+  },
+  {
+    "id": "worker-dom",
+    "question": "Web Worker の中でできないことは？",
+    "choices": [
+      "画面の DOM を直接書き換える",
+      "重い計算をする",
+      "postMessage で結果を送り返す",
+      "importScripts でほかのファイルを読み込む"
+    ],
+    "answer": 0,
+    "explanation": "Worker は画面とは別のスレッドで動くため、DOM にはさわれません。結果をメッセージで返し、画面側で表示します。",
+    "topicIds": ["web-worker"]
+  },
+  {
+    "id": "exif-canvas",
+    "question": "写真を canvas に描いてから toBlob() で書き出すと、元の写真の位置情報（EXIF）はどうなる？",
+    "choices": [
+      "引き継がれず、書き出したファイルには残らない",
+      "そのまま引き継がれる",
+      "位置情報だけが残る",
+      "書き出しに失敗する"
+    ],
+    "answer": 0,
+    "explanation": "書き出されるのは canvas のピクセルだけなので、元のファイルの EXIF は残りません。撮影日時も消える点に注意します。",
+    "topicIds": ["exif-privacy", "canvas-api"]
+  }
+]

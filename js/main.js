@@ -12,7 +12,9 @@ import { renderCategory } from './views/category.js';
 import { renderTopic } from './views/topic.js';
 import { renderApps, renderApp } from './views/apps.js';
 import { renderLearn, renderGlossary } from './views/learn.js';
-import { renderMy, renderFavorites, renderHistory, renderNotesList } from './views/my.js';
+import { renderMy, renderFavorites, renderHistory, renderNotesList, renderStats } from './views/my.js';
+import { renderQuiz } from './views/quiz.js';
+import { renderCards } from './views/cards.js';
 import { renderSettings, renderHelp } from './views/settings.js';
 import { renderNotFound } from './views/not-found.js';
 
@@ -45,6 +47,9 @@ async function boot() {
       { pattern: /^my\/favorites$/, render: renderFavorites },
       { pattern: /^my\/history$/, render: renderHistory },
       { pattern: /^my\/notes$/, render: renderNotesList },
+      { pattern: /^my\/stats$/, render: renderStats },
+      { pattern: /^learn\/quiz$/, render: renderQuiz },
+      { pattern: /^learn\/cards$/, render: renderCards },
       { pattern: /^settings$/, render: renderSettings },
       { pattern: /^help$/, render: renderHelp },
     ],

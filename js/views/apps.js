@@ -71,7 +71,7 @@ export function renderApp(id) {
         h('li', {}, h('span', { class: 'link-kind' }, '公開URL'), extLink(app.pagesUrl.replace(/^https:\/\//, ''), app.pagesUrl)),
         h('li', {}, h('span', { class: 'link-kind' }, 'リポジトリ'), extLink(`${GITHUB_OWNER}/${app.repo}`, `https://github.com/${GITHUB_OWNER}/${app.repo}`)),
       ),
-      h('button', { type: 'button', class: 'btn btn-block', disabled: true }, 'このアプリの技術でクイズ（準備中）'),
+      h('a', { href: `#/learn/quiz?scope=${encodeURIComponent(`app:${app.id}`)}&mode=normal`, class: 'btn btn-primary btn-block' }, 'このアプリの技術でクイズ'),
       h('h2', { class: 'section-title' }, `使った技術（${topics.length} 件）`),
       topics.length === 0 ? h('p', { class: 'empty' }, '表示できる項目はまだありません。') : null,
       groups.map((g) => [h('h3', { class: 'group-title' }, g.cat.label), h('ul', { class: 'list' }, g.list.map(topicRow))]),
