@@ -93,7 +93,7 @@ http://localhost:8766/ を開きます（ファイルを直接開くと動きま
 - **アプリ本体（HTML・CSS・JS）を変えたとき** — `sw.js` の `VERSION` と `js/config.js` の `APP_VERSION` を上げます。ファイルを追加・削除したときは `sw.js` の `SHELL` も直します（`node tools/validate-cli.mjs` が漏れを知らせます）。出題の仕組みを変えたときは `node tools/test-logic.mjs` も実行します
 - **動作や内容を確かめた項目があるとき** — その項目の `lastReviewed` に確認した日、`verifiedNote` に確認した内容（例：`iOS 18.1 実機で確認`）を書いて、学習データと同じ手順で公開します。確認日から一定の日数がたつと「要再確認」のバッジが付きます
 - **対象アプリを更新したとき（コード抜粋の `commitSha` の更新）**
-  1. 参照用フォルダ（`~/manabi-sources/`）の各リポジトリを最新にする（参照用フォルダの更新は作者が行う）
+  1. 参照用フォルダ（web-manabi のリポジトリの外に置いたクローン置き場。ここでは `~/manabi-sources/` とする）の各リポジトリを最新にする（参照用フォルダの更新は作者が行う）
   2. `node tools/snippets.mjs check ~/manabi-sources` で点検する
   3. `△`（HEAD でも同じ内容）だけなら `node tools/snippets.mjs update ~/manabi-sources` で `commitSha` をまとめて更新する。`▲`（内容が変わった）は `extract` で抜粋を取り直し、使われ方の説明も見直す
   4. 学習データを変えたときと同じ手順で、版を上げて公開する
